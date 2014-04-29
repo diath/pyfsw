@@ -59,10 +59,22 @@ def current_user():
 
 	return None
 
+def get_library():
+	liblist = []
+	library = db.session().query(Library).all()
+
+	for lib in library:
+		liblist.append({'uri': lib.uri, 'name': lib.name})
+
+	return liblist
+
+app.jinja_env.globals.update(get_library=get_library)
+
 from pyfsw.models.account import Account
 from pyfsw.models.player import Player, PlayerStorage, PlayerDeath
 from pyfsw.models.house import House
 from pyfsw.models.guild import Guild
 from pyfsw.models.news import News
+from pyfsw.models.library import Library
 
 from pyfsw.views import news, account, community, library, store

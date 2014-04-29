@@ -1,0 +1,20 @@
+{% extends "template.htm" %}
+{% block title %} Library - {{ library.name }} {% endblock %}
+{% block body %}
+
+<div class="panel panel-default">
+	<div class="panel-heading">
+		{{ library.name }}
+	</div>
+	<div class="panel-body">
+	{% if library.enabled %}
+	{% autoescape off %}
+		{{ library.content }}
+	{% endautoescape %}
+	{% else %}
+		<strong>This page is currently disabled.</strong>
+	{% endif %}
+	</div>
+</div>
+
+{% endblock %}
