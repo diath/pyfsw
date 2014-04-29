@@ -1,0 +1,18 @@
+{% extends "template.htm" %}
+{% block title %} News #{{ entry.id }} - {{ entry.header }} {% endblock %}
+{% block body %}
+
+<div class="panel panel-default">
+	<div class="panel-heading">
+		<a href="/news/{{ entry.id }}">{{ entry.header }}</a>
+	</div>
+	<div class="panel-body">
+		{% autoescape off %}
+		{{ entry.content }}
+		<hr>
+		Posted by <a href="/community/player/{{ entry.author.name }}">{{ entry.author.name }}</a> at {{ entry.timestamp | datetime }}.
+		{% endautoescape %}
+	</div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,13 @@
+# Text files
+* text=auto
+*.py  text eol=lf
+*.sql text eol=lf
+*.htm text eol=lf
+*.css text eol=lf
+*.js  text eol=lf
+
+# Binary files
+*.eot  -text -diff
+*.ttf  -text -diff
+*.woff -text -diff
+*.svg  -text -diff

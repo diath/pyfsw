@@ -1,0 +1,49 @@
+{% extends "template.htm" %}
+{% block title %} Server Staff {% endblock %}
+{% block body %}
+
+<div class="panel panel-default">
+	<div class="panel-heading">
+		Game Masters
+	</div>
+	<div class="panel-body">
+		<table class="table table-hover table-striped">
+			<thead>
+				<th>Name</th>
+				<th>Last Seen</th>
+			</thead>
+			<tbody>
+			{% for gm in gms %}
+				<tr>
+					<td><a href="/community/player/{{ gm.name }}">{{ gm.name }}</a></td>
+					<td>{{ (gm.lastlogout if gm.lastlogout > gm.lastlogin else gm.lastlogout) | datetime }}</td>
+				</tr>
+			{% endfor %}
+			</tbody>
+		</table>
+	</div>
+</div>
+
+<div class="panel panel-default">
+	<div class="panel-heading">
+		Tutors
+	</div>
+	<div class="panel-body">
+		<table class="table table-hover table-striped">
+			<thead>
+				<th>Name</th>
+				<th>Last Seen</th>
+			</thead>
+			<tbody>
+			{% for tutor in tutors %}
+				<tr>
+					<td><a href="/community/player/{{ tutor.name }}">{{ tutor.name }}</a></td>
+					<td>{{ (tutor.lastlogout if tutor.lastlogout > tutor.lastlogin else tutor.lastlogout) | datetime }}</td>
+				</tr>
+			{% endfor %}
+			</tbody>
+		</table>
+	</div>
+</div>
+
+{% endblock %}

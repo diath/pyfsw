@@ -1,0 +1,45 @@
+{% extends "template.htm" %}
+{% block title %} Create Account {% endblock %}
+{% block body %}
+
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+<div class="alert alert-info">
+	<strong>The following errors have occured:</strong>
+	<ul>
+	{% for message in messages %}
+		<li>{{ message }}</li>
+	{% endfor %}
+	</ul>
+</div>
+{% endif %}
+{% endwith %}
+
+<div class="panel panel-default">
+	<div class="panel-heading">
+		Create Account
+	</div>
+	<div class="panel-body">
+		<form method="post" action="/account/create">
+			<div class="form-group">
+				<label for="inputName">Account Name</label>
+				<input type="text" class="form-control" id="inputName" name="name" placeholder="Account Name" required>
+			</div>
+			<div class="form-group">
+				<label for="inputPswd">Password</label>
+				<input type="password" class="form-control" id="inputPswd" name="pswd" placeholder="Password" required>
+			</div>
+			<div class="form-group">
+				<label for="inputPswdRepeat">Repeat Password</label>
+				<input type="password" class="form-control" id="inputPswdRepeat" name="pswdRepeat" placeholder="Repeat Password" required>
+			</div>
+			<div class="form-group">
+				<label for="inputMail">E-mail Address</label>
+				<input type="mail" class="form-control" id="inputMail" name="mail" placeholder="E-mail Address" required>
+			</div>
+			<button type="submit" class="btn btn-default">Create</button>
+		</form>
+	</div>
+</div>
+
+{% endblock %}

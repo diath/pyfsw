@@ -1,0 +1,18 @@
+{% extends "template.htm" %}
+{% block title %} Recovery Key {% endblock %}
+{% block body %}
+
+<div class="panel panel-default">
+	<div class="panel-heading">
+		Recovery Key
+	</div>
+	<div class="panel-body">
+		You have successfully generated a recovery key. Please save it somewhere.
+		<br>
+		<h2>{{ key }}</h2>
+		<br><br>
+		<a href="/account/manage"><button class="btn btn-default">Return</button></a>
+	</div>
+</div>
+
+{% endblock %}

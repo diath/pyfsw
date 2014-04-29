@@ -1,0 +1,55 @@
+{% extends "template.htm" %}
+{% block title %} Highscores {% endblock %}
+{% block body %}
+
+<div class="row">
+	<div class="col-md-2">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				Type
+			</div>
+			<div class="panel-body">
+				<ul class="nav nav-pills nav-stacked">
+				{% for town in towns %}
+					{% if town != '' %}
+						<li{% if loop.index0 == town_id %} class="active"{% endif %}><a href="/community/houses/{{ loop.index0 }}">{{ town }}</a></li>
+					{% endif %}
+				{% endfor %}
+				</ul>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-10">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				Highscores - {{ name }}
+			</div>
+			<div class="panel-body">
+				<table class="table table-hover table-striped">
+					<thead>
+						<th>Player</th>
+						<th>{{ name }}</th>
+					</thead>
+					<tbody>
+					{% for player in highscores %}
+						<tr>
+							<td>
+								<a href="/community/player/{{ player.name }}">{{ player.name }}</a>
+								<br>
+								<small>Level {{ player.level }}, {{ player.vocation | vocation }}</small>
+							</td>
+							<td>
+								Level {{ player.level }}
+								<br>
+								<small>{{ '{:,}'.format(player.experience) }} xp</small>
+							</td>
+						</tr>
+					{% endfor %}
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+
+{% endblock %}

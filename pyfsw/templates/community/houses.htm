@@ -1,0 +1,61 @@
+{% extends "template.htm" %}
+{% block title %} Houses {% endblock %}
+{% block body %}
+
+<div class="row">
+	<div class="col-md-2">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				Towns
+			</div>
+			<div class="panel-body">
+				<ul class="nav nav-pills nav-stacked">
+				{% for town in towns %}
+					{% if town != '' %}
+						<li{% if loop.index0 == town_id %} class="active"{% endif %}><a href="/community/houses/{{ loop.index0 }}">{{ town }}</a></li>
+					{% endif %}
+				{% endfor %}
+				</ul>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-10">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				Houses
+			</div>
+			<div class="panel-body">
+				<table class="table table-hover table-striped">
+					<thead>
+						<th>Name</th>
+						<th>Town</th>
+						<th>Size</th>
+						<th>Beds</th>
+						<th>Price</th>
+						<th>Owner</th>
+					</thead>
+					<tbody>
+					{% for house in houses %}
+						<tr>
+							<td>{{ house.name }}</td>
+							<td>{{ house.town_id | town }}</td>
+							<td>{{ house.size }} sqm</td>
+							<td>{{ house.beds }}</td>
+							<td>{{ house.size * price }} gp</td>
+							<td>
+							{% if house.player %}
+								<a href="/community/player/{{ house.player.name }}">{{ house.player.name }}</a>
+							{% else %}
+								Nobody
+							{% endif %}
+							</td>
+						</tr>
+					{% endfor %}
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+
+{% endblock %}

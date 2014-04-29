@@ -1,0 +1,90 @@
+{% set active_page = active_page|default('index') -%}
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="description" content="pyfsw - An interactive website for the Forgotten Server.">
+		<meta name="author" content="Kamil Chojnowski <diath@zodiaclabs.org>">
+
+		<link rel="stylesheet" type="text/css" media="screen" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+		<link rel="stylesheet" type="text/css" media="screen" href="{{ url_for('static', filename='css/style.css') }}">
+
+		<title>pyfsw - {% block title %}{% endblock %}</title>
+
+		<script type="text/javascript" src="//code.jquery.com/jquery.js"></script>
+	</head>
+	<body>
+		<div class="container">
+			<div class="navbar navbar-fixed-top navbar-inverse" role="navigation">
+				<div class="collapse navbar-collapse">
+					<ul class="nav navbar-nav navbar-left">
+						<li><a class="navbar-brand" href="/">7952</a></li>
+					</ul>
+					<ul class="nav navbar-nav navbar-right">
+						<li class="dropdown">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown">News <b class="caret"></b></a>
+							<ul class="dropdown-menu">
+								<li><a href="/">Recent News</a></li>
+								<li><a href="/news/archive">News Archive</a></li>
+							</ul>
+						</li>
+						<li class="dropdown">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown">Account <b class="caret"></b></a>
+							<ul class="dropdown-menu">
+								{% if session.account %}
+								<li><a href="/account/manage">Manage</a></li>
+								<li><a href="/account/logout">Logout</a></li>
+								{% else %}
+								<li><a href="/account/create">Create Account</a></li>
+								<li><a href="/account/login">Login</a></li>
+								<li><a href="/account/recover">Recover Account</a></li>
+								{% endif %}
+							</ul>
+						</li>
+						<li class="dropdown">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown">Community <b class="caret"></b></a>
+							<ul class="dropdown-menu">
+								<li><a href="/community/player">Search Player</a></li>
+								<li><a href="/community/highscores/level">Highscores</a></li>
+								<li><a href="/community/guilds">Guilds</a></li>
+								<li><a href="/community/houses/1">Houses</a></li>
+								<li><a href="/community/deaths">Last Deaths</a></li>
+								<li><a href="/community/market">Market</a></li>
+								<li><a href="/community/online">Online List</a></li>
+								<li><a href="/community/staff">Staff Members</a></li>
+							</ul>
+						</li>
+						<li class="dropdown">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown">Library <b class="caret"></b></a>
+							<ul class="dropdown-menu">
+							</ul>
+						</li>
+						<li class="dropdown">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown">Shop <b class="caret"></b></a>
+							<ul class="dropdown-menu">
+								<li><a href="/shop/points">Get Points</a></li>
+								<li><a href="/shop/offer">Browse Offer</a></li>
+							</ul>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div class="container">
+			{% block body %}
+			{% endblock %}
+		</div>
+		<hr>
+		<div id="footer">
+			<div class="container">
+				<p class="text-muted credit">
+					pyfsw - An interactive website for the <a href="https://github.com/otland/forgottenserver">Forgotten Server</a>.
+					<br>
+					Copyright &copy; {{ g.year }} Kamil Chojnowski &lt;diath&#64;zodiaclabs.org&gt;
+				</p>
+			</div>
+		</div>
+		<script type="text/javascript" src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+		<script type="text/javascript" src="http://twitter.github.com/bootstrap/assets/js/bootstrap-dropdown.js"></script>
+	</body>
+</html>

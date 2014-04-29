@@ -1,0 +1,15 @@
+/*
+	The default style.
+*/
+
+body {
+	background: #eee !important;
+	cursor: default !important;
+	padding-top: 75px !important;
+	font-size: 12px !important;
+	font-family: sans-serif !important;
+}
+
+.right {
+	text-align: right;
+}

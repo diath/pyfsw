@@ -1,0 +1,33 @@
+{% extends "template.htm" %}
+{% block title %} News Archive {% endblock %}
+{% block body %}
+
+<div class="panel panel-default">
+	<div class="panel-heading">
+		News Archive
+	</div>
+	<div class="panel-body">
+		<table class="table table-hover">
+			<thead>
+			<tr>
+				<th>ID</th>
+				<th>Title</th>
+				<th>Date</th>
+				<th>Author</th>
+			</tr>
+			</thead>
+			<tbody>
+			{% for entry in news %}
+			<tr>
+				<td>#{{ entry.id }}</td>
+				<td><a href="/news/{{ entry.id }}">{{ entry.header }}</a></td>
+				<td>{{ entry.timestamp | datetime }}</td>
+				<td><a href="/community/player/{{ entry.author.name }}">{{ entry.author.name }}</a></td>
+			</tr>
+			{% endfor %}
+			</tbody>
+		</table>
+	</div>
+</div>
+
+{% endblock %}

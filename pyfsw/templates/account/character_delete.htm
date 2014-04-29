@@ -1,0 +1,21 @@
+{% extends "template.htm" %}
+{% block title %} Delete Character {% endblock %}
+{% block body %}
+
+<div class="panel panel-default">
+	<div class="panel-heading">
+		Delete Character
+	</div>
+	<div class="panel-body">
+		<form method="post" action="/account/delete/{{ player.id }}">
+			Are you sure you want to delete the character <b>{{ player.name }}</b>?
+			<br>
+			This action is permanent and <u><b>can not be undone</b></u>.
+			<br><br>
+			<button type="submit" class="btn btn-default">Delete</button>
+			<a href="/account/manage"><button type="button" class="btn btn-default">Return</button></a>
+		</form>
+	</div>
+</div>
+
+{% endblock %}

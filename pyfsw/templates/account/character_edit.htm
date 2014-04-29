@@ -1,0 +1,20 @@
+{% extends "template.htm" %}
+{% block title %} Edit Character {% endblock %}
+{% block body %}
+
+<div class="panel panel-default">
+	<div class="panel-heading">
+		Edit Character
+	</div>
+	<div class="panel-body">
+		<form method="post" action="/account/edit/{{ player.id }}">
+			<div class="form-group">
+				<textarea name="comment" class="form-control">{{ player.comment }}</textarea>
+			</div>
+			<button type="submit" class="btn btn-default">Save</button>
+			<a href="/account/manage"><button type="button" class="btn btn-default">Return</button></a>
+		</form>
+	</div>
+</div>
+
+{% endblock %}

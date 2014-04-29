@@ -1,0 +1,84 @@
+{% extends "template.htm" %}
+{% block title %} Manage Account {% endblock %}
+{% block body %}
+
+{% if success %}
+<div class="alert alert-success">
+	<strong>Success</strong>
+	<br>
+	{{ success }}
+</div>
+{% endif %}
+
+<div class="panel panel-default">
+	<div class="panel-heading">
+		Account
+	</div>
+	<div class="panel-body">
+		<table class="table table-striped table-hover">
+			<tbody>
+				<tr>
+					<td>Name</td>
+					<td>{{ account.name }}</td>
+				</tr>
+				<tr>
+					<td>E-mail Address</td>
+					<td>{{ account.email }}</td>
+				</tr>
+				<tr>
+					<td>Created</td>
+					<td>{{ account.creation | datetime }}</td>
+				</tr>
+				<tr>
+					<td>Premium Points</td>
+					<td>{{ account.points }}</td>
+				</tr>
+			</tbody>
+		</table>
+		<a href="/account/password"><button class="btn btn-default btn-sm">Change Password</button></a>
+		<a href="/account/logout"><button class="btn btn-default btn-sm">Logout</button></a>
+	</div>
+</div>
+
+{% if account.key == '' %}
+<div class="panel panel-default">
+	<div class="panel-heading">
+		Recovery Key
+	</div>
+	<div class="panel-body">
+		You do not have a recovery key. It is recommended that you generate one.
+		<br>
+		In case you lose your account, using the recovery key is the only option to recover it.
+		<br><br>
+		<a href="/account/key"><button class="btn btn-default btn-sm">Generate Recovery Key</button></a>
+	</div>
+</div>
+{% endif %}
+
+<div class="panel panel-default">
+	<div class="panel-heading">
+		Characters
+	</div>
+	<div class="panel-body">
+		<table class="table table-striped table-hover">
+			<tbody>
+			{% for player in account.players %}
+				<tr>
+					<td>
+						<a href="/community/player/{{ player.name }}">{{ player.name }}</a>
+						<br>
+						<small>Level {{ player.level }}, {{ player.vocation | vocation }}</small>
+					</td>
+					<td class="right">
+						<a href="/account/edit/{{ player.id }}"><button class="btn btn-default btn-sm">Edit Comment</button></a>
+						<a href="/account/delete/{{ player.id }}"><button class="btn btn-default btn-sm">Delete</button></a>
+					</td>
+				</tr>
+			{% endfor %}
+			</tbody>
+		</table>
+		<a href="/account/character"><button class="btn btn-default btn-sm">Create Character</button></a>
+	</div>
+</div>
+
+{% endblock %}
