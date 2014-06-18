@@ -17,7 +17,7 @@ def init_globals():
 	g.year = date.today().year
 
 @app.template_filter('datetime')
-def filter_datetime(value, fmt=None):
+def filter_datetime(value):
 	return datetime.fromtimestamp(int(value)).strftime(DATE_FORMAT)
 
 @app.template_filter('timetotal')
@@ -76,5 +76,6 @@ from pyfsw.models.house import House
 from pyfsw.models.guild import Guild
 from pyfsw.models.news import News
 from pyfsw.models.library import Library
+from pyfsw.models.shop import ShopCategory, ShopItem
 
-from pyfsw.views import news, account, community, library, store
+from pyfsw.views import news, account, community, library, shop
