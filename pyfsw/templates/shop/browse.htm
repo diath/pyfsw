@@ -1,0 +1,52 @@
+{% extends "template.htm" %}
+{% block title %} Browse Offer {% endblock %}
+{%- block body -%}
+
+<div class="panel panel-default">
+	<div class="panel-heading">Browse Offer</div>
+	<div class="panel-body">
+		<ul id="Categories" class="nav nav-tabs">
+		{% for category in categories %}
+			<li{% if loop.index0 == 0 %} class="active"{% endif %}><a href="#{{ category.name }}">{{ category.name }}</a></li>
+		{% endfor %}
+		</ul>
+
+		<div class="tab-content">
+		{% for category in categories %}
+			<div class="tab-pane{% if loop.index0 == 0 %} active{% endif %}" id="{{ category.name }}">
+				<table class="table table-hover table-striped">
+					<thead><tr>	
+						<th>Item</th>
+						<th>Price</th>
+						<th>&nbsp;</th>
+					</tr></thead>
+					<tbody>
+					{% for item in category.items %}
+					<tr>
+						<td>
+							<strong>{{ item.name }}<strong>
+							{{ item.description }}
+						<td>
+						<td>{{ item.price }}</td>
+						<td><a href="#">Buy</a></td>
+					{% endfor %}
+					</tbody>
+				</table>
+			</div>
+		{% endfor %}
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript">
+	// >2015
+	// >Making your website depend on JavaScript
+	// Fucking disgusting.
+
+	$('#Categories a').click(function(e) {
+		e.preventDefault()
+		$(this).tab('show')
+	});
+</script>
+
+{% endblock %}
