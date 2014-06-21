@@ -2,6 +2,19 @@
 {% block title %} Browse Offer {% endblock %}
 {%- block body -%}
 
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+<div class="alert alert-info">
+	<strong>Information:</strong>
+	<ul>
+	{% for message in messages %}
+		<li>{{ message }}</li>
+	{% endfor %}
+	</ul>
+</div>
+{% endif %}
+{% endwith %}
+
 <div class="panel panel-default">
 	<div class="panel-heading">Browse Offer</div>
 	<div class="panel-body">
@@ -22,13 +35,17 @@
 					</tr></thead>
 					<tbody>
 					{% for item in category.items %}
+					{% if item.enabled %}
 					<tr>
 						<td>
-							<strong>{{ item.name }}<strong>
+							<strong>{{ item.name }}</strong>
+							<br>
 							{{ item.description }}
-						<td>
+						</td>
 						<td>{{ item.price }}</td>
-						<td><a href="#">Buy</a></td>
+						<td><a href="/shop/order/{{ item.id }}"><button class="btn btn-default">Buy</button></a></td>
+					</tr>
+					{% endif %}
 					{% endfor %}
 					</tbody>
 				</table>

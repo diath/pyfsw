@@ -76,6 +76,6 @@ from pyfsw.models.house import House
 from pyfsw.models.guild import Guild
 from pyfsw.models.news import News
 from pyfsw.models.library import Library
-from pyfsw.models.shop import ShopCategory, ShopItem
+from pyfsw.models.shop import ShopCategory, ShopItem, ShopOrder, ShopHistory
 
 from pyfsw.views import news, account, community, library, shop

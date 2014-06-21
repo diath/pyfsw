@@ -1,0 +1,38 @@
+{% extends "template.htm" %}
+{% block title %} Order Item ({{ item.name }}) {% endblock %}
+{%- block body -%}
+
+<div class="panel panel-default">
+	<div class="panel-heading">Order Item ({{ item.name }})</div>
+	<div class="panel-body">
+		<form method="post" action="/shop/order/{{ item.id }}">
+			<table class="table table-hover table-striped">
+				<tbody>
+					<tr>
+						<td>Item</td>
+						<td class="right"><strong>{{ item.name }}</strong><br>{{ item.description }}</td>
+					</tr>
+					<tr>
+						<td>Price</td>
+						<td class="right">{{ item.price }}</td>
+					</tr>
+					<tr>
+						<td>Character</td>
+						<td class="right">
+							<select name="character">
+							{% for character in characters %}
+								<option value="{{ character.id }}">{{ character.name }}</option>
+							{% endfor %}
+							</select>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			<input type="hidden" name="item" value="{{ item.id }}">
+			<button type="submit" class="btn btn-default">Order</button>
+			<a href="/shop/offer"><button type="button" class="btn btn-default">Return</button></a>
+		</form>
+	</div>
+</div>
+
+{% endblock %}

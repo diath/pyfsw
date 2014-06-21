@@ -47,3 +47,27 @@ class ShopItem(db.Model):
 
 	def __repr__(self):
 		return '<ShopItem.{}>'.format(self.id)
+
+class ShopOrder(db.Model):
+	__tablename__ = 'shop_order'
+
+	# Standard columns
+	id = Column(Integer, primary_key=True, unique=True)
+	name = Column(String(32))
+	type = Column(Integer)
+	key = Column(Integer)
+	value = Column(Integer)
+	price = Column(Integer)
+	timestamp = Column(Integer)
+	character_id = Column(Integer)
+
+	# Methods
+	def __init__(self):
+		pass
+
+	def __repr__(self):
+		return '<ShopOrder.{}>'.format(self.id)
+
+class ShopHistory():
+	def __init__(self):
+		pass
