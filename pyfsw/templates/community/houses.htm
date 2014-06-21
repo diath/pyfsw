@@ -9,13 +9,13 @@
 				Towns
 			</div>
 			<div class="panel-body">
-				<ul class="nav nav-pills nav-stacked">
+				<div class="list-group">
 				{% for town in towns %}
 					{% if town != '' %}
-						<li{% if loop.index0 == town_id %} class="active"{% endif %}><a href="/community/houses/{{ loop.index0 }}">{{ town }}</a></li>
+						<a class="list-group-item{% if loop.index0 == town_id %} active{% endif %}" href="/community/houses/{{ loop.index0 }}">{{ town }}</a>
 					{% endif %}
 				{% endfor %}
-				</ul>
+				</div>
 			</div>
 		</div>
 	</div>
