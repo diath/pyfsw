@@ -241,6 +241,39 @@ def route_account_character_post():
 
 	return render_template('account/manage.htm', account=current_user(), success='The character has been created.')
 
-@app.route('/account/recover')
+@app.route('/account/recover', methods=['GET'])
 def route_account_recover():
-	pass
+	return render_template('account/recover.htm')
+
+@app.route('/account/recover', methods=['POST'])
+def route_account_recover_post():
+	name = request.form.get('name', '', type=str)
+	key = request.form.get('key', '', type=str)
+	pswd = request.form.get('pswd', '', type=str)
+	pswdRepeat = request.form.get('pswdRepeat', '', type=str)
+
+	if len(name) < 4 or len(name) > 32:
+		flash('Invalid account name specified.')
+
+	if len(pswd) < 5:
+		flash('The new password must be at least 5 characters long.')
+
+	if pswd != pswdRepeat:
+		flash('The passwords do not match.')
+
+	account = db.session().query(Account).filter(Account.name == name).filter(Account.key == key).first()
+	if not account:
+		flash('Invalid recovery key specified.')
+	else:
+		hash = sha1()
+		hash.update(pswd.encode('utf-8'))
+		pswd = hash.hexdigest()
+
+		account.password = pswd
+		account.key = ''
+
+		db.session().commit()
+
+		flash('The password for the account has been changed.')
+
+	return redirect(url_for('route_account_recover'))
