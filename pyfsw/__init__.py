@@ -94,3 +94,4 @@ from pyfsw.models.library import Library
 from pyfsw.models.shop import ShopCategory, ShopItem, ShopOrder, ShopHistory
 
 from pyfsw.views import news, account, community, library, shop
+from pyfsw.views import paypal

@@ -4,6 +4,18 @@ from pyfsw import app, db
 from pyfsw import QUESTS, TOWNS, HOUSE_PRICE
 from pyfsw import Player, PlayerStorage, House
 
+HS_TYPES = {
+	'level': ('Level', Player.experience.desc(), 'level', 'experience', 'experience'),
+	'mag': ('Magic Level', Player.maglevel.desc(), 'maglevel', 'manaspent', 'mana spent'),
+	'fist': ('Fist Fighting', Player.skill_fist.desc(), 'skill_fist', 'skill_fist_tries', 'hits'),
+	'club': ('Club Fighting', Player.skill_club.desc(), 'skill_club', 'skill_club_tries', 'hits'),
+	'sword': ('Sword Fighting', Player.skill_sword.desc(), 'skill_sword', 'skill_sword_tries', 'hits'),
+	'axe': ('Axe Fighting', Player.skill_axe.desc(), 'skill_axe', 'skill_axe_tries', 'hits'),
+	'dist': ('Distance', Player.skill_dist.desc(), 'skill_dist', 'skill_dist_tries', 'hits'),
+	'shield': ('Shielding', Player.skill_shielding.desc(), 'skill_shielding', 'skill_shielding_tries', 'blocks'),
+	'fish': ('Fishing', Player.skill_fishing.desc(), 'skill_fishing', 'skill_fishing_tries', 'tries')
+}
+
 @app.route('/community/player', methods=['GET'])
 def route_community_player_get():
 	return render_template('community/player_search.htm')
@@ -29,20 +41,19 @@ def route_community_player_post():
 
 @app.route('/community/highscores/<string:type>')
 def route_community_highscores(type):
+	current = HS_TYPES.get(type)
+	if current is None:
+		return redirect(url_for('route_community_highscores', type='level'))
+
 	highscores = Player.query.filter(Player.group_id == 1)
-	name = 'Level'
-
-	if type == 'maglevel':
-		highscores = highscores.order_by(Player.manaspent.desc())
-		name = 'Magic Level'
-	elif type == 'fist':
-		highscores = highscores.order_By(Player.skill_fist.desc())
-		name = 'Club Fighting'
-	else:
-		highscores = highscores.order_by(Player.experience.desc())
-
+	highscores = highscores.order_by(current[1])
 	highscores = highscores.limit(100).all()
-	return render_template('community/highscores.htm', type=type, name=name, highscores=highscores)
+
+	for player in highscores:
+		player.value = getattr(player, current[2])
+		player.subvalue = getattr(player, current[3])
+
+	return render_template('community/highscores.htm', type=type, name=current[0], highscores=highscores, suffix=current[4])
 
 @app.route('/community/houses/<int:town_id>')
 def route_community_houses(town_id):

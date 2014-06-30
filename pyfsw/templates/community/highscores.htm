@@ -1,3 +1,15 @@
+{% set types = [
+	('level', 'Level'),
+	('mag', 'Magic Level'),
+	('fist', 'Fist Fighting'),
+	('club', 'Club Fighting'),
+	('sword', 'Sword Fighting'),
+	('axe', 'Axe Fighting'),
+	('dist', 'Distance'),
+	('shield', 'Shielding'),
+	('fish', 'Fishing')
+] -%}
+
 {% extends "template.htm" %}
 {% block title %} Highscores {% endblock %}
 {% block body %}
@@ -10,10 +22,8 @@
 			</div>
 			<div class="panel-body">
 				<ul class="nav nav-pills nav-stacked">
-				{% for town in towns %}
-					{% if town != '' %}
-						<li{% if loop.index0 == town_id %} class="active"{% endif %}><a href="/community/houses/{{ loop.index0 }}">{{ town }}</a></li>
-					{% endif %}
+				{% for item in types %}
+					<li{% if type == item[0] %} class="active"{% endif %}><a href="/community/highscores/{{ item[0] }}">{{ item[1] }}</a></li>
 				{% endfor %}
 				</ul>
 			</div>
@@ -39,9 +49,9 @@
 								<small>Level {{ player.level }}, {{ player.vocation | vocation }}</small>
 							</td>
 							<td>
-								Level {{ player.level }}
+								Level {{ player.value }}
 								<br>
-								<small>{{ '{:,}'.format(player.experience) }} xp</small>
+								<small>{{ '{:,}'.format(player.subvalue) }} {{ suffix }}</small>
 							</td>
 						</tr>
 					{% endfor %}
