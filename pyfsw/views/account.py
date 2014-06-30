@@ -10,6 +10,10 @@ from pyfsw import NEW_CHARACTER
 
 @app.route('/account/login', methods=['GET'])
 def route_account_login():
+	next = request.args.get('next')
+	if next:
+		return render_template('account/login.htm', next=next)
+
 	return render_template('account/login.htm')
 
 @app.route('/account/login', methods=['POST'])
@@ -27,6 +31,10 @@ def route_account_login_post():
 		return render_template('account/login.htm', error=True)
 
 	session['account'] = account.id
+
+	if 'next' in request.form:
+		return redirect(request.form['next'])
+
 	return redirect(url_for('route_account_manage'))
 
 @app.route('/account/logout')

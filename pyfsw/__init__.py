@@ -62,7 +62,7 @@ def login_required(f):
 	@wraps(f)
 	def decorated(*args, **kwargs):
 		if 'account' not in session:
-			return redirect(url_for('route_account_login'))
+			return redirect(url_for('route_account_login', next=request.path))
 
 		return f(*args, **kwargs)
 
