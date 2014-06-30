@@ -115,8 +115,11 @@ class PlayerDeath(db.Model):
 	def __repr__(self):
 		return '<PlayerDeath {} => >'.format(self.player_id, self.killed_by)
 
-	def toString(self):
-		ret = 'Died at level {} to '.format(self.level)
+	def toString(self, lower=False):
+		if lower:
+			ret = 'died at level {} to '.format(self.level)
+		else:
+			ret = 'Died at level {} to '.format(self.level)
 
 		if self.is_player:
 			ret += '<a href="/community/player/{}">{}</a>'.format(self.killed_by, self.killed_by)

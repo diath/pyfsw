@@ -2,7 +2,7 @@ from flask import render_template, request
 
 from pyfsw import app, db
 from pyfsw import QUESTS, TOWNS, HOUSE_PRICE
-from pyfsw import Player, PlayerStorage, House
+from pyfsw import Player, PlayerStorage, PlayerDeath, House
 
 HS_TYPES = {
 	'level': ('Level', Player.experience.desc(), 'level', 'experience', 'experience'),
@@ -70,3 +70,15 @@ def route_community_staff():
 	tutors = Player.query.filter(Player.group_id == 2).all()
 
 	return render_template('community/staff.htm', gms=gms, tutors=tutors)
+
+@app.route('/community/deaths')
+def route_community_deaths():
+	deaths = PlayerDeath.query.limit(25).all()
+	for death in deaths:
+		player = db.session().query(Player.name).filter(Player.id == death.player_id).first()
+		if player:
+			death.name = player.name
+		else:
+			death.name = 'Unknown'
+
+	return render_template('community/deaths.htm', deaths=deaths)

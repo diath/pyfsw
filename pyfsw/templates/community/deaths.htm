@@ -1,0 +1,24 @@
+{% extends "template.htm" %}
+{% block title %} Latest Deaths {% endblock %}
+{% block body %}
+
+<div class="panel panel-default">
+	<div class="panel-heading">
+		Latest Deaths
+	</div>
+	<div class="panel-body">
+		<table class="table table-hover table-striped">
+			<tbody>
+			{% autoescape off %}
+			{% for death in deaths %}
+				<tr><td>
+					<a href="/community/player/{{ death.name }}">{{ death.name }}</a> {{ death.toString(True) }}
+				</tr>
+			{% endfor %}
+			{% endautoescape %}
+			</tbody>
+		</table>
+	</div>
+</div>
+
+{% endblock %}
