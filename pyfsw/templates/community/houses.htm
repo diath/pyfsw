@@ -41,7 +41,7 @@
 							<td>{{ house.town_id | town }}</td>
 							<td>{{ house.size }} sqm</td>
 							<td>{{ house.beds }}</td>
-							<td>{{ house.size * price }} gp</td>
+							<td>{{ '{:,}'.format(house.size * price) }} gp</td>
 							<td>
 							{% if house.player %}
 								<a href="/community/player/{{ house.player.name }}">{{ house.player.name }}</a>
