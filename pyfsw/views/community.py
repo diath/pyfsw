@@ -4,6 +4,7 @@ from pyfsw import app, db
 from pyfsw import QUESTS, TOWNS, HOUSE_PRICE
 from pyfsw import Player, PlayerStorage, PlayerDeath, PlayerOnline
 from pyfsw import House
+from pyfsw import MarketOffer, MarketHistory
 
 HS_TYPES = {
 	'level': ('Level', Player.experience.desc(), 'level', 'experience', 'experience'),
@@ -88,3 +89,11 @@ def route_community_deaths():
 def route_community_online():
 	online = PlayerOnline.query.all()
 	return render_template('community/online.htm', online=online)
+
+@app.route('/community/market')
+def route_community_market():
+	sell = MarketOffer.query.filter(MarketOffer.sale == 1).all()
+	buy = MarketOffer.query.filter(MarketOffer.sale == 0).all()
+	history = MarketHistory.query.all()
+
+	return render_template('community/market.htm', sell=sell, buy=buy, history=history)
