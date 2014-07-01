@@ -1,0 +1,34 @@
+{% extends "template.htm" %}
+{% block title %} Online List {% endblock %}
+{% block body %}
+
+<div class="panel panel-default">
+	<div class="panel-heading">
+		Online List
+	</div>
+	<div class="panel-body">
+		<table class="table table-hover table-striped">
+			<thead>
+				<tr>
+					<th>Player</th>
+					<th>Level</th>
+					<th>Vocation</th>
+				</tr>
+			</thead>
+			<tbody>
+			{% for player in online %}
+			{% set player = player.player() %}
+				<tr>
+					<td><a href="/community/player/{{ player.name }}">{{ player.name }}</a></td>
+					<td>
+						Level {{ player.level }} ({{ '{:,}'.format(player.experience) }} xp)
+					</td>
+					<td>{{ player.vocation | vocation }}</td>
+				</tr>
+			{% endfor %}
+			</tbody>
+		</table>
+	</div>
+</div>
+
+{% endblock %}

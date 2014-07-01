@@ -13,7 +13,7 @@
 			{% for death in deaths %}
 				<tr><td>
 					<a href="/community/player/{{ death.name }}">{{ death.name }}</a> {{ death.toString(True) }}
-				</tr>
+				</td></tr>
 			{% endfor %}
 			{% endautoescape %}
 			</tbody>

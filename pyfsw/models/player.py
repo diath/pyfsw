@@ -112,8 +112,11 @@ class PlayerDeath(db.Model):
 	mostdamage_unjustified = Column(Integer)
 
 	# Methods
+	def __init__(self):
+		pass
+
 	def __repr__(self):
-		return '<PlayerDeath {} => >'.format(self.player_id, self.killed_by)
+		return '<PlayerDeath {} => {}>'.format(self.player_id, self.killed_by)
 
 	def toString(self, lower=False):
 		if lower:
@@ -134,3 +137,19 @@ class PlayerDeath(db.Model):
 
 		ret += '.'
 		return ret
+
+class PlayerOnline(db.Model):
+	__tablename__ = 'players_online'
+
+	# Standard columns
+	player_id = Column(Integer, ForeignKey('players.id'), primary_key=True)
+
+	# Methods
+	def __init__(self):
+		pass
+
+	def __repr__(self):
+		return '<PlayerOnline {}>'.format(self.player_id)
+
+	def player(self):
+		return Player.query.filter(Player.id == self.player_id).first()

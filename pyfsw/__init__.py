@@ -86,7 +86,7 @@ def get_library():
 app.jinja_env.globals.update(get_library=get_library)
 
 from pyfsw.models.account import Account
-from pyfsw.models.player import Player, PlayerStorage, PlayerDeath
+from pyfsw.models.player import Player, PlayerStorage, PlayerDeath, PlayerOnline
 from pyfsw.models.house import House
 from pyfsw.models.guild import Guild
 from pyfsw.models.news import News

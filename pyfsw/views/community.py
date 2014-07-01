@@ -2,7 +2,8 @@ from flask import render_template, request
 
 from pyfsw import app, db
 from pyfsw import QUESTS, TOWNS, HOUSE_PRICE
-from pyfsw import Player, PlayerStorage, PlayerDeath, House
+from pyfsw import Player, PlayerStorage, PlayerDeath, PlayerOnline
+from pyfsw import House
 
 HS_TYPES = {
 	'level': ('Level', Player.experience.desc(), 'level', 'experience', 'experience'),
@@ -82,3 +83,8 @@ def route_community_deaths():
 			death.name = 'Unknown'
 
 	return render_template('community/deaths.htm', deaths=deaths)
+
+@app.route('/community/online')
+def route_community_online():
+	online = PlayerOnline.query.all()
+	return render_template('community/online.htm', online=online)
