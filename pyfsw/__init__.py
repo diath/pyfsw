@@ -1,10 +1,9 @@
-from flask import Flask, render_template, redirect, url_for, jsonify, request, current_app, g, session
+from flask import Flask
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask_debugtoolbar import DebugToolbarExtension
 
 from pyfsw.config import *
 
-from datetime import date, datetime
 from functools import wraps
 
 app = Flask(__name__)
@@ -23,54 +22,6 @@ if DEBUG:
 
 db = SQLAlchemy(app)
 
-def login_required(f):
-	@wraps(f)
-	def decorated(*args, **kwargs):
-		if 'account' not in session:
-			return redirect(url_for('route_account_login', next=request.path))
-
-		return f(*args, **kwargs)
-
-	return decorated
-
-def current_user():
-	if 'account' in session:
-		return db.session().query(Account).filter(Account.id == session['account']).first()
-
-	return None
-
-def get_library():
-	liblist = []
-	library = db.session().query(Library).all()
-
-	for lib in library:
-		liblist.append({'uri': lib.uri, 'name': lib.name})
-
-	return liblist
-
-def is_guild_leader(id):
-	user = current_user()
-	if not user:
-		return False
-
-	guild = db.session().query(Guild.ownerid).filter(Guild.id == id).first()
-	if not guild:
-		return False
-
-	owner = guild[0]
-	found = False
-
-	for player in user.players:
-		if player.id == owner:
-			found = True
-			break
-
-	return found
-
-app.jinja_env.globals.update(get_library=get_library)
-
-from pyfsw.filters import *
-
 from pyfsw.models.account import Account
 from pyfsw.models.guild import Guild, GuildInvite, GuildMembership, GuildRank, GuildWar, GuildWarKill
 from pyfsw.models.player import Player, PlayerStorage, PlayerDeath, PlayerOnline
@@ -79,6 +30,9 @@ from pyfsw.models.news import News
 from pyfsw.models.library import Library
 from pyfsw.models.shop import ShopCategory, ShopItem, ShopOrder, ShopHistory
 from pyfsw.models.market import MarketOffer, MarketHistory
+
+from pyfsw.filters import *
+from pyfsw.helpers import *
 
 from pyfsw.views import news, account, community, community_guilds, library, shop
 from pyfsw.views import error, paypal
