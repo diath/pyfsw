@@ -1,5 +1,6 @@
 from flask import Flask, render_template, redirect, url_for, jsonify, request, current_app, g, session
 from flask.ext.sqlalchemy import SQLAlchemy
+from flask_debugtoolbar import DebugToolbarExtension
 
 from pyfsw.config import *
 
@@ -9,6 +10,16 @@ from functools import wraps
 app = Flask(__name__)
 app.secret_key = SECRET_KEY
 app.config['SQLALCHEMY_DATABASE_URI'] = DB_URI
+app.config['MAX_CONTENT_LENGTH'] = 3 * 1024 * 1024
+
+if DEBUG:
+	app.debug = DEBUG
+	app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
+
+	if DEBUG_PROFILER:
+		app.config['DEBUG_TB_PROFILER_ENABLED'] = True
+
+	DebugToolbarExtension(app)
 
 db = SQLAlchemy(app)
 
@@ -42,6 +53,15 @@ def filter_vocation(value):
 @app.template_filter('town')
 def filter_town(value):
 	return TOWNS[value]
+
+@app.template_filter('rank')
+def filter_rank(value):
+	if value == 3:
+		return 'The Leader'
+	elif value == 2:
+		return 'Vice Leader'
+
+	return 'Member'
 
 @app.errorhandler(403)
 def error_forbidden(error):
@@ -83,16 +103,35 @@ def get_library():
 
 	return liblist
 
+def is_guild_leader(id):
+	user = current_user()
+	if not user:
+		return False
+
+	guild = db.session().query(Guild.ownerid).filter(Guild.id == id).first()
+	if not guild:
+		return False
+
+	owner = guild[0]
+	found = False
+
+	for player in user.players:
+		if player.id == owner:
+			found = True
+			break
+
+	return found
+
 app.jinja_env.globals.update(get_library=get_library)
 
 from pyfsw.models.account import Account
+from pyfsw.models.guild import Guild, GuildInvite, GuildMembership, GuildRank, GuildWar, GuildWarKill
 from pyfsw.models.player import Player, PlayerStorage, PlayerDeath, PlayerOnline
 from pyfsw.models.house import House
-from pyfsw.models.guild import Guild, GuildInvite, GuildMembership, GuildRank, GuildWar, GuildWarKill
 from pyfsw.models.news import News
 from pyfsw.models.library import Library
 from pyfsw.models.shop import ShopCategory, ShopItem, ShopOrder, ShopHistory
 from pyfsw.models.market import MarketOffer, MarketHistory
 
-from pyfsw.views import news, account, community, library, shop
+from pyfsw.views import news, account, community, community_guilds, library, shop
 from pyfsw.views import paypal

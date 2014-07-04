@@ -1,6 +1,8 @@
 from sqlalchemy import Binary, Column, Integer, BigInteger, String, ForeignKey
 from sqlalchemy.orm import backref
+
 from pyfsw import db
+from pyfsw import Guild, GuildMembership
 
 class Player(db.Model):
 	__tablename__ = 'players'
@@ -68,6 +70,9 @@ class Player(db.Model):
 	storages = db.relationship('PlayerStorage', primaryjoin='Player.id == PlayerStorage.player_id', backref='players')
 	deaths = db.relationship('PlayerDeath', primaryjoin='Player.id == PlayerDeath.player_id', backref='players')
 
+	# Misc
+	guild = None
+
 	# Methods
 	def __init__(self):
 		pass
@@ -81,6 +86,21 @@ class Player(db.Model):
 				return storage.value
 
 		return -1
+
+	def getGuild(self):
+		if self.guild:
+			return self.guild
+
+		membership = db.session().query(GuildMembership.guild_id).filter(GuildMembership.player_id == self.id).first()
+		if not membership:
+			return None
+
+		guild = Guild.query.filter(Guild.id == membership.guild_id)
+		if not guild:
+			return None
+
+		self.guild = guild
+		return self.guild
 
 class PlayerStorage(db.Model):
 	__tablename__ = 'player_storage'

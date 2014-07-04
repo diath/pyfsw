@@ -1,0 +1,45 @@
+{% extends "template.htm" %}
+{% block title %} Guilds {% endblock %}
+{% block body %}
+
+{% if user %}
+<div class="panel panel-default">
+	<div class="panel-heading">
+		Create Guild
+	</div>
+	<div class="panel-body">
+		Any character of level 100 or higher that is not a member of any guild can create a new guild.
+		<br>
+		<a href="/community/guild/create">Click here</a> if any of your characters meets the requirement and you want to create a guild.
+	</div>
+</div>
+{% endif %}
+
+<div class="panel panel-default">
+	<div class="panel-heading">
+		Guilds
+	</div>
+	<div class="panel-body">
+		<table class="table table-hover table-striped">
+			<tbody>
+			{% for guild in guilds %}
+				<tr>
+					<td><img class="emblem" src="/community/guild/{{ guild.id }}/getlogo"></td>
+					<td>
+						<a href="/community/guild/{{ guild.id }}">{{ guild.name }}</a>
+						<br>
+						<small>{{ guild.motd }}</small>
+					</td>
+					<td>
+						<a href="/community/player/{{ guild.owner.name }}">{{ guild.owner.name }}</a>
+						<br>
+						<small>Level {{ guild.owner.level }}, {{ guild.owner.vocation | vocation }}</small>
+					</td>
+				</tr>
+			{% endfor %}
+			</tbody>
+		</table>
+	</div>
+</div>
+
+{% endblock %}

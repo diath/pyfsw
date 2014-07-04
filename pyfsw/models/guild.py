@@ -1,4 +1,5 @@
 from sqlalchemy import Column, Integer, String, ForeignKey
+
 from pyfsw import db
 
 class Guild(db.Model):
@@ -10,6 +11,9 @@ class Guild(db.Model):
 	ownerid = Column(Integer, ForeignKey('players.id'))
 	creationdata = Column(Integer)
 	motd = Column(String(255))
+
+	# Relationships
+	owner = db.relationship('Player', foreign_keys='Guild.ownerid')
 
 	# Methods
 	def __init__(self):
@@ -24,6 +28,10 @@ class GuildInvite(db.Model):
 	# Standard columns
 	player_id = Column(Integer, ForeignKey('players.id'), primary_key=True)
 	guild_id = Column(Integer, ForeignKey('guilds.id'))
+
+	# Relationships
+	player = db.relationship('Player', foreign_keys='GuildInvite.player_id')
+	guild = db.relationship('Guild', foreign_keys='GuildInvite.guild_id')
 
 	# Methods
 	def __init__(self):
@@ -41,6 +49,11 @@ class GuildMembership(db.Model):
 	rank_id = Column(Integer, ForeignKey('guild_ranks.id'))
 	nick = Column(String(15), default='')
 
+	# Relationship
+	player = db.relationship('Player', foreign_keys='GuildMembership.player_id')
+	guild = db.relationship('Guild', foreign_keys='GuildMembership.guild_id')
+	rank = db.relationship('GuildRank', foreign_keys='GuildMembership.rank_id')
+
 	# Methods
 	def __init__(self):
 		pass
@@ -56,6 +69,9 @@ class GuildRank(db.Model):
 	guild_id = Column(Integer, ForeignKey('guilds.id'))
 	name = Column(String(255))
 	level = Column(Integer)
+
+	# Relationship
+	guild = db.relationship('Guild', foreign_keys='GuildRank.guild_id')
 
 	# Methods
 	def __init__(self):

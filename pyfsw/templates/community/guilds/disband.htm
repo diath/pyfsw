@@ -1,0 +1,21 @@
+{% extends "template.htm" %}
+{% block title %} Disband Guild {% endblock %}
+{% block body %}
+
+<div class="panel panel-default">
+	<div class="panel-heading">
+		Disband Guild
+	</div>
+	<div class="panel-body">
+		<form method="post" action="/community/guild/{{ id }}/disband">
+			Are you sure you want to disband the guild?
+			<br>
+			This action is permanent and <u><b>can not be undone</b></u>.
+			<br><br>
+			<button type="submit" class="btn btn-default">Disband</button>
+			<a href="/community/guild/{{ id }}"><button type="button" class="btn btn-default">Return</button></a>
+		</form>
+	</div>
+</div>
+
+{% endblock %}

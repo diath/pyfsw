@@ -1,0 +1,29 @@
+{% extends "template.htm" %}
+{% block title %} Change Guild Logo {% endblock %}
+{% block body %}
+
+<div class="panel panel-default">
+	<div class="panel-heading">
+		Change Guild Logo
+	</div>
+	<div class="panel-body">
+		<form method="post" action="/community/guild/{{ id }}/logo" enctype="multipart/form-data">
+			Here you can change the guild logo by uploading an image file.
+			<br>
+			Logo rules:
+			<ul>
+				<li>The file size can not be bigger than 3 MB.</li>
+				<li>The image dimensions can't be bigger than 512x512.</li>
+				<li>The file format must be either PNG, GIF or JPEG.</li>
+			</ul>
+			<div class="form-group">
+				<label for="logoFile">Choose File</label>
+				<input type="file" name="logo" id="logoFile">
+			</div>
+			<button type="submit" class="btn btn-default">Upload</button>
+			<a href="/community/guild/{{ id }}"><button type="button" class="btn btn-default">Return</button></a>
+		</form>
+	</div>
+</div>
+
+{% endblock %}

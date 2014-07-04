@@ -1,0 +1,112 @@
+{% extends "template.htm" %}
+{% block title %} Guild - {{ guild.name }} {% endblock %}
+{% block body %}
+
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+<div class="alert alert-info">
+	<strong>Information</strong>
+	<ul>
+	{% for message in messages %}
+		<li>{{ message }}</li>
+	{% endfor %}
+	</ul>
+</div>
+{% endif %}
+{% endwith %}
+
+<div class="panel panel-default">
+	<div class="panel-heading">
+		Guild - {{ guild.name }}
+	</div>
+	<div class="panel-body">
+		<table class="table table-hover table-striped">
+			<div class="row">
+				<div class="col-md-4"><img class="emblem" src="/community/guild/{{ guild.id }}/getlogo"></div>
+				<div class="col-md-4 middle">
+					<h2>{{ guild.name }}</h2>
+					<br>
+					{{ guild.motd }}
+				</div>
+				<div class="col-md-4 right"><img class="emblem" src="/community/guild/{{ guild.id }}/getlogo"></div>
+			</div>
+		</table>
+	</div>
+</div>
+
+{% if leader %}
+<div class="panel panel-default">
+	<div class="panel-heading">
+		Manage
+	</div>
+	<div class="panel-body">
+		<a href="/community/guild/{{ guild.id }}/invite"><btn class="btn btn-default">Invite Player</btn></a>
+		<a href="/community/guild/{{ guild.id }}/kick"><btn class="btn btn-default">Kick Player</btn></a>
+		<a href="/community/guild/{{ guild.id }}/ranks"><btn class="btn btn-default">Change Rank Names</btn></a>
+		<a href="/community/guild/{{ guild.id }}/motd"><btn class="btn btn-default">Change Description</btn></a>
+		<a href="/community/guild/{{ guild.id }}/logo"><btn class="btn btn-default">Change Logo</btn></a>
+		<a href="/community/guild/{{ guild.id }}/disband"><btn class="btn btn-default">Disband Guild</btn></a>
+	</div>
+</div>
+{% endif %}
+
+<div class="panel panel-default">
+	<div class="panel-heading">
+		Members
+	</div>
+	<div class="panel-body">
+		<table class="table table-hover table-striped">
+			<tbody>
+			{% for member in members %}
+				<tr>
+					<td>{{ member.rank.name }}</td>
+					<td>
+						<a href="/community/player/{{ member.player.name }}">{{ member.player.name }}</a>
+						<br>
+						<small>Level {{ member.player.level }}, {{ member.player.vocation | vocation }}</small>
+					</td>
+				</tr>
+			{% endfor %}
+			</tbody>
+		</table>
+	</div>
+</div>
+
+{% if invites %}
+<div class="panel panel-default">
+	<div class="panel-heading">
+		Invitations
+	</div>
+	<div class="panel-body">
+		<table class="table table-hover table-striped">
+			<tbody>
+			{% for invite in invites %}
+				<tr>
+					<td>
+						<a href="/community/player/{{ invite.player.name }}">{{ invite.player.name }}</a>
+						<br>
+						<small>Level {{ invite.player.level }}, {{ invite.player.vocation | vocation }}</small>
+					</td>
+				</tr>
+			{% endfor %}
+			</tbody>
+		</table>
+	</div>
+</div>
+{% endif %}
+
+{% if wars %}
+<div class="panel panel-default">
+	<div class="panel-heading">
+		Active Wars
+	</div>
+	<div class="panel-body">
+		<table class="table table-hover table-striped">
+			<tbody>
+			</tbody>
+		</table>
+	</div>
+</div>
+{% endif %}
+
+{% endblock %}

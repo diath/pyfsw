@@ -1,0 +1,23 @@
+{% extends "template.htm" %}
+{% block title %} Change Rank Names {% endblock %}
+{% block body %}
+
+<div class="panel panel-default">
+	<div class="panel-heading">
+		Change Rank Names
+	</div>
+	<div class="panel-body">
+		<form method="post" action="/community/guild/{{ id }}/ranks">
+			{% for rank in ranks %}
+				<div class="form-group">
+					<label for="input{{ rank.level }}">{{ rank.level | rank}}</label>
+					<input type="text" class="form-control" id="input{{ rank.level }}" name="rank{{ rank.level }}" value="{{ rank.name }}">
+				</div>
+			{% endfor %}
+			<button type="submit" class="btn btn-default">Save Changes</button>
+			<a href="/community/guilds"><button type="button" class="btn btn-default">Return</button></a>
+		</form>
+	</div>
+</div>
+
+{% endblock %}
