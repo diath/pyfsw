@@ -23,10 +23,6 @@ if DEBUG:
 
 db = SQLAlchemy(app)
 
-@app.before_request
-def init_globals():
-	g.year = date.today().year
-
 @app.template_filter('datetime')
 def filter_datetime(value):
 	return datetime.fromtimestamp(int(value)).strftime(DATE_FORMAT)
