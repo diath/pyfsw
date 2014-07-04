@@ -55,7 +55,7 @@ def route_shop_order_post(id):
 		order.key = item.key
 		order.value = item.value
 		order.price = item.price
-		order.timestamp = int(time())
+		order.ordered = int(time())
 		order.character_id = character.id
 
 		account.points -= item.price

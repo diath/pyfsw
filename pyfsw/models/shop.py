@@ -58,7 +58,7 @@ class ShopOrder(db.Model):
 	key = Column(Integer)
 	value = Column(Integer)
 	price = Column(Integer)
-	timestamp = Column(Integer)
+	ordered = Column(Integer)
 	character_id = Column(Integer)
 
 	# Methods

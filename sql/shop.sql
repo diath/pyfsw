@@ -27,7 +27,7 @@ CREATE TABLE IF NOT EXISTS `shop_order` (
   `key` int(11) NOT NULL,
   `value` int(11) NOT NULL,
   `price` int(11) NOT NULL,
-  `timestamp` int(11) NOT NULL,
+  `ordered` int(11) NOT NULL,
   `character_id` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY (`id`)
