@@ -314,4 +314,8 @@ def route_community_guild_disband_post(id):
 	db.session().delete(guild)
 	db.session().commit()
 
+	logo = os.path.join(UPLOAD_PATH, '{}.png'.format(id))
+	if os.path.isfile(logo):
+		os.remove(logo)
+
 	return redirect(url_for('route_community_guilds'))
