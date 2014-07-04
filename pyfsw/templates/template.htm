@@ -66,6 +66,9 @@
 							<ul class="dropdown-menu">
 								<li><a href="/paypal/donate">Get Points (Paypal)</a></li>
 								<li><a href="/shop/offer">Browse Offer</a></li>
+								{% if session.account %}
+								<li><a href="/shop/history">Order History</a></li>
+								{% endif %}
 							</ul>
 						</li>
 					</ul>

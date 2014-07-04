@@ -2,7 +2,7 @@ from flask import redirect, render_template, url_for, request, flash
 from time import time
 
 from pyfsw import app, db
-from pyfsw import Player, ShopCategory, ShopItem, ShopOrder
+from pyfsw import Player, ShopCategory, ShopItem, ShopOrder, ShopHistory
 from pyfsw import login_required, current_user
 
 @app.route('/shop/offer')
@@ -66,3 +66,11 @@ def route_shop_order_post(id):
 		flash('The item has been ordered and should be delivered soon to your character.')
 
 	return redirect(url_for('route_shop'))
+
+@app.route('/shop/history', methods=['GET'])
+@login_required
+def route_shop_history():
+	user = current_user()
+	history = ShopHistory.query.filter(ShopHistory.account_id == user.id).all()
+
+	return render_template('shop/history.htm', history=history)

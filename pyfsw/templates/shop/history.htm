@@ -1,0 +1,27 @@
+{% extends "template.htm" %}
+{% block title %} Shop Order History {% endblock %}
+{%- block body -%}
+
+<div class="panel panel-default">
+	<div class="panel-heading">Shop Order History</div>
+	<div class="panel-body">
+		<table class="table table-hover table-striped">
+			<thead><tr>	
+				<th>Item</th>
+				<th>Price</th>
+				<th>Ordered</th>
+				<th>Delivered</th>
+			</tr></thead>
+			{% for item in history %}
+				<tr>
+					<td>{{ item.name }}</td>
+					<td>{{ item.price }}</td>
+					<td>{{ item.ordered | datetime }}</td>
+					<td>{{ item.delivered | datetime }}</td>
+				</tr>
+			{% endfor %}
+		</table>
+	</div>
+</div>
+
+{% endblock %}
