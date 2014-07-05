@@ -39,6 +39,7 @@ class ShopItem(db.Model):
 	key = Column(Integer)
 	value = Column(Integer)
 	price = Column(Integer)
+	custom_image = Column(String(128), default='')
 	enabled = Column(Integer, default=1)
 
 	# Methods

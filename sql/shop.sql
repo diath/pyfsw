@@ -15,6 +15,7 @@ CREATE TABLE IF NOT EXISTS `shop_item` (
   `key` int(11) NOT NULL,
   `value` int(11) NOT NULL,
   `price` int(11) NOT NULL DEFAULT '1',
+  `custom_image` varchar(128) NOT NULL DEFAULT '', 
   `enabled` int(11) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`),
   UNIQUE KEY `id` (`id`)
