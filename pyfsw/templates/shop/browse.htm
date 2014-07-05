@@ -29,6 +29,7 @@
 			<div class="tab-pane{% if loop.index0 == 0 %} active{% endif %}" id="{{ category.name }}">
 				<table class="table table-hover table-striped">
 					<thead><tr>	
+						<th>&nbsp</th>
 						<th>Item</th>
 						<th>Price</th>
 						<th>&nbsp;</th>
@@ -37,6 +38,13 @@
 					{% for item in category.items %}
 					{% if item.enabled %}
 					<tr>
+						<td>
+						{% if item.type == 1 or item.type == 2 %}
+							<img src="/static/img/items/{{ item.key }}.png">
+						{% else %}
+							<img src="{{ item.force_url }}">
+						{% endif %}
+						</td>
 						<td>
 							<strong>{{ item.name }}</strong>
 							<br>
