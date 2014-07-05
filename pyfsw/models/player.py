@@ -78,7 +78,7 @@ class Player(db.Model):
 		pass
 
 	def __repr__(self):
-		return '<Player {} => {}>'.format(self.id, self.name)
+		return '<Player.{}>'.format(self.id)
 
 	def getStorageValue(self, key):
 		for storage in self.storages:
@@ -115,7 +115,7 @@ class PlayerStorage(db.Model):
 		pass
 
 	def __repr__(self):
-		return '<PlayerStorage {} => {}>'.format(self.key, self.value)
+		return '<PlayerStorage.{}.{}.{}>'.format(self.player_id, self.key, self.value)
 
 class PlayerDeath(db.Model):
 	__tablename__ = 'player_deaths'
@@ -136,7 +136,7 @@ class PlayerDeath(db.Model):
 		pass
 
 	def __repr__(self):
-		return '<PlayerDeath {} => {}>'.format(self.player_id, self.killed_by)
+		return '<PlayerDeath.{}>'.format(self.player_id)
 
 	def toString(self, lower=False):
 		if lower:
@@ -169,7 +169,7 @@ class PlayerOnline(db.Model):
 		pass
 
 	def __repr__(self):
-		return '<PlayerOnline {}>'.format(self.player_id)
+		return '<PlayerOnline.{}>'.format(self.player_id)
 
 	def player(self):
 		return Player.query.filter(Player.id == self.player_id).first()

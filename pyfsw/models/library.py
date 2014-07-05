@@ -16,4 +16,4 @@ class Library(db.Model):
 		pass
 
 	def __repr__(self):
-		return '<Library.{}./{}/>'.format(self.id, self.uri)
+		return '<Library.{}.{}>'.format(self.id, self.uri)

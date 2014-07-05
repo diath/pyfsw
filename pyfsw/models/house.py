@@ -29,4 +29,4 @@ class House(db.Model):
 		pass
 
 	def __repr__(self):
-		return '<House {} => {}>'.format(self.id, self.name)
+		return '<House.{}>'.format(self.id)

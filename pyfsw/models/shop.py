@@ -17,7 +17,7 @@ class ShopCategory(db.Model):
 		pass
 
 	def __repr__(self):
-		return '<ShopCategory.{}.{}>'.format(self.id, self.name)
+		return '<ShopCategory.{}>'.format(self.id)
 
 class ShopItem(db.Model):
 	__tablename__ = 'shop_item'
