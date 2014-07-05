@@ -83,15 +83,27 @@ class GuildRank(db.Model):
 class GuildWar(db.Model):
 	__tablename__ = 'guild_wars'
 
+	# Constants
+	Pending = 0
+	Active = 1
+	Rejected = 2
+	Revoked = 3
+	PendingEnd = 4
+	Ended = 5
+
 	# Standard columns
 	id = Column(Integer, primary_key=True, unique=True)
-	guild1 = Column(Integer)
-	guild2 = Column(Integer)
+	guild1 = Column(Integer, ForeignKey('guilds.id'))
+	guild2 = Column(Integer, ForeignKey('guilds.id'))
 	name1 = Column(String(255))
 	name2 = Column(String(255))
 	status = Column(Integer)
 	started = Column(Integer)
 	ended = Column(Integer)
+
+	# Relationships
+	g1 = db.relationship('Guild', foreign_keys='GuildWar.guild1')
+	g2 = db.relationship('Guild', foreign_keys='GuildWar.guild2')
 
 	# Methods
 	def __init__(self):
@@ -105,12 +117,19 @@ class GuildWarKill(db.Model):
 
 	# Standard columns
 	id = Column(Integer, primary_key=True, unique=True)
-	killer = Column(Integer)
-	target = Column(Integer)
-	killerguild = Column(Integer)
-	targetguild = Column(Integer)
+	killer = Column(Integer, ForeignKey('players.id'))
+	target = Column(Integer, ForeignKey('players.id'))
+	killerguild = Column(Integer, ForeignKey('guilds.id'))
+	targetguild = Column(Integer, ForeignKey('guilds.id'))
 	warid = Column(Integer, ForeignKey('guild_wars.id'))
 	time = Column(Integer)
+
+	# Relationships
+	g1 = db.relationship('Guild', foreign_keys='GuildWarKill.killerguild')
+	g2 = db.relationship('Guild', foreign_keys='GuildWarKill.targetguild')
+
+	p1 = db.relationship('Player', foreign_keys='GuildWarKill.killer')
+	p2 = db.relationship('Player', foreign_keys='GuildWarKill.target')
 
 	# Methods
 	def __init__(self):

@@ -5,6 +5,7 @@ from pyfsw import QUESTS, TOWNS, HOUSE_PRICE
 from pyfsw import Player, PlayerStorage, PlayerDeath, PlayerOnline
 from pyfsw import House
 from pyfsw import MarketOffer, MarketHistory
+from pyfsw import GuildWar, GuildWarKill
 
 HS_TYPES = {
 	'level': ('Level', Player.experience.desc(), 'level', 'experience', 'experience'),
@@ -97,3 +98,19 @@ def route_community_market():
 	history = MarketHistory.query.all()
 
 	return render_template('community/market.htm', sell=sell, buy=buy, history=history)
+
+@app.route('/community/wars')
+def route_community_wars():
+	active = GuildWar.query.filter(GuildWar.status == GuildWar.Active).all()
+	pending = GuildWar.query.filter(GuildWar.status == GuildWar.Pending).all()
+	ended = GuildWar.query.filter(GuildWar.status == GuildWar.ended).all()
+
+	return render_template('community/wars.htm', active=active, pending=pending, ended=ended)
+
+@app.route('/community/war/<int:id>')
+def route_community_war(id):
+	war = GuildWar.query.filter(GuildWar.id == id).first()
+	if not war:
+		return redirect(url_for('route_community_wars'))
+
+	return render_template('community/war.htm', war=war)
