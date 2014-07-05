@@ -24,7 +24,11 @@
 					<tbody>
 					{% for offer in sell %}
 						<tr>
-							<td>{{ offer.itemtype }}</td>
+							<td>
+								<img src="/static/img/items/{{ offer.itemtype }}.png">
+								&nbsp;
+								{{ offer.itemtype }}
+							</td>
 							<td>{{ offer.amount }}</td>
 							<td>{{ offer.price }}</td>
 							<td>{{ offer.created | datetime }}</td>
@@ -52,7 +56,11 @@
 					<tbody>
 					{% for offer in buy %}
 						<tr>
-							<td>{{ offer.itemtype }}</td>
+							<td>
+								<img src="/static/img/items/{{ offer.itemtype }}.png">
+								&nbsp;
+								{{ offer.itemtype }}
+							</td>
 							<td>{{ offer.amount }}</td>
 							<td>{{ offer.price }}</td>
 							<td>{{ offer.created | datetime }}</td>
@@ -81,7 +89,11 @@
 					<tbody>
 					{% for offer in history %}
 						<tr>
-							<td>{{ offer.itemtype }}</td>
+							<td>
+								<img src="/static/img/items/{{ offer.itemtype }}.png">
+								&nbsp;
+								{{ offer.itemtype }}
+							</td>
 							<td>{{ offer.amount }}</td>
 							<td>{{ offer.price }}</td>
 							<td>{{ offer.inserted | datetime }}</td>
