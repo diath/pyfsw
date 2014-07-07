@@ -38,3 +38,15 @@ def filter_rank(value):
 		return 'Vice Leader'
 
 	return 'Member'
+
+@app.template_filter('price')
+def filter_price(value):
+	if value < 1000:
+		return '{}{}'.format(value, 'gp')
+
+	s = ''
+	while value > 1000:
+		value /= 1000
+		s += 'k'
+
+	return '{:.1f}{}'.format(value, s)

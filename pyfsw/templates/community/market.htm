@@ -30,7 +30,7 @@
 								{{ offer.itemtype }}
 							</td>
 							<td>{{ offer.amount }}</td>
-							<td>{{ offer.price }}</td>
+							<td>{{ offer.price | price }}</td>
 							<td>{{ offer.created | datetime }}</td>
 							<td>
 								{% if offer.anonymous %}
@@ -62,7 +62,7 @@
 								{{ offer.itemtype }}
 							</td>
 							<td>{{ offer.amount }}</td>
-							<td>{{ offer.price }}</td>
+							<td>{{ offer.price | price }}</td>
 							<td>{{ offer.created | datetime }}</td>
 							<td>
 								{% if offer.anonymous %}
@@ -95,7 +95,7 @@
 								{{ offer.itemtype }}
 							</td>
 							<td>{{ offer.amount }}</td>
-							<td>{{ offer.price }}</td>
+							<td>{{ offer.price | price }}</td>
 							<td>{{ offer.inserted | datetime }}</td>
 							<td>
 								{% if offer.sale %}
