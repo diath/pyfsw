@@ -20,15 +20,15 @@ def filter_timetotal(value):
 
 @app.template_filter('gender')
 def filter_gender(value):
-	return GENDERS[value]
+	return GENDERS.get(value, 'Unknown')
 
 @app.template_filter('vocation')
 def filter_vocation(value):
-	return VOCATIONS[value]
+	return VOCATIONS.get(value, 'Unknown')
 
 @app.template_filter('town')
 def filter_town(value):
-	return TOWNS[value]
+	return TOWNS.get(value, 'Unknown')
 
 @app.template_filter('rank')
 def filter_rank(value):
