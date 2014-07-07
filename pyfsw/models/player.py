@@ -68,7 +68,7 @@ class Player(db.Model):
 
 	# Relationships
 	storages = db.relationship('PlayerStorage', primaryjoin='Player.id == PlayerStorage.player_id', backref='players')
-	deaths = db.relationship('PlayerDeath', primaryjoin='Player.id == PlayerDeath.player_id', backref='players')
+	deaths = db.relationship('PlayerDeath', primaryjoin='Player.id == PlayerDeath.player_id', order_by='desc(PlayerDeath.time)', backref='players', lazy='dynamic')
 
 	# Misc
 	guild = None
