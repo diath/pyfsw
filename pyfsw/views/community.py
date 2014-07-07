@@ -30,7 +30,7 @@ def route_community_player_get_name(name):
 	if player is None:
 		return render_template('community/player_search.htm', error=True)
 
-	return render_template('community/player_view.htm', player=player, quests=QUESTS)
+	return render_template('community/player_view.htm', player=player, guild=player.getGuild(), quests=QUESTS)
 
 @app.route('/community/player', methods=['POST'])
 def route_community_player_post():
@@ -40,7 +40,7 @@ def route_community_player_post():
 	if player is None:
 		return render_template('community/player_search.htm', error=True)
 
-	return render_template('community/player_view.htm', player=player, quests=QUESTS)
+	return render_template('community/player_view.htm', player=player, guild=player.getGuild(), quests=QUESTS)
 
 @app.route('/community/highscores/<string:type>')
 def route_community_highscores(type):

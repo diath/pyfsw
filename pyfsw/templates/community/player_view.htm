@@ -40,6 +40,12 @@
 				<td>Online Time</td>
 				<td>{{ player.onlinetime | timetotal }}</td>
 			</tr>
+			{% if guild %}
+			<tr>
+				<td>Guild</td>
+				<td><a href="/community/guild/{{ guild.id }}">{{ guild.name }}</a></td>
+			</tr>
+			{% endif %}
 			{% if player.comment %}
 			<tr>
 				<td>Comment</td>

@@ -95,11 +95,13 @@ class Player(db.Model):
 		if not membership:
 			return None
 
-		guild = Guild.query.filter(Guild.id == membership.guild_id)
+		guild = Guild.query.filter(Guild.id == membership.guild_id).first()
 		if not guild:
 			return None
 
 		self.guild = guild
+		self.membership = membership
+
 		return self.guild
 
 class PlayerStorage(db.Model):
