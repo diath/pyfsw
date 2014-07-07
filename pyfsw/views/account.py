@@ -241,8 +241,13 @@ def route_account_character_post():
 	player.sex = gender
 	player.vocation = vocation
 	player.town_id = town
-	player.looktype = 136 if gender == 0 else 128
 	player.account_id = current_user().id
+
+	player.looktype = 136 if gender == 0 else 128
+	player.lookhead = NEW_CHARACTER.get('outfit')[0]
+	player.lookbody = NEW_CHARACTER.get('outfit')[1]
+	player.looklegs = NEW_CHARACTER.get('outfit')[2]
+	player.lookfeet = NEW_CHARACTER.get('outfit')[3]
 
 	db.session().add(player)
 	db.session().commit()
