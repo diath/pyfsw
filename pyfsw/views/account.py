@@ -26,7 +26,7 @@ def route_account_login_post():
 		hash.update(pswd.encode('utf-8'))
 		pswd = hash.hexdigest()
 
-	account = db.session().query(Account).filter(Account.name == name).filter(Account.password == pswd).first()
+	account = db.session().query(Account.id).filter(Account.name == name).filter(Account.password == pswd).first()
 	if account is None:
 		return render_template('account/login.htm', error=True)
 
@@ -65,7 +65,7 @@ def route_account_create_post():
 	if len(mail) < 6:
 		flash('The specified e-mail address is not valid.')
 
-	account = db.session().query(Account).filter(Account.name == name).first()
+	account = db.session().query(Account.id).filter(Account.name == name).first()
 	if account:
 		flash('The account name is already in use.')
 
@@ -151,7 +151,7 @@ def route_account_key():
 @login_required
 def route_account_edit(id):
 	account = current_user()
-	player  = db.session().query(Player).filter(Player.id == id).first()
+	player = db.session().query(Player.id, Player.comment, Player.account_id).filter(Player.id == id).first()
 	if not account or not player or account.id != player.account_id:
 		return redirect(url_for('route_account_manage'))
 
@@ -161,7 +161,7 @@ def route_account_edit(id):
 @login_required
 def route_account_edit_post(id):
 	account = current_user()
-	player  = db.session().query(Player).filter(Player.id == id).first()
+	player = db.session().query(Player).filter(Player.id == id).first()
 	if not account or not player or account.id != player.account_id:
 		return redirect(url_for('route_account_manage'))
 
@@ -174,7 +174,7 @@ def route_account_edit_post(id):
 @login_required
 def route_account_delete(id):
 	account = current_user()
-	player  = db.session().query(Player).filter(Player.id == id).first()
+	player = db.session().query(Player.id, Player.account_id).filter(Player.id == id).first()
 	if not account or not player or account.id != player.account_id:
 		return redirect(url_for('route_account_manage'))
 
@@ -184,7 +184,7 @@ def route_account_delete(id):
 @login_required
 def route_account_delete_post(id):
 	account = current_user()
-	player  = db.session().query(Player).filter(Player.id == id).first()
+	player = db.session().query(Player).filter(Player.id == id).first()
 	if account and player and account.id == player.account_id:
 		db.session().delete(player)
 		db.session().commit()
@@ -226,7 +226,7 @@ def route_account_character_post():
 		flash('The selected town is not valid.')
 
 	name = string.capwords(name)
-	player = db.session().query(Player).filter(Player.name == name).first()
+	player = db.session().query(Player.id).filter(Player.name == name).first()
 	if player:
 		flash('The character name is already in use.')
 

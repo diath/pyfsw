@@ -5,7 +5,9 @@ from pyfsw import Library
 
 @app.route('/library/<string:uri>')
 def route_library(uri):
-	library = db.session().query(Library).filter(Library.uri == uri).first()
+	library = db.session().query(Library.uri, Library.name, Library.content)
+	library = library.filter(Library.uri == uri).filter(Library.enabled == 1).first()
+
 	if not library:
 		return redirect(url_for('route_news'))
 

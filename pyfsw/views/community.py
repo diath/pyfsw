@@ -65,8 +65,6 @@ def route_community_highscores(type, page):
 		player.value = getattr(player, current[2])
 		player.subvalue = getattr(player, current[3])
 
-	print(pagination)
-
 	return render_template(
 		'community/highscores.htm',
 		type=type, name=current[0], highscores=highscores, suffix=current[4],
