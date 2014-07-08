@@ -8,7 +8,7 @@
 		<link rel="stylesheet" type="text/css" media="screen" href="{{ url_for('static', filename='css/theme.min.css') }}">
 		<link rel="stylesheet" type="text/css" media="screen" href="{{ url_for('static', filename='css/style.css') }}">
 
-		<title>pyfsw - {% block title %}{% endblock %}</title>
+		<title>{{ g.server_name }} - {% block title %}{% endblock %}</title>
 
 		<script type="text/javascript" src="//code.jquery.com/jquery.js"></script>
 	</head>
@@ -17,7 +17,7 @@
 			<div class="navbar navbar-default" role="navigation">
 				<div class="collapse navbar-collapse">
 					<ul class="nav navbar-nav navbar-left">
-						<li><a class="navbar-brand" href="/">7952</a></li>
+						<li><a class="navbar-brand" href="/">{{ g.server_name }}</a></li>
 					</ul>
 					<ul class="nav navbar-nav navbar-right">
 						<li class="dropdown">
@@ -82,9 +82,13 @@
 		</div>
 		<hr>
 		<div id="footer">
-			<div class="container">
+			<div class="container middle">
 				<p class="text-muted credit">
-					pyfsw - An interactive website for the <a href="https://github.com/otland/forgottenserver">Forgotten Server</a>.
+					Copyright {{ g.year }} &copy; {{ g.server_name }}
+					<br>
+					Some rights reserved.
+					<br>
+					Tibia and associated resources are a trademark of CipSoft GmbH.
 				</p>
 			</div>
 		</div>

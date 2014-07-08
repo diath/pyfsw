@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, g
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask_debugtoolbar import DebugToolbarExtension
 
@@ -6,6 +6,7 @@ from pyfsw.config import *
 
 from functools import wraps
 from os import path
+from datetime import date
 import inspect
 
 app = Flask(__name__)
@@ -24,6 +25,11 @@ if DEBUG:
 
 BASE_PATH = path.dirname(inspect.getfile(inspect.currentframe()))
 db = SQLAlchemy(app)
+
+@app.before_request
+def init_globals():
+	g.server_name = SERVER_NAME
+	g.year = date.today().year
 
 from pyfsw.models.account import Account
 from pyfsw.models.guild import Guild, GuildInvite, GuildMembership, GuildRank, GuildWar, GuildWarKill

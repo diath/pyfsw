@@ -8,7 +8,7 @@
 		<link rel="stylesheet" type="text/css" media="screen" href="{{ url_for('static', filename='css/theme.min.css') }}">
 		<link rel="stylesheet" type="text/css" media="screen" href="{{ url_for('static', filename='css/style.css') }}">
 
-		<title>pyfsw - Error #{{ error }}</title>
+		<title>{{ g.server_name }} - Error #{{ error }}</title>
 	</head>
 	<body>
 		<div class="container">
