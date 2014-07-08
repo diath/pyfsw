@@ -60,6 +60,7 @@
 			{% for member in members %}
 				<tr>
 					<td>{{ member.rank.name }}</td>
+					<td><img class="outfit" src="/outfit/{{ member.player.looktype }}/{{ member.player.lookhead }}/{{ member.player.lookbody }}/{{ member.player.looklegs }}/{{ member.player.lookfeet }}/{{ member.player.lookaddons }}"></td>
 					<td>
 						<a href="/community/player/{{ member.player.name }}">{{ member.player.name }}</a>
 						<br>

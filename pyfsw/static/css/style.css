@@ -7,6 +7,9 @@ body {
 	padding-top: 20px !important;
 	font-size: 12px !important;
 	font-family: sans-serif !important;
+	background: url('/static/img/background.png') no-repeat top center #272B30;
+	background-attachment: fixed;
+	margin-top: 200px;
 }
 
 a {
@@ -29,4 +32,11 @@ a:hover {
 .emblem {
 	max-width: 128px;
 	max-height: 128px;
+}
+
+.outfit {
+	top: -16px;
+	text-align: right;
+	position: relative;
+	z-index: 100;
 }

@@ -10,7 +10,12 @@
 		<table class="table table-striped table-hover">
 			<tr>
 				<td>Name</td>
-				<td>{{ player.name }}</td>
+				<td>
+					{{ player.name }}
+					<div class="outfit">
+						<img class="outfit" src="/outfit/{{ player.looktype }}/{{ player.lookhead }}/{{ player.lookbody }}/{{ player.looklegs }}/{{ player.lookfeet }}/{{ player.lookaddons }}">
+					</div>
+				</td>
 			</tr>
 			<tr>
 				<td>Sex</td>
