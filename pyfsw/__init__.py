@@ -44,4 +44,4 @@ from pyfsw.filters import *
 from pyfsw.helpers import *
 
 from pyfsw.views import news, account, community, community_guilds, library, shop
-from pyfsw.views import error, outfit, paypal
+from pyfsw.views import error, captcha, outfit, paypal

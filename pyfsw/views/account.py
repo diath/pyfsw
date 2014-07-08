@@ -52,6 +52,7 @@ def route_account_create_post():
 	pswd = request.form.get('pswd', '', type=str)
 	mail = request.form.get('mail', '', type=str)
 	pswdRepeat = request.form.get('pswdRepeat', '', type=str)
+	captcha = request.form.get('captcha', '', type=str)
 
 	if len(name) < 4 or len(name) > 32:
 		flash('The account name length must be between 4 and 32 characters.')
@@ -68,6 +69,9 @@ def route_account_create_post():
 	account = db.session().query(Account.id).filter(Account.name == name).first()
 	if account:
 		flash('The account name is already in use.')
+
+	if captcha != session.get('captcha', ''):
+		flash('The captcha code does not match.')
 
 	if len(get_flashed_messages()) > 0:
 		return render_template('account/create.htm')
