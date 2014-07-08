@@ -1,4 +1,5 @@
 from flask import render_template, request
+from flask.ext.sqlalchemy import Pagination
 
 from pyfsw import app, db
 from pyfsw import QUESTS, TOWNS, HOUSE_PRICE
@@ -42,21 +43,35 @@ def route_community_player_post():
 
 	return render_template('community/player_view.htm', player=player, guild=player.getGuild(), quests=QUESTS)
 
-@app.route('/community/highscores/<string:type>')
-def route_community_highscores(type):
+@app.route('/community/highscores/<string:type>/<int:page>')
+def route_community_highscores(type, page):
 	current = HS_TYPES.get(type)
 	if current is None:
 		return redirect(url_for('route_community_highscores', type='level'))
 
+	total = db.session().query(Player.id).filter(Player.group_id == 1).count()
+	perpage = 50
+
 	highscores = Player.query.filter(Player.group_id == 1)
 	highscores = highscores.order_by(current[1])
-	highscores = highscores.limit(100).all()
+
+	pagination = highscores.paginate(page, perpage)
+
+	highscores = highscores.offset((page - 1) * perpage)
+	highscores = highscores.limit(perpage)
+	highscores = highscores.all()
 
 	for player in highscores:
 		player.value = getattr(player, current[2])
 		player.subvalue = getattr(player, current[3])
 
-	return render_template('community/highscores.htm', type=type, name=current[0], highscores=highscores, suffix=current[4])
+	print(pagination)
+
+	return render_template(
+		'community/highscores.htm',
+		type=type, name=current[0], highscores=highscores, suffix=current[4],
+		pagination=pagination, perpage=perpage, page=page
+	)
 
 @app.route('/community/houses/<int:town_id>')
 def route_community_houses(town_id):

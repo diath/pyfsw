@@ -23,7 +23,7 @@
 			<div class="panel-body">
 				<ul class="nav nav-pills nav-stacked">
 				{% for item in types %}
-					<li{% if type == item[0] %} class="active"{% endif %}><a href="/community/highscores/{{ item[0] }}">{{ item[1] }}</a></li>
+					<li{% if type == item[0] %} class="active"{% endif %}><a href="/community/highscores/{{ item[0] }}/1">{{ item[1] }}</a></li>
 				{% endfor %}
 				</ul>
 			</div>
@@ -45,7 +45,7 @@
 					<tbody>
 					{% for player in highscores %}
 						<tr>
-							<td>{{ loop.index }}.</td>
+							<td>{{ loop.index + perpage * (page - 1) }}.</td>
 							<td>
 								<img class="outfit" src="/outfit/{{ player.looktype }}/{{ player.lookhead }}/{{ player.lookbody }}/{{ player.looklegs }}/{{ player.lookfeet }}/{{ player.lookaddons }}">
 							</td>
@@ -63,6 +63,19 @@
 					{% endfor %}
 					</tbody>
 				</table>
+				<div class="middle">
+					<ul class="pagination">
+						{% for page in pagination.iter_pages() %}
+						{% if page %}
+							{% if page != pagination.page %}
+								<li><a href="/community/highscores/{{ type }}/{{ page }}">{{ page }}</a></li>
+							{% else %}
+								<li class="active"><a href="/community/highscores/{{ type }}/{{ page }}">{{ page }}</a></li>
+							{% endif %}
+						{% endif %}
+						{% endfor %}
+					</ul>
+				</div>
 			</div>
 		</div>
 	</div>
