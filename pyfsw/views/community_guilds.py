@@ -11,6 +11,8 @@ from pyfsw import UPLOAD_PATH
 from pyfsw import current_user, login_required, is_guild_leader
 from pyfsw import Player, Guild, GuildInvite, GuildMembership, GuildRank
 
+GUILD_NAME_EXPR = re.compile('^([a-zA-Z ]+)$')
+
 @app.route('/community/guilds')
 def route_community_guilds():
 	guilds = Guild.query.all()
@@ -55,7 +57,7 @@ def route_community_guild_create_post():
 		flash('The guild name must be between 4 and 32 characters long.')
 		error = True
 
-	if re.compile('^[a-zA-Z]$').search(name):
+	if not GUILD_NAME_EXPR.match(name):
 		flash('The guild name may only contain latin characters and spaces (A-Z, a-z).')
 		error = True
 

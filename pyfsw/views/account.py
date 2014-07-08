@@ -8,6 +8,8 @@ from pyfsw import Account, Player
 from pyfsw import login_required, current_user
 from pyfsw import NEW_CHARACTER
 
+CHAR_NAME_EXPR = re.compile('^([a-zA-Z ]+)$')
+
 @app.route('/account/login', methods=['GET'])
 def route_account_login():
 	next = request.args.get('next')
@@ -214,7 +216,7 @@ def route_account_character_post():
 	if len(name) < 4:
 		flash('The name must be at least 4 characters long.')
 
-	if re.compile('^[a-zA-Z]$').search(name):
+	if not CHAR_NAME_EXPR.match(name):
 		flash('The name may only contain latin characters (A-Z, a-z).')
 
 	if len(name.split(' ')) > 3:
