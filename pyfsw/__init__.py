@@ -5,6 +5,8 @@ from flask_debugtoolbar import DebugToolbarExtension
 from pyfsw.config import *
 
 from functools import wraps
+from os import path
+import inspect
 
 app = Flask(__name__)
 app.secret_key = SECRET_KEY
@@ -20,6 +22,7 @@ if DEBUG:
 
 	DebugToolbarExtension(app)
 
+BASE_PATH = path.dirname(inspect.getfile(inspect.currentframe()))
 db = SQLAlchemy(app)
 
 from pyfsw.models.account import Account
@@ -35,4 +38,4 @@ from pyfsw.filters import *
 from pyfsw.helpers import *
 
 from pyfsw.views import news, account, community, community_guilds, library, shop
-from pyfsw.views import error, paypal
+from pyfsw.views import error, outfit, paypal
