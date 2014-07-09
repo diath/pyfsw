@@ -7,8 +7,8 @@ import os
 from time import time
 from PIL import Image
 
-from pyfsw import app, db
-from pyfsw import UPLOAD_PATH
+from pyfsw import app, db, cache
+from pyfsw import CACHE_TIME, UPLOAD_PATH
 from pyfsw import current_user, login_required, is_guild_leader
 from pyfsw import Player
 from pyfsw import Guild, GuildInvite, GuildMembership, GuildRank, GuildWar
@@ -16,11 +16,13 @@ from pyfsw import Guild, GuildInvite, GuildMembership, GuildRank, GuildWar
 GUILD_NAME_EXPR = re.compile('^([a-zA-Z ]+)$')
 
 @app.route('/community/guilds')
+@cache.cached(timeout=CACHE_TIME)
 def route_community_guilds():
 	guilds = Guild.query.all()
 	return render_template('community/guilds/list.htm', guilds=guilds, user=current_user())
 
 @app.route('/community/guild/<int:id>')
+@cache.cached(timeout=CACHE_TIME)
 def route_community_guild(id):
 	guild = Guild.query.filter(Guild.id == id).first()
 	members = GuildMembership.query.filter(GuildMembership.guild_id == guild.id).all()

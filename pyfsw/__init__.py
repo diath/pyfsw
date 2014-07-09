@@ -1,6 +1,7 @@
 from flask import Flask, g
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask_debugtoolbar import DebugToolbarExtension
+from flask.ext.cache import Cache
 
 from pyfsw.config import *
 
@@ -25,6 +26,7 @@ if DEBUG:
 
 BASE_PATH = path.dirname(inspect.getfile(inspect.currentframe()))
 db = SQLAlchemy(app)
+cache = Cache(app, config={'CACHE_TYPE': 'simple'})
 
 @app.before_request
 def init_globals():
