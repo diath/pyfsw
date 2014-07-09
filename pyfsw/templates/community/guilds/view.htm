@@ -89,7 +89,7 @@
 					</td>
 					{% if invite.own %}
 					<td>
-						<a href="/community/guild/{{ invite.guild_id }}/join/{{ invite.player_id }}"><button class="btn btn-primary">Join</button></a>
+						<a href="/community/guild/{{ invite.guild_id }}/join/{{ invite.player_id }}"><button class="btn btn-default">Join</button></a>
 					</td>
 					{% endif %}
 				</tr>
@@ -119,7 +119,7 @@
 						<br>
 						<strong>War declared on {{ war.started | datetime }} until {{ war.frags }} frags.</strong>
 						<br><br>
-						<a href="/community/war/{{ war.id }}"><button class="btn btn-primary">Frag Stats</button></a>
+						<a href="/community/war/{{ war.id }}"><button class="btn btn-default">Frag Stats</button></a>
 					</td>
 					<td class="middle">
 						<h2>{{ war.name2 }}</h2>
