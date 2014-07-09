@@ -41,17 +41,20 @@ def route_community_player_get_name(name):
 	eq = get_player_equipment(player.id)
 
 	kills = db.session().query(PlayerDeath.player_id, PlayerDeath.level, PlayerDeath.time)
-	kills = kills.filter(PlayerDeath.is_player == 1).filter(PlayerDeath.killed_by == Player.name)
+	kills = kills.filter(PlayerDeath.is_player == 1).filter(PlayerDeath.killed_by == player.name)
 	kills = kills.order_by(PlayerDeath.time.desc()).limit(5).all()
 
 	for kill in kills:
 		target = db.session.query(Player.name).filter(Player.id == kill.player_id).first()
 		kill.target = target.name
 
+	characters = db.session().query(Player.name, Player.level, Player.vocation)
+	characters = characters.filter(Player.account_id == player.account_id).all()
+
 	return render_template(
 		'community/player_view.htm', player=player, guild=player.getGuild(),
 		quests=QUESTS, achievements=ACHIEVEMENTS, hp=hp, mp=mp,
-		sp=sp, up=up, eq=eq, kills=kills
+		sp=sp, up=up, eq=eq, kills=kills, characters=characters
 	)
 
 @app.route('/community/player', methods=['POST'])
@@ -70,17 +73,20 @@ def route_community_player_post():
 	eq = get_player_equipment(player.id)
 
 	kills = db.session().query(PlayerDeath.player_id, PlayerDeath.level, PlayerDeath.time)
-	kills = kills.filter(PlayerDeath.is_player == 1).filter(PlayerDeath.killed_by == Player.name)
+	kills = kills.filter(PlayerDeath.is_player == 1).filter(PlayerDeath.killed_by == player.name)
 	kills = kills.order_by(PlayerDeath.time.desc()).limit(5).all()
 
 	for kill in kills:
 		target = db.session.query(Player.name).filter(Player.id == kill.player_id).first()
 		kill.target = target.name
 
+	characters = db.session().query(Player.name, Player.level, Player.vocation)
+	characters = characters.filter(Player.account_id == player.account_id).all()
+
 	return render_template(
 		'community/player_view.htm', player=player, guild=player.getGuild(),
 		quests=QUESTS, achievements=ACHIEVEMENTS, hp=hp, mp=mp,
-		sp=sp, up=up, eq=eq, kills=kills
+		sp=sp, up=up, eq=eq, kills=kills, characters=characters
 	)
 
 @app.route('/community/highscores/<string:type>/<int:page>')

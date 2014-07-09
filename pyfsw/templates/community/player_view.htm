@@ -14,6 +14,7 @@
 			<li><a href="#Achievements">Achievements</a></li>
 			<li><a href="#Deaths">Deaths</a></li>
 			<li><a href="#Kills">Kills</a></li>
+			<li><a href="#Characters">Characters</a></li>
 		</ul>
 
 		<div class="tab-content">
@@ -218,6 +219,16 @@
 				{% for kill in kills %}
 					<tr>
 						<td>Killed <a href="/community/player/{{ kill.target }}">{{ kill.target }}</a> (Level {{ kill.level }}) on {{ kill.time | datetime }}.</td>
+					</tr>
+				{% endfor %}
+				</table>
+			</div>
+			<div class="tab-pane" id="Characters">
+				<table class="table table-striped table-hover">
+				{% for character in characters %}
+					<tr>
+						<td><a href="/community/player/{{ character.name }}">{{ character.name }}</a></td>
+						<td>Level {{ character.level }}, {{ character.vocation | vocation }}</td>
 					</tr>
 				{% endfor %}
 				</table>
