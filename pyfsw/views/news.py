@@ -11,6 +11,9 @@ def route_news():
 @app.route('/news/<int:id>')
 def route_news_single(id):
 	entry = db.session().query(News).filter(News.id == id).first()
+	if not entry:
+		return redirect(url_for('route_news'))
+
 	return render_template('news/single.htm', entry=entry)
 
 @app.route('/news/archive')

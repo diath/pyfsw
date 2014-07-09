@@ -31,7 +31,7 @@ def route_community_player_get():
 def route_community_player_get_name(name):
 	player = Player.query.filter(Player.name == name).first()
 
-	if player is None:
+	if not player:
 		return render_template('community/player_search.htm', error=True)
 
 	hp = int((player.health / player.healthmax) * 100)
@@ -63,7 +63,7 @@ def route_community_player_post():
 	name = request.form.get('name', '', type=str)
 	player = Player.query.filter(Player.name == name).first()
 
-	if player is None:
+	if not player:
 		return render_template('community/player_search.htm', error=True)
 
 	hp = int((player.health / player.healthmax) * 100)
@@ -93,8 +93,8 @@ def route_community_player_post():
 @cache.cached(timeout=CACHE_TIME)
 def route_community_highscores(type, page):
 	current = HS_TYPES.get(type)
-	if current is None:
-		return redirect(url_for('route_community_highscores', type='level'))
+	if not current:
+		return redirect(url_for('route_community_highscores', type='level', page=1))
 
 	total = db.session().query(Player.id).filter(Player.group_id == 1).count()
 	perpage = 50
