@@ -1,4 +1,4 @@
-from flask import render_template, request, flash, redirect, url_for, get_flashed_messages, send_file
+from flask import render_template, request, flash, redirect, url_for, send_file
 from sqlalchemy import or_
 from werkzeug.utils import secure_filename
 
@@ -51,32 +51,32 @@ def route_community_guild_create_post():
 
 	character = Player.query.filter(Player.id == character).first()
 	if not character or character.account_id != user.id:
-		flash('You can not create a guild with not your own character.')
+		flash('You can not create a guild with not your own character.', 'error')
 		error = True
 
 	if character and character.level < 100:
-		flash('The character needs to be at least level 100.')
+		flash('The character needs to be at least level 100.', 'error')
 		error = True
 
 	if character and character.getGuild():
-		flash('The character can not be a member of another guild.')
+		flash('The character can not be a member of another guild.', 'error')
 		error = True
 
 	if len(name) < 4 or len(name) > 32:
-		flash('The guild name must be between 4 and 32 characters long.')
+		flash('The guild name must be between 4 and 32 characters long.', 'error')
 		error = True
 
 	if not GUILD_NAME_EXPR.match(name):
-		flash('The guild name may only contain latin characters and spaces (A-Z, a-z).')
+		flash('The guild name may only contain latin characters (A-Z, a-z and spaces).', 'error')
 		error = True
 
 	if len(name.split(' ')) > 3:
-		flash('The guild name may only consist of 3 words.')
+		flash('The guild name may only consist of 3 words.', 'error')
 		error = True
 
 	guild = Guild.query.filter(Guild.name == name).first()
 	if guild:
-		flash('The guild name is taken by another guild.')
+		flash('The guild name is taken by another guild.', 'error')
 		error = True
 
 	if error:
@@ -101,6 +101,8 @@ def route_community_guild_create_post():
 	db.session().add(membership)
 	db.session().commit()
 
+	flash('The guild has been created.')
+
 	return redirect(url_for('route_community_guild', id=guild.id))
 
 @app.route('/community/guild/<int:id>/invite', methods=['GET'])
@@ -122,17 +124,17 @@ def route_community_guild_invite_post(id):
 
 	player = Player.query.filter(Player.name == name).first()
 	if not player:
-		flash('The player you are trying to invite does not exist.')
+		flash('The player you are trying to invite does not exist.', 'error')
 		return redirect(url_for('route_community_guild', id=id))
 
 	membership = GuildMembership.query.filter(GuildMembership.guild_id == id).filter(GuildMembership.player_id == player.id).first()
 	if membership:
-		flash('The player is already a member of your guild.')
+		flash('The player is already a member of your guild.', 'error')
 		error = True
 
 	invite = GuildInvite.query.filter(GuildInvite.guild_id == id).filter(GuildInvite.player_id == player.id).first()
 	if invite:
-		flash('The player is already invited to your guild.')
+		flash('The player is already invited to your guild.', 'error')
 		error = True
 
 	if not error:
@@ -143,7 +145,7 @@ def route_community_guild_invite_post(id):
 		db.session().add(invite)
 		db.session().commit()
 
-		flash('The player has been invited.')
+		flash('The player has been invited.', 'success')
 
 	return redirect(url_for('route_community_guild', id=id))
 
@@ -174,7 +176,7 @@ def route_community_guild_kick_post(id):
 	db.session().delete(membership)
 	db.session().commit()
 
-	flash('The player has been kicked from the guild.')
+	flash('The player has been kicked from the guild.', 'success')
 
 	return redirect(url_for('route_community_guild', id=id))
 
@@ -201,18 +203,18 @@ def route_community_guild_ranks_post(id):
 		error = False
 
 		if re.compile('^[a-zA-Z ]$').search(value):
-			flash('The rank name may only contain latin characters and spaces (A-Z, a-z).')
+			flash('The rank name may only contain latin characters (A-Z, a-z and spaces).', 'error')
 			error = True
 
 		if len(value) < 4 or len(value) > 16:
-			flash('The rank name must be between 4 and 16 characters long.')
+			flash('The rank name must be between 4 and 16 characters long.', 'error')
 			error = True
 
 		if not error:
 			rank = GuildRank.query.filter(GuildRank.guild_id == id).filter(GuildRank.level == level).first()
 			rank.name = value
 
-		db.session().commit()
+			db.session().commit()
 
 	return redirect(url_for('route_community_guild', id=id))
 
@@ -242,7 +244,7 @@ def route_community_guild_motd_post(id):
 	guild.motd = motd
 
 	db.session().commit()
-	flash('The guild description has been changed.')
+	flash('The guild description has been changed.', 'success')
 
 	return redirect(url_for('route_community_guild', id=id))
 
@@ -266,15 +268,15 @@ def route_community_guild_logo_post(id):
 	if file:
 		name = secure_filename(file.filename)
 		if len(name) == 0 or not '.' in name and not name.rsplit('.', 1)[1] in ['png', 'gif', 'jpg', 'jpeg']:
-			flash('The file extension is not allowed.')
+			flash('The file extension is not allowed.', 'error')
 			error = True
 
 		if len(file.getvalue()) > 3 * 1024 * 1024:
-			flash('The file size exceeds the limit of 3 MB.')
+			flash('The file size exceeds the limit of 3 MB.', 'error')
 			error = True
 
 		if file.content_type not in ['image/png', 'image/gif', 'image/jpeg']:
-			flash('The file format is not allowed.')
+			flash('The file format is not allowed.', 'error')
 			error = True
 
 		if not error:
@@ -286,16 +288,15 @@ def route_community_guild_logo_post(id):
 				image.thumbnail((128, 128), Image.ANTIALIAS)
 				image.save(name)
 			except Exception as e:
-				flash('Failed to upload the file.')
+				flash('Failed to upload the file.', 'error')
 				os.remove(name)
-				print(e)
 				error = True
 	else:
-		flash('Failed to upload the file.')
+		flash('Failed to upload the file.', 'error')
 		error = True
 
 	if not error:
-		flash('The guild logo has been changed.')
+		flash('The guild logo has been changed.', 'success')
 
 	return redirect(url_for('route_community_guild', id=id))
 
