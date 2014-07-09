@@ -32,8 +32,8 @@ def route_community_player_get_name(name):
 	player = Player.query.filter(Player.name == name).first()
 
 	if not player:
-		return render_template('community/player_search.htm', error=True)
-
+		flash('The character you are trying to search does not exist.', 'error')
+		return redirect(url_for('route_community_player_get'))
 
 	hp = int((player.health / player.healthmax) * 100)
 	mp = int((player.mana / player.manamax) * 100)
@@ -67,7 +67,8 @@ def route_community_player_post():
 	player = Player.query.filter(Player.name == name).first()
 
 	if not player:
-		return render_template('community/player_search.htm', error=True)
+		flash('The character you are trying to search does not exist.', 'error')
+		return redirect(url_for('route_community_player_get'))
 
 	hp = int((player.health / player.healthmax) * 100)
 	mp = int((player.mana / player.manamax) * 100)
