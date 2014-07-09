@@ -2,19 +2,6 @@
 {% block title %} Create Character {% endblock %}
 {% block body %}
 
-{% with messages = get_flashed_messages() %}
-{% if messages %}
-<div class="alert alert-info">
-	<strong>The following errors have occured:</strong>
-	<ul>
-	{% for message in messages %}
-		<li>{{ message }}</li>
-	{% endfor %}
-	</ul>
-</div>
-{% endif %}
-{% endwith %}
-
 <div class="panel panel-default">
 	<div class="panel-heading">
 		Create Character

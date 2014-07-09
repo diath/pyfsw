@@ -1,4 +1,4 @@
-from flask import redirect, render_template, request, url_for, flash, get_flashed_messages, session
+from flask import redirect, render_template, request, url_for, flash, session
 from hashlib import sha1
 from time import time
 import random, string, re
@@ -56,28 +56,35 @@ def route_account_create_post():
 	mail = request.form.get('mail', '', type=str)
 	pswdRepeat = request.form.get('pswdRepeat', '', type=str)
 	captcha = request.form.get('captcha', '', type=str)
+	error = False
 
 	if len(name) < 4 or len(name) > 32:
-		flash('The account name length must be between 4 and 32 characters.')
+		flash('The account name length must be between 4 and 32 characters.', 'error')
+		error = True
 
 	if len(pswd) < 5:
-		flash('The password must be at least 5 characters long.')
+		flash('The password must be at least 5 characters long.', 'error')
+		error = True
 
 	if pswd != pswdRepeat:
-		flash('The passwords do not match.')
+		flash('The passwords do not match.', 'error')
+		error = True
 
 	if len(mail) < 6:
-		flash('The specified e-mail address is not valid.')
+		flash('The specified e-mail address is not valid.', 'error')
+		error = True
 
 	account = db.session().query(Account.id).filter(Account.name == name).first()
 	if account:
-		flash('The account name is already in use.')
+		flash('The account name is already in use.', 'error')
+		error = True
 
 	if captcha != session.get('captcha', ''):
-		flash('The captcha code does not match.')
+		flash('The captcha code does not match.', 'error')
+		error = True
 
-	if len(get_flashed_messages()) > 0:
-		return render_template('account/create.htm')
+	if error:
+		return redirect(url_for('route_account_create'))
 
 	hash = sha1()
 	hash.update(pswd.encode('utf-8'))
@@ -88,9 +95,12 @@ def route_account_create_post():
 	account.password = pswd
 	account.email = mail
 	account.creation = int(time())
+	account.key = ''
 
 	db.session().add(account)
 	db.session().commit()
+
+	session.pop('captcha')
 
 	return render_template('account/login.htm', created=True)
 
@@ -110,24 +120,27 @@ def route_account_password_post():
 	pswd = request.form.get('pswd', '', type=str)
 	pswdNew = request.form.get('pswdNew', '', type=str)
 	pswdRepeat = request.form.get('pswdRepeat', '', type=str)
-
 	user = current_user()
+	error = False
 
 	hash = sha1()
 	hash.update(pswd.encode('utf-8'))
 	pswd = hash.hexdigest()
 
 	if user.password != pswd:
-		flash('The current password is not correct.')
+		flash('The current password is not correct.', 'error')
+		error = True
 
 	if len(pswdNew) < 5:
-		flash('The new password must be at least 5 characters long.')
+		flash('The new password must be at least 5 characters long.', 'error')
+		error = True
 
 	if pswdNew != pswdRepeat:
-		flash('The new passwords do not match.')
+		flash('The new passwords do not match.', 'error')
+		error = True
 
-	if len(get_flashed_messages()) > 0:
-		return render_template('account/password.htm')
+	if error:
+		return redirect(url_for('route_account_password'))
 
 	hash = sha1()
 	hash.update(pswdNew.encode('utf-8'))
@@ -135,6 +148,8 @@ def route_account_password_post():
 
 	user.password = newPswd
 	db.session().commit()
+
+	flash('The password has been changed.', 'success')
 
 	return redirect(url_for('route_account_manage'))
 
@@ -171,13 +186,15 @@ def route_account_edit(id):
 def route_account_edit_post(id):
 	account = current_user()
 	player = db.session().query(Player).filter(Player.id == id).first()
-	if not player or account.id != player.account_id:
-		return redirect(url_for('route_account_manage'))
+	if player or account.id == player.account_id:
+		player.comment = request.form.get('comment', '', type=str)
+		db.session().commit()
 
-	player.comment = request.form.get('comment', '', type=str)
-	db.session().commit()
+		flash('The character comment has been updated.', 'success')
+	else:
+		flash('You cannot edit the comment of a character that does not belong to you.', 'error')
 
-	return render_template('account/manage.htm', account=current_user(), success='The character comment has been updated.')
+	return redirect(url_for('route_account_manage'))
 
 @app.route('/account/delete/<int:id>', methods=['GET'])
 @login_required
@@ -198,7 +215,11 @@ def route_account_delete_post(id):
 		db.session().delete(player)
 		db.session().commit()
 
-	return render_template('account/manage.htm', account=current_user(), success='The character has been deleted.')
+		flash('The character has been deleted.', 'success')
+	else:
+		flash('You cannot delete a character that does not belong to you.', 'error')
+
+	return redirect(url_for('route_account_manage'))
 
 @app.route('/account/character')
 @login_required
@@ -215,35 +236,40 @@ def route_account_character_post():
 	gender = request.form.get('gender', 0, type=int)
 	vocation = request.form.get('vocation', 0, type=int)
 	town = request.form.get('town', 1, type=int)
+	error = False
 
 	if len(name) < 4:
-		flash('The name must be at least 4 characters long.')
+		flash('The name must be at least 4 characters long.', 'error')
+		error = True
 
 	if not CHAR_NAME_EXPR.match(name):
-		flash('The name may only contain latin characters (A-Z, a-z).')
+		flash('The name may only contain latin characters (A-Z, a-z and spaces).', 'error')
+		error = True
 
 	if len(name.split(' ')) > 3:
-		flash('The name may only consist of 3 words.')
+		flash('The name may only consist of 3 words.', 'error')
+		error = True
 
 	if gender not in NEW_CHARACTER.get('genders'):
-		flash('The selected gender is not valid.')
+		flash('The selected gender is not valid.', 'error')
+		error = True
 
 	if vocation not in NEW_CHARACTER.get('vocations'):
-		flash('The selected vocation is not valid.')
+		flash('The selected vocation is not valid.', 'error')
+		error = True
 
 	if town not in NEW_CHARACTER.get('towns'):
-		flash('The selected town is not valid.')
+		flash('The selected town is not valid.', 'error')
+		error = True
 
 	name = string.capwords(name)
 	player = db.session().query(Player.id).filter(Player.name == name).first()
 	if player:
-		flash('The character name is already in use.')
+		flash('The character name is already in use.', 'error')
+		error = True
 
-	if len(get_flashed_messages()) > 0:
-		return render_template(
-			'account/character.htm', genders=NEW_CHARACTER.get('genders'),
-			vocations=NEW_CHARACTER.get('vocations'), towns=NEW_CHARACTER.get('towns')
-		)
+	if error:
+		return redirect(url_for('route_account_character'))
 
 	player = Player()
 	player.name = name
@@ -261,7 +287,9 @@ def route_account_character_post():
 	db.session().add(player)
 	db.session().commit()
 
-	return render_template('account/manage.htm', account=current_user(), success='The character has been created.')
+	flash('The character has been created.', 'success')
+
+	return redirect(url_for('route_account_manage'))
 
 @app.route('/account/recover', methods=['GET'])
 def route_account_recover():
@@ -273,20 +301,25 @@ def route_account_recover_post():
 	key = request.form.get('key', '', type=str)
 	pswd = request.form.get('pswd', '', type=str)
 	pswdRepeat = request.form.get('pswdRepeat', '', type=str)
+	error = False
 
 	if len(name) < 4 or len(name) > 32:
-		flash('Invalid account name specified.')
+		flash('Invalid account name specified.', 'error')
+		error = True
 
 	if len(pswd) < 5:
-		flash('The new password must be at least 5 characters long.')
+		flash('The new password must be at least 5 characters long.', 'error')
+		error = True
 
 	if pswd != pswdRepeat:
-		flash('The passwords do not match.')
+		flash('The passwords do not match.', 'error')
+		error = True
 
 	account = db.session().query(Account).filter(Account.name == name).filter(Account.key == key).first()
 	if not account:
-		flash('Invalid recovery key specified.')
-	else:
+		flash('Invalid recovery key specified.', 'error')
+		error = True
+	elif account and not error:
 		hash = sha1()
 		hash.update(pswd.encode('utf-8'))
 		pswd = hash.hexdigest()
@@ -296,6 +329,6 @@ def route_account_recover_post():
 
 		db.session().commit()
 
-		flash('The password for the account has been changed.')
+		flash('The password for the account has been changed.', 'success')
 
 	return redirect(url_for('route_account_recover'))

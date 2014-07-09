@@ -3,7 +3,7 @@
 {% block body %}
 
 {% if error %}
-<div class="alert alert-info">
+<div class="alert alert-danger">
 	<strong>Error</strong>
 	<br>
 	The specified account name or password is incorrect.
@@ -11,8 +11,8 @@
 {% endif %}
 
 {% if created %}
-<div class="alert alert-info">
-	<strong>Information</strong>
+<div class="alert alert-success">
+	<strong>Success</strong>
 	<br>
 	Your account has been created, you can login now.
 </div>
