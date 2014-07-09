@@ -13,6 +13,7 @@
 			<li><a href="#Quests">Quests</a></li>
 			<li><a href="#Achievements">Achievements</a></li>
 			<li><a href="#Deaths">Deaths</a></li>
+			<li><a href="#Kills">Kills</a></li>
 		</ul>
 
 		<div class="tab-content">
@@ -208,6 +209,15 @@
 					<tr>
 						<td>{{ death.time | datetime }}</td>
 						<td>{% autoescape off %}{{ death.toString() }}{% endautoescape %}</td>
+					</tr>
+				{% endfor %}
+				</table>
+			</div>
+			<div class="tab-pane" id="Kills">
+				<table class="table table-striped table-hover">
+				{% for kill in kills %}
+					<tr>
+						<td>Killed <a href="/community/player/{{ kill.target }}">{{ kill.target }}</a> (Level {{ kill.level }}) on {{ kill.time | datetime }}.</td>
 					</tr>
 				{% endfor %}
 				</table>

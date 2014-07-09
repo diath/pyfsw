@@ -40,10 +40,18 @@ def route_community_player_get_name(name):
 	up = int((player.soul / 200) * 100)
 	eq = get_player_equipment(player.id)
 
+	kills = db.session().query(PlayerDeath.player_id, PlayerDeath.level, PlayerDeath.time)
+	kills = kills.filter(PlayerDeath.is_player == 1).filter(PlayerDeath.killed_by == Player.name)
+	kills = kills.order_by(PlayerDeath.time.desc()).limit(5).all()
+
+	for kill in kills:
+		target = db.session.query(Player.name).filter(Player.id == kill.player_id).first()
+		kill.target = target.name
+
 	return render_template(
 		'community/player_view.htm', player=player, guild=player.getGuild(),
 		quests=QUESTS, achievements=ACHIEVEMENTS, hp=hp, mp=mp,
-		sp=sp, up=up, eq=eq
+		sp=sp, up=up, eq=eq, kills=kills
 	)
 
 @app.route('/community/player', methods=['POST'])
@@ -61,10 +69,18 @@ def route_community_player_post():
 	up = int((player.soul / 200) * 100)
 	eq = get_player_equipment(player.id)
 
+	kills = db.session().query(PlayerDeath.player_id, PlayerDeath.level, PlayerDeath.time)
+	kills = kills.filter(PlayerDeath.is_player == 1).filter(PlayerDeath.killed_by == Player.name)
+	kills = kills.order_by(PlayerDeath.time.desc()).limit(5).all()
+
+	for kill in kills:
+		target = db.session.query(Player.name).filter(Player.id == kill.player_id).first()
+		kill.target = target.name
+
 	return render_template(
 		'community/player_view.htm', player=player, guild=player.getGuild(),
 		quests=QUESTS, achievements=ACHIEVEMENTS, hp=hp, mp=mp,
-		sp=sp, up=up, eq=eq
+		sp=sp, up=up, eq=eq, kills=kills
 	)
 
 @app.route('/community/highscores/<string:type>/<int:page>')
