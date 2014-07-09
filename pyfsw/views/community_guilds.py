@@ -159,7 +159,11 @@ def route_community_guild_kick(id):
 	for rank in GuildRank.query.filter(GuildRank.guild_id == id).all():
 		ranks.append(rank.id)
 
-	members = GuildMembership.query.filter(GuildMembership.guild_id == id).filter(GuildMembership.rank_id.notin_(ranks)).all()
+	if len(ranks):
+		members = GuildMembership.query.filter(GuildMembership.guild_id == id).filter(GuildMembership.rank_id.notin_(ranks)).all()
+	else:
+		members = []
+
 	return render_template('community/guilds/kick.htm', id=id, members=members)
 
 @app.route('/community/guild/<int:id>/kick', methods=['POST'])

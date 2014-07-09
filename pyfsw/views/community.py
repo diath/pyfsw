@@ -183,7 +183,10 @@ def route_community_online():
 		Player.looktype, Player.lookhead, Player.lookbody, Player.looklegs, Player.lookfeet, Player.lookaddons
 	)
 
-	online = online.filter(Player.id.in_(ids)).all()		
+	if len(ids):
+		online = online.filter(Player.id.in_(ids)).all()		
+	else:
+		online = []
 
 	return render_template('community/online.htm', online=online)
 
