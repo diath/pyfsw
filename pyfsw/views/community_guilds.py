@@ -9,7 +9,7 @@ from PIL import Image
 
 from pyfsw import app, db, cache
 from pyfsw import CACHE_TIME, UPLOAD_PATH
-from pyfsw import current_user, login_required, is_guild_leader
+from pyfsw import current_user, login_required, is_guild_leader, is_guild_vice
 from pyfsw import Player
 from pyfsw import Guild, GuildInvite, GuildMembership, GuildRank, GuildWar
 
@@ -29,7 +29,10 @@ def route_community_guild(id):
 	invites = GuildInvite.query.filter(GuildInvite.guild_id == guild.id).all()
 	wars = GuildWar.query.filter(or_(GuildWar.guild1 == id, GuildWar.guild2 == id)).filter(GuildWar.status == GuildWar.Active).all()
 
-	return render_template('community/guilds/view.htm', guild=guild, members=members, invites=invites, leader=is_guild_leader(id), wars=wars)
+	return render_template(
+		'community/guilds/view.htm', guild=guild, members=members, invites=invites,
+		leader=is_guild_leader(id), vice=is_guild_vice(id), wars=wars
+	)
 
 @app.route('/community/guild/create', methods=['GET'])
 @login_required
@@ -103,7 +106,7 @@ def route_community_guild_create_post():
 @app.route('/community/guild/<int:id>/invite', methods=['GET'])
 @login_required
 def route_community_guild_invite(id):
-	if not is_guild_leader(id):
+	if not is_guild_vice(id):
 		return redirect(url_for('route_community_guild', id=id))
 
 	return render_template('community/guilds/invite.htm', id=id)
@@ -111,7 +114,7 @@ def route_community_guild_invite(id):
 @app.route('/community/guild/<int:id>/invite', methods=['POST'])
 @login_required
 def route_community_guild_invite_post(id):
-	if not is_guild_leader(id):
+	if not is_guild_vice(id):
 		return redirect(url_for('route_community_guild', id=id))
 
 	name = request.form.get('name', '', type=str)
@@ -147,7 +150,7 @@ def route_community_guild_invite_post(id):
 @app.route('/community/guild/<int:id>/kick', methods=['GET'])
 @login_required
 def route_community_guild_kick(id):
-	if not is_guild_leader(id):
+	if not is_guild_vice(id):
 		return redirect(url_for('route_community_guild', id=id))
 
 	ranks = []
@@ -160,7 +163,7 @@ def route_community_guild_kick(id):
 @app.route('/community/guild/<int:id>/kick', methods=['POST'])
 @login_required
 def route_community_guild_kick_post(id):
-	if not is_guild_leader(id):
+	if not is_guild_vice(id):
 		return redirect(url_for('route_community_guild', id=id))
 
 	player = request.form.get('id', 0, type=int)

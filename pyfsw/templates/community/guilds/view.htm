@@ -50,6 +50,18 @@
 </div>
 {% endif %}
 
+{% if vice and not leader %}
+<div class="panel panel-default">
+	<div class="panel-heading">
+		Manage
+	</div>
+	<div class="panel-body">
+		<a href="/community/guild/{{ guild.id }}/invite"><btn class="btn btn-default">Invite Player</btn></a>
+		<a href="/community/guild/{{ guild.id }}/kick"><btn class="btn btn-default">Kick Player</btn></a>
+	</div>
+</div>
+{% endif %}
+
 <div class="panel panel-default">
 	<div class="panel-heading">
 		Members

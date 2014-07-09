@@ -2,7 +2,7 @@ from flask import redirect, url_for, session
 from functools import wraps
 
 from pyfsw import app, db
-from pyfsw import Account, Library, Guild
+from pyfsw import Account, Library, Guild, GuildMembership, GuildRank
 from pyfsw import PlayerItem
 
 def login_required(f):
@@ -39,7 +39,7 @@ def is_guild_leader(id):
 	if not guild:
 		return False
 
-	owner = guild[0]
+	owner = guild.ownerid
 	found = False
 
 	for player in user.players:
@@ -48,6 +48,30 @@ def is_guild_leader(id):
 			break
 
 	return found
+
+def is_guild_vice(id):
+	user = current_user()
+	if not user:
+		return False
+
+	players = []
+	for player in user.players:
+		players.append(player.id)
+
+	membership = db.session().query(GuildMembership.rank_id)
+	membership = membership.filter(GuildMembership.guild_id == id)
+	membership = membership.filter(GuildMembership.player_id.in_(players)).all()
+
+	ranks = []
+	for m in membership:
+		ranks.append(m.rank_id)
+
+	ranks = db.session().query(GuildRank.level).filter(GuildRank.id.in_(ranks)).all()
+	for rank in ranks:
+		if rank.level > 1:
+			return True
+
+	return False
 
 def get_player_equipment(player_id):
 	items = db.session().query(PlayerItem.pid, PlayerItem.itemtype)
