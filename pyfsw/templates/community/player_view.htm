@@ -7,94 +7,212 @@
 		Player Information
 	</div>
 	<div class="panel-body">
-		<table class="table table-striped table-hover">
-			<tr>
-				<td>Name</td>
-				<td>
-					{{ player.name }}
-					<div class="outfit">
-						<img class="outfit" src="/outfit/{{ player.looktype }}/{{ player.lookhead }}/{{ player.lookbody }}/{{ player.looklegs }}/{{ player.lookfeet }}/{{ player.lookaddons }}">
+		<ul id="Tabs" class="nav nav-tabs">
+			<li class="active"><a href="#General">General</a></li>
+			<li><a href="#Extra">Equipment/Skills</a></li>
+			<li><a href="#Quests">Quests</a></li>
+			<li><a href="#Achievements">Achievements</a></li>
+			<li><a href="#Deaths">Deaths</a></li>
+		</ul>
+
+		<div class="tab-content">
+			<div class="tab-pane active" id="General">
+				<table class="table table-striped table-hover">
+					<tr>
+						<td>Name</td>
+						<td>
+							{{ player.name }}
+							<div class="outfit">
+								<img class="outfit" src="/outfit/{{ player.looktype }}/{{ player.lookhead }}/{{ player.lookbody }}/{{ player.looklegs }}/{{ player.lookfeet }}/{{ player.lookaddons }}">
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td>Sex</td>
+						<td>{{ player.sex | gender }}</td>
+					</tr>
+					<tr>
+						<td>Vocation</td>
+						<td>{{ player.vocation | vocation }}</td>
+					</tr>
+					<tr>
+						<td>Level</td>
+						<td>{{ player.level }}</td>
+					</tr>
+					<tr>
+						<td>Magic Level</td>
+						<td>{{ player.maglevel }}</td>
+					</tr>
+					<tr>
+						<td>Town</td>
+						<td>{{ player.town_id | town }}</td>
+					</tr>
+					<tr>
+						<td>Last Seen</td>
+						<td>{{ (player.lastlogout if player.lastlogout > player.lastlogin else player.lastlogout) | datetime }}</td>
+					</tr>
+					<tr>
+						<td>Online Time</td>
+						<td>{{ player.onlinetime | timetotal }}</td>
+					</tr>
+					{% if guild %}
+					<tr>
+						<td>Guild</td>
+						<td><a href="/community/guild/{{ guild.id }}">{{ guild.name }}</a></td>
+					</tr>
+					{% endif %}
+					{% if player.comment %}
+					<tr>
+						<td>Comment</td>
+						<td>{{ player.comment }}</td>
+					</tr>
+					{% endif %}
+				</table>
+			</div>
+			<div class="tab-pane" id="Extra">
+				<div class="row">
+					<div class="col-md-4">
+						<div class="panel panel-default">
+							<div class="panel-heading">Statistics</div>
+							<div class="panel-body">
+								<div class="middle">Health</div>
+								<div class="progress">
+									<div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="{{ player.health }}" aria-valuemin="0" aria-valuemax="{{ player.healthmax }}" style="width: {{ hp }}%;">
+										{{ player.health }} / {{ player.healthmax }}
+									</div>
+								</div>
+								<div class="middle">Mana</div>
+								<div class="progress">
+									<div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="{{ player.mana }}" aria-valuemin="0" aria-valuemax="{{ player.manamax }}" style="width: {{ mp }}%">
+										{{ player.mana }} / {{ player.manamax }}
+									</div>
+								</div>
+								<div class="middle">Soul</div>
+								<div class="progress">
+									<div class="progress-bar progress-bar-custom" role="progressbar" aria-valuenow="{{ player.soul }}" aria-valuemin="0" aria-valuemax="200" style="width: {{ up }}%">
+										{{ player.soul }} / 200
+									</div>
+								</div>
+								<div class="middle">Stamina</div>
+								<div class="progress">
+									<div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="{{ player.stamina }}" aria-valuemin="0" aria-valuemax="2520" style="width: {{ sp }}%">
+										{{ player.stamina | stamina }}
+									</div>
+								</div>
+							</div>
+						</div>
 					</div>
-				</td>
-			</tr>
-			<tr>
-				<td>Sex</td>
-				<td>{{ player.sex | gender }}</td>
-			</tr>
-			<tr>
-				<td>Vocation</td>
-				<td>{{ player.vocation | vocation }}</td>
-			</tr>
-			<tr>
-				<td>Level</td>
-				<td>{{ player.level }}</td>
-			</tr>
-			<tr>
-				<td>Magic Level</td>
-				<td>{{ player.maglevel }}</td>
-			</tr>
-			<tr>
-				<td>Town</td>
-				<td>{{ player.town_id | town }}</td>
-			</tr>
-			<tr>
-				<td>Last Seen</td>
-				<td>{{ (player.lastlogout if player.lastlogout > player.lastlogin else player.lastlogout) | datetime }}</td>
-			</tr>
-			<tr>
-				<td>Online Time</td>
-				<td>{{ player.onlinetime | timetotal }}</td>
-			</tr>
-			{% if guild %}
-			<tr>
-				<td>Guild</td>
-				<td><a href="/community/guild/{{ guild.id }}">{{ guild.name }}</a></td>
-			</tr>
-			{% endif %}
-			{% if player.comment %}
-			<tr>
-				<td>Comment</td>
-				<td>{{ player.comment }}</td>
-			</tr>
-			{% endif %}
-		</table>
-	</div>
-</div>
-
-<div class="panel panel-default">
-	<div class="panel-heading">
-		Quests
-	</div>
-	<div class="panel-body">
-		<table class="table table-striped table-hover">
-		{% for quest in quests %}
-		<tr>
-			<td>{{ quest.name }}</td>
-			<td class="right">
-				{% if player.getStorageValue(quest.key) >= quest.value %}
-					<span class="glyphicon glyphicon-ok"></i>
-				{% else %}
-					<span class="glyphicon glyphicon-remove"></i>
-				{% endif %}
-			</td>
-		{% endfor %}
-		</table>
-	</div>
-</div>
-
-<div class="panel panel-default">
-	<div class="panel-heading">
-		Deaths
-	</div>
-	<div class="panel-body">
-		<table class="table table-striped table-hover">
-		{% for death in player.deaths.limit(10) %}
-			<tr>
-				<td>{{ death.time | datetime }}</td>
-				<td>{% autoescape off %}{{ death.toString() }}{% endautoescape %}</td>
-			</tr>
-		{% endfor %}
-	</table>
+					<div class="col-md-4">
+						<div class="panel panel-default">
+							<div class="panel-heading">Equipment</div>
+							<div class="panel-body">
+								<table class="table table-striped table-hover">
+								{% autoescape off %}
+									<tr>
+										<td class="middle">{{ eq[2] }}</td>
+										<td class="middle">{{ eq[1] }}</td>
+										<td class="middle">{{ eq[3] }}</td>
+									</tr>
+									<tr>
+										<td class="middle">{{ eq[6] }}</td>
+										<td class="middle">{{ eq[4] }}</td>
+										<td class="middle">{{ eq[5] }}</td>
+									</tr>
+									<tr>
+										<td class="middle">{{ eq[9] }}</td>
+										<td class="middle">{{ eq[7] }}</td>
+										<td class="middle">{{ eq[10] }}</td>
+									</tr>
+									<tr>
+										<td class="middle">Soul: {{ player.soul }}</td>
+										<td class="middle">{{ eq[8] }}</td>
+										<td class="middle">Cap: {{ player.cap }}</td>
+									</tr>
+								{% endautoescape %}
+								</table>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="panel panel-default">
+							<div class="panel-heading">Skills</div>
+							<div class="panel-body">
+								<table class="table table-striped table-hover">
+									<tr>
+										<td class="left">Fist Fighting</td>
+										<td class="right">{{ player.skill_fist }}</td>
+									</tr>
+									<tr>
+										<td class="left">Club Fighting</td>
+										<td class="right">{{ player.skill_club }}</td>
+									</tr>
+									<tr>
+										<td class="left">Sword Fighting</td>
+										<td class="right">{{ player.skill_sword }}</td>
+									</tr>
+									<tr>
+										<td class="left">Axe Fighting</td>
+										<td class="right">{{ player.skill_axe }}</td>
+									</tr>
+									<tr>
+										<td class="left">Distance</td>
+										<td class="right">{{ player.skill_dist }}</td>
+									</tr>
+									<tr>
+										<td class="left">Shielding</td>
+										<td class="right">{{ player.skill_shielding }}</td>
+									</tr>
+									<tr>
+										<td class="left">Fishing</td>
+										<td class="right">{{ player.skill_fishing }}</td>
+									</tr>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="tab-pane" id="Quests">
+				<table class="table table-striped table-hover">
+				{% for quest in quests %}
+				<tr>
+					<td>{{ quest.name }}</td>
+					<td class="right">
+						{% if player.getStorageValue(quest.key) >= quest.value %}
+							<span class="glyphicon glyphicon-ok"></span>
+						{% else %}
+							<span class="glyphicon glyphicon-remove"></span>
+						{% endif %}
+					</td>
+				{% endfor %}
+				</table>
+			</div>
+			<div class="tab-pane" id="Achievements">
+				<table class="table table-striped table-hover">
+				{% for achievement in achievements %}
+				<tr>
+					<td>{{ achievement.name }}</td>
+					<td class="right">
+						{% if player.getStorageValue(achievement.key) >= achievement.value %}
+							<span class="glyphicon glyphicon-ok"></span>
+						{% else %}
+							<span class="glyphicon glyphicon-remove"></span>
+						{% endif %}
+					</td>
+				{% endfor %}
+				</table>
+			</div>
+			<div class="tab-pane" id="Deaths">
+				<table class="table table-striped table-hover">
+				{% for death in player.deaths.limit(10) %}
+					<tr>
+						<td>{{ death.time | datetime }}</td>
+						<td>{% autoescape off %}{{ death.toString() }}{% endautoescape %}</td>
+					</tr>
+				{% endfor %}
+				</table>
+			</div>
+		</div>
 	</div>
 </div>
 
@@ -113,5 +231,12 @@
 		</form>
 	</div>
 </div>
+
+<script type="text/javascript">
+	$('#Tabs a').click(function(e) {
+		e.preventDefault();
+		$(this).tab('show');
+	});
+</script>
 
 {% endblock %}

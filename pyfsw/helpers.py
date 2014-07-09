@@ -3,6 +3,7 @@ from functools import wraps
 
 from pyfsw import app, db
 from pyfsw import Account, Library, Guild
+from pyfsw import PlayerItem
 
 def login_required(f):
 	@wraps(f)
@@ -47,5 +48,22 @@ def is_guild_leader(id):
 			break
 
 	return found
+
+def get_player_equipment(player_id):
+	items = db.session().query(PlayerItem.pid, PlayerItem.itemtype)
+	items = items.filter(PlayerItem.player_id == player_id)
+	items = items.filter(PlayerItem.pid.in_((1, 2, 3, 4, 5, 6, 7, 8, 9, 10)))
+	items = items.all()
+
+	ret = {}
+
+	for item in items:
+		ret[item.pid] = '<img src="/static/img/items/{}.png">'.format(item.itemtype)
+
+	for x in range(1, 11):
+		if not ret.get(x):
+			ret[x] = '<span class="glyphicon glyphicon-remove"></span>'
+
+	return ret
 
 app.jinja_env.globals.update(get_library=get_library)

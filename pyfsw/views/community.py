@@ -2,11 +2,13 @@ from flask import render_template, request
 from flask.ext.sqlalchemy import Pagination
 
 from pyfsw import app, db
-from pyfsw import QUESTS, TOWNS, HOUSE_PRICE
+from pyfsw import QUESTS, ACHIEVEMENTS, TOWNS, HOUSE_PRICE
 from pyfsw import Player, PlayerStorage, PlayerDeath, PlayerOnline
 from pyfsw import House
 from pyfsw import MarketOffer, MarketHistory
 from pyfsw import Guild, GuildWar, GuildWarKill
+
+from pyfsw import get_player_equipment
 
 HS_TYPES = {
 	'level': ('Level', Player.experience.desc(), 'level', 'experience', 'experience'),
@@ -31,7 +33,17 @@ def route_community_player_get_name(name):
 	if player is None:
 		return render_template('community/player_search.htm', error=True)
 
-	return render_template('community/player_view.htm', player=player, guild=player.getGuild(), quests=QUESTS)
+	hp = int((player.health / player.healthmax) * 100)
+	mp = int((player.mana / player.manamax) * 100)
+	sp = int((player.stamina / 2520) * 100)
+	up = int((player.soul / 200) * 100)
+	eq = get_player_equipment(player.id)
+
+	return render_template(
+		'community/player_view.htm', player=player, guild=player.getGuild(),
+		quests=QUESTS, achievements=ACHIEVEMENTS, hp=hp, mp=mp,
+		sp=sp, up=up, eq=eq
+	)
 
 @app.route('/community/player', methods=['POST'])
 def route_community_player_post():
@@ -41,7 +53,17 @@ def route_community_player_post():
 	if player is None:
 		return render_template('community/player_search.htm', error=True)
 
-	return render_template('community/player_view.htm', player=player, guild=player.getGuild(), quests=QUESTS)
+	hp = int((player.health / player.healthmax) * 100)
+	mp = int((player.mana / player.manamax) * 100)
+	sp = int((player.stamina / 2520) * 100)
+	up = int((player.soul / 200) * 100)
+	eq = get_player_equipment(player.id)
+
+	return render_template(
+		'community/player_view.htm', player=player, guild=player.getGuild(),
+		quests=QUESTS, achievements=ACHIEVEMENTS, hp=hp, mp=mp,
+		sp=sp, up=up, eq=eq
+	)
 
 @app.route('/community/highscores/<string:type>/<int:page>')
 def route_community_highscores(type, page):

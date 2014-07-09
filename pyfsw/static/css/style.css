@@ -40,3 +40,7 @@ a:hover {
 	position: relative;
 	z-index: 100;
 }
+
+.progress-bar-custom {
+	background-color: #5E58AF;
+}

@@ -33,7 +33,7 @@ def init_globals():
 
 from pyfsw.models.account import Account
 from pyfsw.models.guild import Guild, GuildInvite, GuildMembership, GuildRank, GuildWar, GuildWarKill
-from pyfsw.models.player import Player, PlayerStorage, PlayerDeath, PlayerOnline
+from pyfsw.models.player import Player, PlayerItem, PlayerStorage, PlayerDeath, PlayerOnline
 from pyfsw.models.house import House
 from pyfsw.models.news import News
 from pyfsw.models.library import Library

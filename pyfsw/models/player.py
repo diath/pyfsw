@@ -104,6 +104,23 @@ class Player(db.Model):
 
 		return self.guild
 
+class PlayerItem(db.Model):
+	__tablename__ = 'player_items'
+
+	# Standard columns
+	player_id = Column(Integer, ForeignKey('players.id'), primary_key=True)
+	pid = Column(Integer, primary_key=True)
+	sid = Column(Integer)
+	itemtype = Column(Integer)
+	count = Column(Integer)
+
+	# Methods
+	def __init__(self):
+		pass
+
+	def __repr__(self):
+		return '<PlayerItem.{}.{}>'.format(self.player_id, self.pid)
+
 class PlayerStorage(db.Model):
 	__tablename__ = 'player_storage'
 

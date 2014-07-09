@@ -1,4 +1,5 @@
 from datetime import datetime
+from math import floor
 
 from pyfsw import app
 from pyfsw import DATE_FORMAT, GENDERS, VOCATIONS, TOWNS
@@ -50,3 +51,19 @@ def filter_price(value):
 		s += 'k'
 
 	return '{:.1f}{}'.format(value, s)
+
+@app.template_filter('stamina')
+def filter_stamina(value):
+	stamina = value
+	hours = 0
+	minutes = 0
+
+	while stamina >= 60:
+		hours += 1
+		stamina -= 60
+
+	minutes = floor(stamina)
+	if minutes == 0:
+		minutes = '00'
+
+	return '{} hours, {} minutes'.format(hours, minutes)
