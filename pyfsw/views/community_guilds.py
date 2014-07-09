@@ -1,4 +1,5 @@
 from flask import render_template, request, flash, redirect, url_for, get_flashed_messages, send_file
+from sqlalchemy import or_
 from werkzeug.utils import secure_filename
 
 import re
@@ -9,7 +10,8 @@ from PIL import Image
 from pyfsw import app, db
 from pyfsw import UPLOAD_PATH
 from pyfsw import current_user, login_required, is_guild_leader
-from pyfsw import Player, Guild, GuildInvite, GuildMembership, GuildRank
+from pyfsw import Player
+from pyfsw import Guild, GuildInvite, GuildMembership, GuildRank, GuildWar
 
 GUILD_NAME_EXPR = re.compile('^([a-zA-Z ]+)$')
 
@@ -23,7 +25,9 @@ def route_community_guild(id):
 	guild = Guild.query.filter(Guild.id == id).first()
 	members = GuildMembership.query.filter(GuildMembership.guild_id == guild.id).all()
 	invites = GuildInvite.query.filter(GuildInvite.guild_id == guild.id).all()
-	return render_template('community/guilds/view.htm', guild=guild, members=members, invites=invites, leader=is_guild_leader(id))
+	wars = GuildWar.query.filter(or_(GuildWar.guild1 == id, GuildWar.guild2 == id)).filter(GuildWar.status == GuildWar.Active).all()
+
+	return render_template('community/guilds/view.htm', guild=guild, members=members, invites=invites, leader=is_guild_leader(id), wars=wars)
 
 @app.route('/community/guild/create', methods=['GET'])
 @login_required

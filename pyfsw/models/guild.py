@@ -22,6 +22,9 @@ class Guild(db.Model):
 	def __repr__(self):
 		return '<Guild.{}>'.format(self.id)
 
+	def memberCount(self):
+		return db.session().query(GuildMembership.player_id).filter(GuildMembership.guild_id == self.id).count()
+
 class GuildInvite(db.Model):
 	__tablename__ = 'guild_invites'
 
@@ -88,8 +91,8 @@ class GuildWar(db.Model):
 	Active = 1
 	Rejected = 2
 	Revoked = 3
-	PendingEnd = 4
-	Ended = 5
+	#PendingEnd = 4
+	Ended = 4
 
 	# Standard columns
 	id = Column(Integer, primary_key=True, unique=True)
@@ -100,6 +103,7 @@ class GuildWar(db.Model):
 	status = Column(Integer)
 	started = Column(Integer)
 	ended = Column(Integer)
+	frags = Column(Integer)
 
 	# Relationships
 	g1 = db.relationship('Guild', foreign_keys='GuildWar.guild1')
@@ -127,9 +131,6 @@ class GuildWarKill(db.Model):
 	# Relationships
 	g1 = db.relationship('Guild', foreign_keys='GuildWarKill.killerguild')
 	g2 = db.relationship('Guild', foreign_keys='GuildWarKill.targetguild')
-
-	p1 = db.relationship('Player', foreign_keys='GuildWarKill.killer')
-	p2 = db.relationship('Player', foreign_keys='GuildWarKill.target')
 
 	# Methods
 	def __init__(self):

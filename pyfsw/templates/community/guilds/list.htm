@@ -35,6 +35,9 @@
 						<br>
 						<small>Level {{ guild.owner.level }}, {{ guild.owner.vocation | vocation }}</small>
 					</td>
+					<td>
+						{{ guild.memberCount() }} members
+					</td>
 				</tr>
 			{% endfor %}
 			</tbody>

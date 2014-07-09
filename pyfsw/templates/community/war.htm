@@ -1,0 +1,43 @@
+{% extends "template.htm" %}
+{% block title %} Guild Wars - Frag Stats {% endblock %}
+{% block body %}
+
+<div class="panel panel-default">
+	<div class="panel-heading">Guild Wars - Frag Stats</div>
+	<div class="panel-body">
+		<ul id="Tabs" class="nav nav-tabs">
+			<li class="active"><a href="#F1">{{ g1.name }} ({{ c1 }} frags)</a></li>
+			<li><a href="#F2">{{ g2.name }} ({{ c2 }} frags)</a></li>
+		</ul>
+
+		<div class="tab-content">
+			<div class="tab-pane active" id="F1">
+				<table class="table table-striped table-hover">
+				{% for frag in f1 %}
+					<tr><td>
+						Player <a href="/community/player/{{ frag.killer }}">{{ frag.killer }}</a> killed <a href="/community/player/{{ frag.target }}">{{ frag.target }}</a> on {{ frag.time | datetime }}.
+					</td></tr>
+				{% endfor %}
+				</table>
+			</div>
+			<div class="tab-pane" id="F2">
+				<table class="table table-striped table-hover">
+				{% for frag in f2 %}
+					<tr><td>
+						Player <a href="/community/player/{{ frag.killer }}">{{ frag.killer }}</a> killed <a href="/community/player/{{ frag.target }}">{{ frag.target }}</a> on {{ frag.time | datetime }}.
+					</td></tr>
+				{% endfor %}
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript">
+	$('#Tabs a').click(function(e) {
+		e.preventDefault();
+		$(this).tab('show');
+	});
+</script>
+
+{% endblock %}

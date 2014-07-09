@@ -6,7 +6,7 @@ from pyfsw import QUESTS, TOWNS, HOUSE_PRICE
 from pyfsw import Player, PlayerStorage, PlayerDeath, PlayerOnline
 from pyfsw import House
 from pyfsw import MarketOffer, MarketHistory
-from pyfsw import GuildWar, GuildWarKill
+from pyfsw import Guild, GuildWar, GuildWarKill
 
 HS_TYPES = {
 	'level': ('Level', Player.experience.desc(), 'level', 'experience', 'experience'),
@@ -116,14 +116,24 @@ def route_community_market():
 def route_community_wars():
 	active = GuildWar.query.filter(GuildWar.status == GuildWar.Active).all()
 	pending = GuildWar.query.filter(GuildWar.status == GuildWar.Pending).all()
-	ended = GuildWar.query.filter(GuildWar.status == GuildWar.ended).all()
+	ended = GuildWar.query.filter(GuildWar.status == GuildWar.Ended).all()
 
 	return render_template('community/wars.htm', active=active, pending=pending, ended=ended)
 
 @app.route('/community/war/<int:id>')
 def route_community_war(id):
-	war = GuildWar.query.filter(GuildWar.id == id).first()
+	war = db.session().query(GuildWar.id, GuildWar.guild1, GuildWar.guild2).filter(GuildWar.id == id).first()
 	if not war:
 		return redirect(url_for('route_community_wars'))
 
-	return render_template('community/war.htm', war=war)
+	g1 = db.session().query(Guild.id, Guild.name).filter(Guild.id == war.guild1).first()
+	g2 = db.session().query(Guild.id, Guild.name).filter(Guild.id == war.guild2).first()
+
+
+	f1 = db.session().query(GuildWarKill).filter(GuildWarKill.warid == id)
+	f1 = f1.filter(GuildWarKill.killerguild == g1.id).all()
+
+	f2 = db.session().query(GuildWarKill).filter(GuildWarKill.warid == id)
+	f2 = f2.filter(GuildWarKill.killerguild == g2.id).all()
+
+	return render_template('community/war.htm', g1=g1, g2=g2, f1=f1, f2=f2, c1=len(f1), c2=len(f2))

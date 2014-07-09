@@ -70,7 +70,7 @@
 		{% for quest in quests %}
 		<tr>
 			<td>{{ quest.name }}</td>
-			<td>
+			<td class="right">
 				{% if player.getStorageValue(quest.key) >= quest.value %}
 					<span class="glyphicon glyphicon-ok"></i>
 				{% else %}
