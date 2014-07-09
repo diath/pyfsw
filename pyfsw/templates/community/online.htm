@@ -17,16 +17,14 @@
 			</thead>
 			<tbody>
 			{% for player in online %}
-			{% set player = player.player() %}
 				<tr>
-					<td><a href="/community/player/{{ player.name }}">{{ player.name }}</a></td>
-					<td>Level {{ player.level }} ({{ '{:,}'.format(player.experience) }} xp)</td>
 					<td>
-						{{ player.vocation | vocation }}
-						<div class="outfit">
-							<img src="/outfit/{{ player.looktype }}/{{ player.lookhead }}/{{ player.lookbody }}/{{ player.looklegs }}/{{ player.lookfeet }}/{{ player.lookaddons }}">
-						</div>
+						<img class="outfit" src="/outfit/{{ player.looktype }}/{{ player.lookhead }}/{{ player.lookbody }}/{{ player.looklegs }}/{{ player.lookfeet }}/{{ player.lookaddons }}">
+						&nbsp;
+						<a href="/community/player/{{ player.name }}">{{ player.name }}</a>
 					</td>
+					<td>Level {{ player.level }} ({{ '{:,}'.format(player.experience) }} xp)</td>
+					<td>{{ player.vocation | vocation }}</td>
 				</tr>
 			{% endfor %}
 			</tbody>

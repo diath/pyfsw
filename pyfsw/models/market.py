@@ -14,9 +14,6 @@ class MarketOffer(db.Model):
 	anonymous = Column(Integer)
 	price = Column(Integer)
 
-	# Relationships
-	player = db.relationship('Player', foreign_keys='MarketOffer.player_id')
-
 	# Methods
 	def __init__(self):
 		pass
@@ -37,9 +34,6 @@ class MarketHistory(db.Model):
 	expires_at = Column(Integer)
 	inserted = Column(Integer)
 	state = Column(Integer)
-
-	# Relationships
-	player = db.relationship('Player', foreign_keys='MarketHistory.player_id')
 
 	# Methods
 	def __init__(self):

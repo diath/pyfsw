@@ -44,7 +44,7 @@
 							<td>{{ (house.size * price) | price }}</td>
 							<td>
 							{% if house.player %}
-								<a href="/community/player/{{ house.player.name }}">{{ house.player.name }}</a>
+								<a href="/community/player/{{ house.player }}">{{ house.player }}</a>
 							{% else %}
 								Nobody
 							{% endif %}

@@ -34,11 +34,14 @@ def route_community_player_get_name(name):
 	if not player:
 		return render_template('community/player_search.htm', error=True)
 
+
 	hp = int((player.health / player.healthmax) * 100)
 	mp = int((player.mana / player.manamax) * 100)
 	sp = int((player.stamina / 2520) * 100)
 	up = int((player.soul / 200) * 100)
 	eq = get_player_equipment(player.id)
+
+	player.deaths = PlayerDeath.query.filter(PlayerDeath.player_id == player.id).limit(10).all()
 
 	kills = db.session().query(PlayerDeath.player_id, PlayerDeath.level, PlayerDeath.time)
 	kills = kills.filter(PlayerDeath.is_player == 1).filter(PlayerDeath.killed_by == player.name)
@@ -72,6 +75,8 @@ def route_community_player_post():
 	up = int((player.soul / 200) * 100)
 	eq = get_player_equipment(player.id)
 
+	player.deaths = PlayerDeath.query.filter(PlayerDeath.player_id == player.id).limit(10).all()
+
 	kills = db.session().query(PlayerDeath.player_id, PlayerDeath.level, PlayerDeath.time)
 	kills = kills.filter(PlayerDeath.is_player == 1).filter(PlayerDeath.killed_by == player.name)
 	kills = kills.order_by(PlayerDeath.time.desc()).limit(5).all()
@@ -99,11 +104,15 @@ def route_community_highscores(type, page):
 	total = db.session().query(Player.id).filter(Player.group_id == 1).count()
 	perpage = 50
 
-	highscores = Player.query.filter(Player.group_id == 1)
-	highscores = highscores.order_by(current[1])
-
-	pagination = highscores.paginate(page, perpage)
-
+	highscores = db.session().query(
+		Player.name, Player.vocation, Player.level, Player.experience, Player.maglevel, Player.manaspent,
+		Player.skill_fist, Player.skill_club, Player.skill_sword, Player.skill_axe,
+		Player.skill_dist, Player.skill_shielding, Player.skill_fishing,
+		Player.skill_fist_tries, Player.skill_club_tries, Player.skill_sword_tries, Player.skill_axe_tries,
+		Player.skill_dist_tries, Player.skill_shielding_tries, Player.skill_fishing_tries,
+		Player.looktype, Player.lookhead, Player.lookbody, Player.looklegs, Player.lookfeet, Player.lookaddons
+	)
+	highscores = highscores.filter(Player.group_id == 1).order_by(current[1])
 	highscores = highscores.offset((page - 1) * perpage)
 	highscores = highscores.limit(perpage)
 	highscores = highscores.all()
@@ -111,6 +120,8 @@ def route_community_highscores(type, page):
 	for player in highscores:
 		player.value = getattr(player, current[2])
 		player.subvalue = getattr(player, current[3])
+
+	pagination = Pagination(highscores, page, perpage, total, highscores)
 
 	return render_template(
 		'community/highscores.htm',
@@ -126,13 +137,23 @@ def route_community_houses(town_id):
 	if town_id != 0:
 		houses = houses.filter(House.town_id == town_id)
 
-	return render_template('community/houses.htm', towns=TOWNS, town_id=town_id, price=HOUSE_PRICE, houses=houses.all())
+	houses = houses.all()
+
+	for house in houses:
+		if house.owner != 0:
+			player = db.session().query(Player.name).filter(Player.id == house.owner).first()
+			house.player = player.name
+
+	return render_template('community/houses.htm', towns=TOWNS, town_id=town_id, price=HOUSE_PRICE, houses=houses)
 
 @app.route('/community/staff')
 @cache.cached(timeout=CACHE_TIME)
 def route_community_staff():
-	gms = Player.query.filter(Player.group_id == 3).all()
-	tutors = Player.query.filter(Player.group_id == 2).all()
+	gms = db.session().query(Player.name, Player.lastlogin, Player.lastlogout)
+	gms = gms.filter(Player.group_id == 3).all()
+
+	tutors = db.session().query(Player.name, Player.lastlogin, Player.lastlogout)
+	tutors = tutors.filter(Player.group_id == 2).all()
 
 	return render_template('community/staff.htm', gms=gms, tutors=tutors)
 
@@ -152,15 +173,36 @@ def route_community_deaths():
 @app.route('/community/online')
 @cache.cached(timeout=CACHE_TIME)
 def route_community_online():
-	online = PlayerOnline.query.all()
+	ids = []
+	for entry in PlayerOnline.query.all():
+		ids.append(entry.player_id)
+
+	online = db.session().query(
+		Player.name, Player.experience, Player.level, Player.vocation, 
+		Player.looktype, Player.lookhead, Player.lookbody, Player.looklegs, Player.lookfeet, Player.lookaddons
+	)
+
+	online = online.filter(Player.id.in_(ids)).all()		
+
 	return render_template('community/online.htm', online=online)
 
 @app.route('/community/market')
 @cache.cached(timeout=CACHE_TIME)
 def route_community_market():
 	sell = MarketOffer.query.filter(MarketOffer.sale == 1).all()
+	for offer in sell:
+		player = db.session.query(Player.name).filter(Player.id == offer.player_id).first()
+		offer.player = player.name
+
 	buy = MarketOffer.query.filter(MarketOffer.sale == 0).all()
+	for offer in buy:
+		player = db.session.query(Player.name).filter(Player.id == offer.player_id).first()
+		offer.player = player.name
+
 	history = MarketHistory.query.all()
+	for offer in history:
+		player = db.session.query(Player.name).filter(Player.id == offer.player_id).first()
+		offer.player = player.name
 
 	return render_template('community/market.htm', sell=sell, buy=buy, history=history)
 

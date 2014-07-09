@@ -21,9 +21,6 @@ class House(db.Model):
 	size = Column(Integer)
 	beds = Column(Integer)
 
-	# Relationships
-	player = db.relationship('Player', foreign_keys='House.owner')
-
 	# Methods
 	def __init__(self):
 		pass

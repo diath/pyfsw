@@ -68,7 +68,6 @@ class Player(db.Model):
 
 	# Relationships
 	storages = db.relationship('PlayerStorage', primaryjoin='Player.id == PlayerStorage.player_id', backref='players', passive_deletes=True)
-	deaths = db.relationship('PlayerDeath', primaryjoin='Player.id == PlayerDeath.player_id', order_by='desc(PlayerDeath.time)', backref='players', lazy='dynamic', passive_deletes=True)
 
 	# Misc
 	guild = None
@@ -189,6 +188,3 @@ class PlayerOnline(db.Model):
 
 	def __repr__(self):
 		return '<PlayerOnline.{}>'.format(self.player_id)
-
-	def player(self):
-		return Player.query.filter(Player.id == self.player_id).first()
