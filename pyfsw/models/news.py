@@ -13,9 +13,6 @@ class News(db.Model):
 	content = Column(Text)
 	author_id = Column(Integer, ForeignKey(Player.id))
 
-	# Relationships
-	author = db.relationship('Player', foreign_keys='News.author_id')
-
 	# Methods
 	def __init__(self):
 		pass

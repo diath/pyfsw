@@ -10,7 +10,7 @@
 		{% autoescape off %}
 		{{ entry.content }}
 		<hr>
-		Posted by <a href="/community/player/{{ entry.author.name }}">{{ entry.author.name }}</a> at {{ entry.timestamp | datetime }}.
+		Posted by <a href="/community/player/{{ entry.author }}">{{ entry.author }}</a> on {{ entry.timestamp | datetime }}.
 		{% endautoescape %}
 	</div>
 </div>

@@ -6,6 +6,10 @@ from pyfsw import News, Player
 @app.route('/')
 def route_news():
 	news = db.session().query(News).order_by(News.id.desc()).limit(5).all()
+	for entry in news:
+		player = db.session().query(Player.name).filter(Player.id == entry.author_id).first()
+		entry.author = player.name
+
 	return render_template('news/news.htm', news=news)
 
 @app.route('/news/<int:id>')
@@ -14,9 +18,16 @@ def route_news_single(id):
 	if not entry:
 		return redirect(url_for('route_news'))
 
+	player = db.session().query(Player.name).filter(Player.id == entry.author_id).first()
+	entry.author = player.name
+
 	return render_template('news/single.htm', entry=entry)
 
 @app.route('/news/archive')
 def route_news_archive():
 	news = db.session().query(News).order_by(News.id.desc()).all()
+	for entry in news:
+		player = db.session().query(Player.name).filter(Player.id == entry.author_id).first()
+		entry.author = player.name
+
 	return render_template('news/archive.htm', news=news)
