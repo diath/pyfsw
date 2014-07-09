@@ -160,18 +160,18 @@ def route_account_key():
 @login_required
 def route_account_edit(id):
 	account = current_user()
-	player = db.session().query(Player.id, Player.comment, Player.account_id).filter(Player.id == id).first()
+	player = db.session().query(Player.account_id, Player.comment).filter(Player.id == id).first()
 	if not account or not player or account.id != player.account_id:
 		return redirect(url_for('route_account_manage'))
 
-	return render_template('account/character_edit.htm', player=player)
+	return render_template('account/character_edit.htm', id=id, comment=player.comment)
 
 @app.route('/account/edit/<int:id>', methods=['POST'])
 @login_required
 def route_account_edit_post(id):
 	account = current_user()
 	player = db.session().query(Player).filter(Player.id == id).first()
-	if not account or not player or account.id != player.account_id:
+	if not player or account.id != player.account_id:
 		return redirect(url_for('route_account_manage'))
 
 	player.comment = request.form.get('comment', '', type=str)
@@ -183,18 +183,18 @@ def route_account_edit_post(id):
 @login_required
 def route_account_delete(id):
 	account = current_user()
-	player = db.session().query(Player.id, Player.account_id).filter(Player.id == id).first()
-	if not account or not player or account.id != player.account_id:
+	player = db.session().query(Player.account_id, Player.name).filter(Player.id == id).first()
+	if not player or account.id != player.account_id:
 		return redirect(url_for('route_account_manage'))
 
-	return render_template('account/character_delete.htm', player=player)
+	return render_template('account/character_delete.htm', id=id, name=player.name)
 
 @app.route('/account/delete/<int:id>', methods=['POST'])
 @login_required
 def route_account_delete_post(id):
 	account = current_user()
 	player = db.session().query(Player).filter(Player.id == id).first()
-	if account and player and account.id == player.account_id:
+	if player and account.id == player.account_id:
 		db.session().delete(player)
 		db.session().commit()
 

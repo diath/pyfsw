@@ -7,9 +7,9 @@
 		Edit Character
 	</div>
 	<div class="panel-body">
-		<form method="post" action="/account/edit/{{ player.id }}">
+		<form method="post" action="/account/edit/{{ id }}">
 			<div class="form-group">
-				<textarea name="comment" class="form-control">{{ player.comment }}</textarea>
+				<textarea name="comment" class="form-control">{{ comment }}</textarea>
 			</div>
 			<button type="submit" class="btn btn-default">Save</button>
 			<a href="/account/manage"><button type="button" class="btn btn-default">Return</button></a>
