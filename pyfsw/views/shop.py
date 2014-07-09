@@ -25,30 +25,31 @@ def route_shop_order(id):
 def route_shop_order_post(id):
 	item = request.form.get('item', 0, type=int)
 	character = request.form.get('character', 0, type=int)
-	order = True
+	error = False
 
 	if item == 0 or character == 0:
 		return redirect(url_for('route_shop'))
 
 	item = db.session().query(ShopItem).filter(ShopItem.id == item).first()
 	if not item:
-		flash('Failed to find the selected item.')
+		flash('Failed to find the selected item.', 'error')
+		error = True
 
 	character = db.session().query(Player).filter(Player.id == character).first()
 	if not character:
-		order = False
-		flash('Failed to find the selected character.')
+		flash('Failed to find the selected character.', 'error')
+		error = True
 
 	account = current_user()
 	if character not in account.players:
-		order = False
-		flash('You can not order an item for foreign character.')
+		flash('You can not order an item for foreign character.', 'error')
+		error = True
 
 	if account.points < item.price:
-		order = False
-		flash('You do not have enough premium points to purchase this item.')
+		flash('You do not have enough premium points to purchase this item.', 'error')
+		error = True
 
-	if order:
+	if not error:
 		order = ShopOrder()
 		order.name = item.name
 		order.type = item.type
@@ -63,7 +64,7 @@ def route_shop_order_post(id):
 		db.session().add(order)
 		db.session().commit()
 
-		flash('The item has been ordered and should be delivered soon to your character.')
+		flash('The item has been ordered and should be delivered soon to your character.', 'success')
 
 	return redirect(url_for('route_shop'))
 
