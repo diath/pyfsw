@@ -1,4 +1,4 @@
-from flask import render_template, request
+from flask import render_template, request, redirect, url_for
 from flask.ext.sqlalchemy import Pagination
 
 from pyfsw import app, db, cache
@@ -225,6 +225,8 @@ def route_community_war(id):
 	g1 = db.session().query(Guild.id, Guild.name).filter(Guild.id == war.guild1).first()
 	g2 = db.session().query(Guild.id, Guild.name).filter(Guild.id == war.guild2).first()
 
+	if not g1 or not g2:
+		return redirect(url_for('route_community_wars'))
 
 	f1 = db.session().query(GuildWarKill).filter(GuildWarKill.warid == id)
 	f1 = f1.filter(GuildWarKill.killerguild == g1.id).all()
