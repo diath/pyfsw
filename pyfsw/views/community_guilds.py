@@ -29,6 +29,14 @@ def route_community_guild(id):
 	invites = GuildInvite.query.filter(GuildInvite.guild_id == guild.id).all()
 	wars = GuildWar.query.filter(or_(GuildWar.guild1 == id, GuildWar.guild2 == id)).filter(GuildWar.status == GuildWar.Active).all()
 
+	ids = []
+	for player in current_user().players:
+		ids.append(player.id)
+
+	for invite in invites:
+		if invite.player_id in ids:
+			invite.own = True
+
 	return render_template(
 		'community/guilds/view.htm', guild=guild, members=members, invites=invites,
 		leader=is_guild_leader(id), vice=is_guild_vice(id), wars=wars
@@ -183,6 +191,47 @@ def route_community_guild_kick_post(id):
 	flash('The player has been kicked from the guild.', 'success')
 
 	return redirect(url_for('route_community_guild', id=id))
+
+@app.route('/community/guild/<int:gid>/join/<int:pid>', methods=['GET'])
+@login_required
+def route_community_guild_join(gid, pid):
+	user = current_user()
+	found = False
+
+	for player in user.players:
+		if player.id == pid:
+			found = True
+			break
+
+	if not found:
+		return redirect(url_for('route_community_guild', id=gid))
+
+	invite = GuildInvite.query.filter(GuildInvite.guild_id == gid)
+	invite = invite.filter(GuildInvite.player_id == pid).first()
+
+	if not invite:
+		return redirect(url_for('route_community_guild', id=gid))
+
+	rank = db.session().query(GuildRank.id).filter(GuildRank.guild_id == gid)
+	rank = rank.filter(GuildRank.level == 1).first()
+
+	if not rank:
+		return redirect(url_for('route_community_guild', id=gid))
+
+	membership = GuildMembership()
+	membership.player_id = pid
+	membership.guild_id = gid
+	membership.rank_id = rank.id
+	membership.nick = ''
+
+	db.session().delete(invite)
+	db.session().add(membership)
+
+	db.session().commit()
+
+	flash('You have joined the guild.', 'success')
+
+	return redirect(url_for('route_community_guild', id=gid))
 
 @app.route('/community/guild/<int:id>/ranks', methods=['GET'])
 @login_required

@@ -2,19 +2,6 @@
 {% block title %} Guild - {{ guild.name }} {% endblock %}
 {% block body %}
 
-{% with messages = get_flashed_messages() %}
-{% if messages %}
-<div class="alert alert-info">
-	<strong>Information</strong>
-	<ul>
-	{% for message in messages %}
-		<li>{{ message }}</li>
-	{% endfor %}
-	</ul>
-</div>
-{% endif %}
-{% endwith %}
-
 <div class="panel panel-default">
 	<div class="panel-heading">
 		Guild - {{ guild.name }}
@@ -100,6 +87,11 @@
 						<br>
 						<small>Level {{ invite.player.level }}, {{ invite.player.vocation | vocation }}</small>
 					</td>
+					{% if invite.own %}
+					<td>
+						<a href="/community/guild/{{ invite.guild_id }}/join/{{ invite.player_id }}"><button class="btn btn-primary">Join</button></a>
+					</td>
+					{% endif %}
 				</tr>
 			{% endfor %}
 			</tbody>
