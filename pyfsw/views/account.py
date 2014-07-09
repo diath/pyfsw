@@ -29,7 +29,7 @@ def route_account_login_post():
 		pswd = hash.hexdigest()
 
 	account = db.session().query(Account.id).filter(Account.name == name).filter(Account.password == pswd).first()
-	if account is None:
+	if not account:
 		return render_template('account/login.htm', error=True)
 
 	session['account'] = account.id
@@ -40,6 +40,7 @@ def route_account_login_post():
 	return redirect(url_for('route_account_manage'))
 
 @app.route('/account/logout')
+@login_required
 def route_account_logout():
 	session.pop('account')
 	return redirect(url_for('route_account_login'))
@@ -110,11 +111,13 @@ def route_account_password_post():
 	pswdNew = request.form.get('pswdNew', '', type=str)
 	pswdRepeat = request.form.get('pswdRepeat', '', type=str)
 
+	user = current_user()
+
 	hash = sha1()
 	hash.update(pswd.encode('utf-8'))
 	pswd = hash.hexdigest()
 
-	if current_user().password != pswd:
+	if user.password != pswd:
 		flash('The current password is not correct.')
 
 	if len(pswdNew) < 5:
@@ -130,7 +133,7 @@ def route_account_password_post():
 	hash.update(pswdNew.encode('utf-8'))
 	newPswd = hash.hexdigest()
 
-	current_user().password = newPswd
+	user.password = newPswd
 	db.session().commit()
 
 	return redirect(url_for('route_account_manage'))
@@ -138,8 +141,8 @@ def route_account_password_post():
 @app.route('/account/key')
 @login_required
 def route_account_key():
-	account = current_user()
-	if not account or account.key != '':
+	user = current_user()
+	if user.key != '':
 		return redirect(url_for('route_account_manage'))
 
 	parts = []
@@ -148,7 +151,7 @@ def route_account_key():
 
 	key = '-'.join(parts)
 
-	account.key = key
+	user.key = key
 	db.session().commit()
 
 	return render_template('account/key.htm', key=key)
