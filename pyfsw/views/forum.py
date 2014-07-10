@@ -59,6 +59,10 @@ def route_forum_board_post(id):
 		if player.id == character:
 			found = True
 
+	if board.locked:
+		flash('You can not create a thread in a locked board.', 'error')
+		error = True
+
 	if not found:
 		flash('You can not post from a character that does not belong to you.', 'error')
 		error = True
@@ -143,6 +147,10 @@ def route_forum_thread_post(id):
 	for player in user.players:
 		if player.id == character:
 			found = True
+
+	if thread.locked:
+		flash('You can not post in a locked thread.', 'error')
+		error = True
 
 	if not found:
 		flash('You can not post from a character that does not belong to you.', 'error')

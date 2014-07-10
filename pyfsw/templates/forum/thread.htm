@@ -54,7 +54,7 @@
 </div>
 {% endfor %}
 
-{% if characters %}
+{% if characters and not thread.locked %}
 <div class="panel panel-default">
 	<div class="panel-heading">
 		Reply Box

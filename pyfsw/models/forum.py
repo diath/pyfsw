@@ -26,6 +26,7 @@ class ForumBoard(db.Model):
 	name = Column(String(32))
 	description = Column(Text)
 	category_id = Column(Integer, ForeignKey('forum_categories.id'))
+	locked = Column(Integer, default=0)
 
 	# Methods
 	def __init__(self):
