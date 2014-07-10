@@ -30,6 +30,7 @@
 		<a href="/community/guild/{{ guild.id }}/invite"><btn class="btn btn-default">Invite Player</btn></a>
 		<a href="/community/guild/{{ guild.id }}/kick"><btn class="btn btn-default">Kick Player</btn></a>
 		<a href="/community/guild/{{ guild.id }}/ranks"><btn class="btn btn-default">Change Rank Names</btn></a>
+		<a href="/community/guild/{{ guild.id }}/rank"><btn class="btn btn-default">Change Player Rank</btn></a>
 		<a href="/community/guild/{{ guild.id }}/motd"><btn class="btn btn-default">Change Description</btn></a>
 		<a href="/community/guild/{{ guild.id }}/logo"><btn class="btn btn-default">Change Logo</btn></a>
 		<a href="/community/guild/{{ guild.id }}/disband"><btn class="btn btn-default">Disband Guild</btn></a>
@@ -87,6 +88,7 @@
 			<tbody>
 			{% for invite in invites %}
 				<tr>
+					<td><img class="outfit" src="/outfit/{{ invite.player.looktype }}/{{ invite.player.lookhead }}/{{ invite.player.lookbody }}/{{ invite.player.looklegs }}/{{ invite.player.lookfeet }}/{{ invite.player.lookaddons }}"></td>
 					<td>
 						<a href="/community/player/{{ invite.player.name }}">{{ invite.player.name }}</a>
 						<br>

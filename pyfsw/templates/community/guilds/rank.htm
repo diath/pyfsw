@@ -1,0 +1,32 @@
+{% extends "template.htm" %}
+{% block title %} Change Player Rank {% endblock %}
+{% block body %}
+
+<div class="panel panel-default">
+	<div class="panel-heading">
+		Change Player Rank
+	</div>
+	<div class="panel-body">
+		<form method="post" action="/community/guild/{{ id }}/rank">
+			<div class="form-group">
+				<label for="inputName">Member Name</label>
+				<select class="form-control" id="inputName" name="id">
+				{% for member in members %}
+					<option value="{{ member.id }}">{{ member.name }}</option>
+				{% endfor %}
+				</select>
+			</div>
+			<div class="form-group">
+				<label for="inputRank">Rank</label>
+				<select class="form-control" id="inputRank" name="rank">
+					<option value="1">Member</option>
+					<option value="2">Vice Leader</option>
+				</select>
+			</div>
+			<button type="submit" class="btn btn-default">Change Rank</button>
+			<a href="/community/guild/{{ id }}"><button type="button" class="btn btn-default">Return</button></a>
+		</form>
+	</div>
+</div>
+
+{% endblock %}

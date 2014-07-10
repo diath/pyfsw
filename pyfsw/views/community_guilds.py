@@ -275,11 +275,11 @@ def route_community_guild_leave(gid, pid):
 @login_required
 def route_community_guild_ranks(id):
 	if not is_guild_leader(id):
-		return redirect(url_for('route_community_guild'), id=id)
+		return redirect(url_for('route_community_guild', id=id))
 
 	ranks = GuildRank.query.filter(GuildRank.guild_id == id).all()
 	if not ranks:
-		return redirect(url_for('route_community_guild'), id=id)
+		return redirect(url_for('route_community_guild', id=id))
 
 	return render_template('community/guilds/ranks.htm', id=id, ranks=ranks)
 
@@ -287,7 +287,7 @@ def route_community_guild_ranks(id):
 @login_required
 def route_community_guild_ranks_post(id):
 	if not is_guild_leader(id):
-		return redirect(url_for('route_community_guild'), id=id)
+		return redirect(url_for('route_community_guild', id=id))
 
 	for level in range(1, 4):
 		value = request.form.get('rank{}'.format(level), '', type=str)
@@ -306,6 +306,61 @@ def route_community_guild_ranks_post(id):
 			rank.name = value
 
 			db.session().commit()
+
+	return redirect(url_for('route_community_guild', id=id))
+
+@app.route('/community/guild/<int:id>/rank', methods=['GET'])
+@login_required
+def route_community_guild_rank(id):
+	if not is_guild_leader(id):
+		return redirect(url_for('route_community_guild', id=id))
+
+	ranks = []
+	for rank in db.session().query(GuildRank.id).filter(GuildRank.guild_id == id).filter(GuildRank.level < 3).all():
+		ranks.append(rank.id)
+
+	membership = db.session().query(GuildMembership.player_id, GuildMembership.rank_id)
+	membership = membership.filter(GuildMembership.guild_id == id)
+	membership = membership.filter(GuildMembership.rank_id.in_(ranks)).all()
+
+	members = []
+	for entry in membership:
+		player = db.session().query(Player.id, Player.name).filter(Player.id == entry.player_id).first()
+		if player:
+			members.append(player)
+
+	return render_template('community/guilds/rank.htm', id=id, members=members)
+
+@app.route('/community/guild/<int:id>/rank', methods=['POST'])
+@login_required
+def route_community_guild_rank_post(id):
+	if not is_guild_leader(id):
+		return redirect(url_for('route_community_guild', id=id))
+
+	pid = request.form.get('id', 0, type=int)
+	level = request.form.get('rank', 0, type=int)
+
+	if level not in [1, 2]:
+		return redirect(url_for('route_community_guild', id=id))
+
+	if not db.session().query(Player.id).filter(Player.id == pid).first():
+		flash('The player does not exist.', 'error')
+		return redirect(url_for('route_community_guild', id=id))
+
+	rank = db.session().query(GuildRank.id).filter(GuildRank.guild_id == id)
+	rank = rank.filter(GuildRank.level == level).first()
+	if not rank:
+		flash('The rank does not exist', 'error')
+		return redirect(url_for('route_community_guild', id=id))
+
+	membership = GuildMembership.query.filter(GuildMembership.player_id == pid).first()
+	if not membership:
+		return redirect(url_for('route_community_guild', id=id))
+
+	membership.rank_id = rank.id
+	db.session().commit()
+
+	flash('The rank has been updated.', 'success')
 
 	return redirect(url_for('route_community_guild', id=id))
 
