@@ -73,6 +73,9 @@ def route_outfit(type, head, body, legs, feet, addon):
 	path_mask = path.join(OUTFIT_MASKS, name_in)
 	path_shadow = path.join(OUTFIT_SHADOWS, name_in)
 
+	if not path.exists(path_shadow):
+		return send_file(path.join(BASE_PATH, 'static', 'img', 'gm.png'))
+
 	mask = Image.open(path_mask)
 	shadow = Image.open(path_shadow)
 

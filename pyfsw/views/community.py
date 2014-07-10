@@ -150,10 +150,16 @@ def route_community_houses(town_id):
 @app.route('/community/staff')
 @cache.cached(timeout=CACHE_TIME)
 def route_community_staff():
-	gms = db.session().query(Player.name, Player.lastlogin, Player.lastlogout)
+	gms = db.session().query(
+		Player.name, Player.lastlogin, Player.lastlogout,
+		Player.looktype, Player.lookhead, Player.lookbody, Player.looklegs, Player.lookfeet, Player.lookaddons
+	)
 	gms = gms.filter(Player.group_id == 3).all()
 
-	tutors = db.session().query(Player.name, Player.lastlogin, Player.lastlogout)
+	tutors = db.session().query(
+		Player.name, Player.lastlogin, Player.lastlogout,
+		Player.looktype, Player.lookhead, Player.lookbody, Player.looklegs, Player.lookfeet, Player.lookaddons
+	)
 	tutors = tutors.filter(Player.group_id == 2).all()
 
 	return render_template('community/staff.htm', gms=gms, tutors=tutors)

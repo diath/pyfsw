@@ -15,6 +15,7 @@
 			<tbody>
 			{% for gm in gms %}
 				<tr>
+					<td><img class="outfit" src="/outfit/{{ gm.looktype }}/{{ gm.lookhead }}/{{ gm.lookbody }}/{{ gm.looklegs }}/{{ gm.lookfeet }}/{{ gm.lookaddons }}"></td>
 					<td><a href="/community/player/{{ gm.name }}">{{ gm.name }}</a></td>
 					<td>{{ (gm.lastlogout if gm.lastlogout > gm.lastlogin else gm.lastlogout) | datetime }}</td>
 				</tr>
@@ -37,6 +38,7 @@
 			<tbody>
 			{% for tutor in tutors %}
 				<tr>
+					<td><img class="outfit" src="/outfit/{{ tutor.looktype }}/{{ tutor.lookhead }}/{{ tutor.lookbody }}/{{ tutor.looklegs }}/{{ tutor.lookfeet }}/{{ tutor.lookaddons }}"></td>
 					<td><a href="/community/player/{{ tutor.name }}">{{ tutor.name }}</a></td>
 					<td>{{ (tutor.lastlogout if tutor.lastlogout > tutor.lastlogin else tutor.lastlogout) | datetime }}</td>
 				</tr>
