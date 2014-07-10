@@ -1,4 +1,5 @@
 from flask import render_template, redirect, url_for, flash, request
+from flask.ext.sqlalchemy import Pagination
 
 from time import time
 
@@ -18,15 +19,23 @@ def route_forum():
 
 	return render_template('forum/main.htm', categories=categories)
 
-@app.route('/forum/<int:board>', methods=['GET'])
-def route_forum_board(board):
+@app.route('/forum/<int:board>/<int:page>', methods=['GET'])
+def route_forum_board(board, page):
 	board = ForumBoard.query.filter(ForumBoard.id == board).first()
 	if not board:
 		return redirect(url_for('route_forum'))
 
+	total = db.session().query(ForumThread.id).filter(ForumThread.board_id == board.id).count()
+	perpage = 20
+
 	threads = ForumThread.query.filter(ForumThread.board_id == board.id)
-	threads = threads.order_by(ForumThread.pinned.desc())
-	threads = threads.order_by(ForumThread.lastpost.desc()).all()
+
+	if page == 1:
+		threads = threads.order_by(ForumThread.pinned.desc())
+
+	threads = threads.order_by(ForumThread.lastpost.desc())
+	threads = threads.offset((page - 1) * perpage)
+	threads = threads.limit(perpage).all()
 
 	for thread in threads:
 		posts = db.session().query(ForumPost.id).filter(ForumPost.thread_id == thread.id).count()
@@ -38,7 +47,12 @@ def route_forum_board(board):
 	if user:
 		characters = db.session().query(Player.id, Player.name).filter(Player.account_id == user.id).all()
 
-	return render_template('forum/board.htm', board=board, threads=threads, characters=characters)
+	pagination = Pagination(threads, page, perpage, total, threads)
+
+	return render_template(
+		'forum/board.htm', board=board, threads=threads, characters=characters,
+		pagination=pagination, perpage=perpage, page=page
+	)
 
 @app.route('/forum/<int:id>', methods=['POST'])
 @login_required
@@ -100,10 +114,10 @@ def route_forum_board_post(id):
 
 		return redirect(url_for('route_forum_thread', thread=thread.id))
 
-	return redirect(url_for('route_forum_board', board=id))
+	return redirect(url_for('route_forum_board', board=id, page=1))
 
-@app.route('/forum/thread/<int:thread>', methods=['GET'])
-def route_forum_thread(thread):
+@app.route('/forum/thread/<int:thread>/<int:page>', methods=['GET'])
+def route_forum_thread(thread, page):
 	thread = ForumThread.query.filter(ForumThread.id == thread).first()
 	if not thread:
 		return redirect(url_for('route_forum'))
@@ -115,7 +129,14 @@ def route_forum_thread(thread):
 	if player:
 		thread.player = player
 
-	posts = ForumPost.query.filter(ForumPost.thread_id == thread.id).all()
+	total = db.session().query(ForumPost.id).filter(ForumPost.thread_id == thread.id).count()
+	perpage = 3
+
+	posts = ForumPost.query.filter(ForumPost.thread_id == thread.id)
+	posts = posts.order_by(ForumPost.timestamp.asc())
+	posts = posts.offset((page - 1) * perpage)
+	posts = posts.limit(perpage).all()
+
 	for post in posts:
 		player = db.session().query(
 			Player.name, Player.level, Player.vocation, Player.town_id,
@@ -130,7 +151,12 @@ def route_forum_thread(thread):
 	if user:
 		characters = db.session().query(Player.id, Player.name).filter(Player.account_id == user.id).all()
 
-	return render_template('forum/thread.htm', thread=thread, posts=posts, characters=characters)
+	pagination = Pagination(posts, page, perpage, total, posts)
+
+	return render_template(
+		'forum/thread.htm', thread=thread, posts=posts, characters=characters,
+		pagination=pagination, perpage=perpage, page=page
+	)
 
 @app.route('/forum/thread/<int:id>', methods=['POST'])
 @login_required

@@ -62,6 +62,20 @@
 </div>
 {% endfor %}
 
+<div class="middle">
+	<ul class="pagination">
+	{% for page in pagination.iter_pages() %}
+	{% if page %}
+		{% if page != pagination.page %}
+			<li><a href="/forum/thread/{{ thread.id }}/{{ page }}">{{ page }}</a></li>
+		{% else %}
+			<li class="active"><a href="/forum/thread/{{ thread.id }}/{{ page }}">{{ page }}</a></li>
+		{% endif %}
+	{% endif %}
+	{% endfor %}
+	</ul>
+</div>
+
 {% if characters and not thread.locked %}
 <div class="panel panel-default">
 	<div class="panel-heading">

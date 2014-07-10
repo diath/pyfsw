@@ -26,7 +26,7 @@
 						{% if thread.locked %}
 							<span class="glyphicon glyphicon-lock" title="Locked"></span>
 						{% endif %}
-						<a href="/forum/thread/{{ thread.id }}">{{ thread.subject }}</a>
+						<a href="/forum/thread/{{ thread.id }}/1">{{ thread.subject }}</a>
 					</td>
 					<td>{{ thread.timestamp | datetime }}</td>
 					<td>{{ thread.lastpost | datetime }}</td>
@@ -36,6 +36,20 @@
 			</tbody>
 		</table>
 	</div>
+</div>
+
+<div class="middle">
+	<ul class="pagination">
+	{% for page in pagination.iter_pages() %}
+	{% if page %}
+		{% if page != pagination.page %}
+			<li><a href="/forum/{{ board.id }}/{{ page }}">{{ page }}</a></li>
+		{% else %}
+			<li class="active"><a href="/forum/{{ board.id }}/{{ page }}">{{ page }}</a></li>
+		{% endif %}
+	{% endif %}
+	{% endfor %}
+	</ul>
 </div>
 
 {% if characters and not board.locked %}
