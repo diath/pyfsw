@@ -37,6 +37,10 @@ def route_community_guild(id):
 		if invite.player_id in ids:
 			invite.own = True
 
+	for member in members:
+		if member.player_id in ids:
+			member.own = True
+
 	return render_template(
 		'community/guilds/view.htm', guild=guild, members=members, invites=invites,
 		leader=is_guild_leader(id), vice=is_guild_vice(id), wars=wars
@@ -230,6 +234,40 @@ def route_community_guild_join(gid, pid):
 	db.session().commit()
 
 	flash('You have joined the guild.', 'success')
+
+	return redirect(url_for('route_community_guild', id=gid))
+
+@app.route('/community/guild/<int:gid>/leave/<int:pid>', methods=['GET'])
+@login_required
+def route_community_guild_leave(gid, pid):
+	user = current_user()
+	found = False
+
+	for player in user.players:
+		if player.id == pid:
+			found = True
+			break
+
+	if not found:
+		return redirect(url_for('route_community_guild', id=gid))
+
+	membership = GuildMembership.query.filter(GuildMembership.guild_id == gid)
+	membership = membership.filter(GuildMembership.player_id == pid).first()
+
+	if not membership:
+		return redirect(url_for('route_community_guild', id=gid))
+
+	rank = db.session().query(GuildRank.level).filter(GuildRank.id == membership.rank_id).first()
+	if not rank:
+		return redirect(url_for('route_community_guild', id=gid))
+
+	if rank.level < 3:
+		db.session().delete(membership)
+		db.session().commit()
+
+		flash('You left the guild.', 'success')
+	else:
+		flash('Guild leaders can not leave the guild, use the disband feature instead.', 'error')
 
 	return redirect(url_for('route_community_guild', id=gid))
 

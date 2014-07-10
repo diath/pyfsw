@@ -65,6 +65,11 @@
 						<br>
 						<small>Level {{ member.player.level }}, {{ member.player.vocation | vocation }}</small>
 					</td>
+					{% if member.own %}
+					<td>
+						<a href="/community/guild/{{ member.guild_id }}/leave/{{ member.player_id }}"><button class="btn btn-default">Leave</button></a>
+					</td>
+					{% endif %}
 				</tr>
 			{% endfor %}
 			</tbody>
