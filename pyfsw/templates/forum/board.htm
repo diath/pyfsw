@@ -19,7 +19,15 @@
 			<tbody>
 			{% for thread in threads %}
 				<tr>
-					<td><a href="/forum/thread/{{ thread.id }}">{{ thread.subject }}</a></td>
+					<td>
+						{% if thread.pinned %}
+							<span class="glyphicon glyphicon-pushpin" title="Pinned"></span>
+						{% endif %}
+						{% if thread.locked %}
+							<span class="glyphicon glyphicon-lock" title="Locked"></span>
+						{% endif %}
+						<a href="/forum/thread/{{ thread.id }}">{{ thread.subject }}</a>
+					</td>
 					<td>{{ thread.timestamp | datetime }}</td>
 					<td>{{ thread.lastpost | datetime }}</td>
 					<td>{{ thread.posts }}</td>
