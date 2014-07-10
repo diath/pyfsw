@@ -44,3 +44,7 @@ a:hover {
 .progress-bar-custom {
 	background-color: #5E58AF;
 }
+
+.tab-content {
+	margin-top: 25px;
+}
