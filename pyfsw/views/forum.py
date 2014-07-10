@@ -24,7 +24,9 @@ def route_forum_board(board):
 	if not board:
 		return redirect(url_for('route_forum'))
 
-	threads = ForumThread.query.filter(ForumThread.board_id == board.id).all()
+	threads = ForumThread.query.filter(ForumThread.board_id == board.id)
+	threads = threads.order_by(ForumThread.pinned.desc())
+	threads = threads.order_by(ForumThread.lastpost.desc()).all()
 
 	for thread in threads:
 		posts = db.session().query(ForumPost.id).filter(ForumPost.thread_id == thread.id).count()
