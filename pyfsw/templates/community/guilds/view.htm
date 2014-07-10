@@ -7,137 +7,119 @@
 		Guild - {{ guild.name }}
 	</div>
 	<div class="panel-body">
-		<table class="table table-hover table-striped">
-			<div class="row">
-				<div class="col-md-4"><img class="emblem" src="/community/guild/{{ guild.id }}/getlogo"></div>
-				<div class="col-md-4 middle">
-					<h2>{{ guild.name }}</h2>
-					<br>
-					{{ guild.motd }}
-				</div>
-				<div class="col-md-4 right"><img class="emblem" src="/community/guild/{{ guild.id }}/getlogo"></div>
+		<div class="row">
+			<div class="col-md-4"><img class="emblem" src="/community/guild/{{ guild.id }}/getlogo"></div>
+			<div class="col-md-4 middle">
+				<h2>{{ guild.name }}</h2>
+				<br>
+				{{ guild.motd }}
 			</div>
-		</table>
+			<div class="col-md-4 right"><img class="emblem" src="/community/guild/{{ guild.id }}/getlogo"></div>
+		</div>
+
+		<br>
+
+		<ul id="Tabs" class="nav nav-tabs">
+			<li class="active"><a href="#Members">Members</a></li>
+			{% if leader or vice %}
+			<li><a href="#Manage">Manage</a></li>
+			{% endif %}
+			<li><a href="#Invitations">Invitations</a></li>
+			<li><a href="#Wars">Active Wars</a></li>
+		</ul>
+
+		<div class="tab-content">
+			<div class="tab-pane active" id="Members">
+				<table class="table table-hover table-striped">
+					<tbody>
+					{% for member in members %}
+						<tr>
+							<td>{{ member.rank.name }}</td>
+							<td><img class="outfit" src="/outfit/{{ member.player.looktype }}/{{ member.player.lookhead }}/{{ member.player.lookbody }}/{{ member.player.looklegs }}/{{ member.player.lookfeet }}/{{ member.player.lookaddons }}"></td>
+							<td>
+								<a href="/community/player/{{ member.player.name }}">{{ member.player.name }}</a>
+								<br>
+								<small>Level {{ member.player.level }}, {{ member.player.vocation | vocation }}</small>
+							</td>
+							{% if member.own %}
+							<td>
+								<a href="/community/guild/{{ member.guild_id }}/leave/{{ member.player_id }}"><button class="btn btn-default">Leave</button></a>
+							</td>
+							{% endif %}
+						</tr>
+					{% endfor %}
+					</tbody>
+				</table>
+			</div>
+			<div class="tab-pane" id="Manage">
+				{% if leader %}
+					<a href="/community/guild/{{ guild.id }}/invite"><button class="btn btn-default">Invite Player</button></a>
+					<a href="/community/guild/{{ guild.id }}/kick"><button class="btn btn-default">Kick Player</button></a>
+					<a href="/community/guild/{{ guild.id }}/ranks"><button class="btn btn-default">Change Rank Names</button></a>
+					<a href="/community/guild/{{ guild.id }}/rank"><button class="btn btn-default">Change Player Rank</button></a>
+					<a href="/community/guild/{{ guild.id }}/motd"><button class="btn btn-default">Change Description</button></a>
+					<a href="/community/guild/{{ guild.id }}/logo"><button class="btn btn-default">Change Logo</button></a>
+					<a href="/community/guild/{{ guild.id }}/disband"><button class="btn btn-default">Disband Guild</button></a>
+				{% endif %}
+
+				{% if vice and not leader %}
+					<a href="/community/guild/{{ guild.id }}/invite"><button class="btn btn-default">Invite Player</button></a>
+					<a href="/community/guild/{{ guild.id }}/kick"><button class="btn btn-default">Kick Player</button></a>
+				{% endif %}
+			</div>
+			<div class="tab-pane" id="Invitations">
+				<table class="table table-hover table-striped">
+					<tbody>
+					{% for invite in invites %}
+						<tr>
+							<td><img class="outfit" src="/outfit/{{ invite.player.looktype }}/{{ invite.player.lookhead }}/{{ invite.player.lookbody }}/{{ invite.player.looklegs }}/{{ invite.player.lookfeet }}/{{ invite.player.lookaddons }}"></td>
+							<td>
+								<a href="/community/player/{{ invite.player.name }}">{{ invite.player.name }}</a>
+								<br>
+								<small>Level {{ invite.player.level }}, {{ invite.player.vocation | vocation }}</small>
+							</td>
+							{% if invite.own %}
+							<td>
+								<a href="/community/guild/{{ invite.guild_id }}/join/{{ invite.player_id }}"><button class="btn btn-default">Join</button></a>
+							</td>
+							{% endif %}
+						</tr>
+					{% endfor %}
+					</tbody>
+				</table>
+			</div>
+			<div class="tab-pane" id="Wars">
+				<table class="table table-hover table-striped">
+				{% for war in wars %}
+					<tr>
+						<td class="middle">
+							<h2>{{ war.name1 }}</h2>
+							<img class="emblem" src="/community/guild/{{ war.g1.id }}/getlogo">
+						</td>
+						<td class="middle">
+							<h1>VS</h1>
+							<br>
+							<strong>War declared on {{ war.started | datetime }} until {{ war.frags }} frags.</strong>
+								<br><br>
+							<a href="/community/war/{{ war.id }}"><button class="btn btn-default">Frag Stats</button></a>
+						</td>
+						<td class="middle">
+							<h2>{{ war.name2 }}</h2>
+							<img class="emblem" src="/community/guild/{{ war.g2.id }}/getlogo">
+						</td>
+					</tr>
+				{% endfor %}
+				</table>
+			</div>
+		</div>
 	</div>
 </div>
 
-{% if leader %}
-<div class="panel panel-default">
-	<div class="panel-heading">
-		Manage
-	</div>
-	<div class="panel-body">
-		<a href="/community/guild/{{ guild.id }}/invite"><button class="btn btn-default">Invite Player</btn></a>
-		<a href="/community/guild/{{ guild.id }}/kick"><button class="btn btn-default">Kick Player</btn></a>
-		<a href="/community/guild/{{ guild.id }}/ranks"><button class="btn btn-default">Change Rank Names</btn></a>
-		<a href="/community/guild/{{ guild.id }}/rank"><button class="btn btn-default">Change Player Rank</btn></a>
-		<a href="/community/guild/{{ guild.id }}/motd"><button class="btn btn-default">Change Description</btn></a>
-		<a href="/community/guild/{{ guild.id }}/logo"><button class="btn btn-default">Change Logo</btn></a>
-		<a href="/community/guild/{{ guild.id }}/disband"><button class="btn btn-default">Disband Guild</btn></a>
-	</div>
-</div>
-{% endif %}
-
-{% if vice and not leader %}
-<div class="panel panel-default">
-	<div class="panel-heading">
-		Manage
-	</div>
-	<div class="panel-body">
-		<a href="/community/guild/{{ guild.id }}/invite"><button class="btn btn-default">Invite Player</btn></a>
-		<a href="/community/guild/{{ guild.id }}/kick"><button class="btn btn-default">Kick Player</btn></a>
-	</div>
-</div>
-{% endif %}
-
-<div class="panel panel-default">
-	<div class="panel-heading">
-		Members
-	</div>
-	<div class="panel-body">
-		<table class="table table-hover table-striped">
-			<tbody>
-			{% for member in members %}
-				<tr>
-					<td>{{ member.rank.name }}</td>
-					<td><img class="outfit" src="/outfit/{{ member.player.looktype }}/{{ member.player.lookhead }}/{{ member.player.lookbody }}/{{ member.player.looklegs }}/{{ member.player.lookfeet }}/{{ member.player.lookaddons }}"></td>
-					<td>
-						<a href="/community/player/{{ member.player.name }}">{{ member.player.name }}</a>
-						<br>
-						<small>Level {{ member.player.level }}, {{ member.player.vocation | vocation }}</small>
-					</td>
-					{% if member.own %}
-					<td>
-						<a href="/community/guild/{{ member.guild_id }}/leave/{{ member.player_id }}"><button class="btn btn-default">Leave</button></a>
-					</td>
-					{% endif %}
-				</tr>
-			{% endfor %}
-			</tbody>
-		</table>
-	</div>
-</div>
-
-{% if invites %}
-<div class="panel panel-default">
-	<div class="panel-heading">
-		Invitations
-	</div>
-	<div class="panel-body">
-		<table class="table table-hover table-striped">
-			<tbody>
-			{% for invite in invites %}
-				<tr>
-					<td><img class="outfit" src="/outfit/{{ invite.player.looktype }}/{{ invite.player.lookhead }}/{{ invite.player.lookbody }}/{{ invite.player.looklegs }}/{{ invite.player.lookfeet }}/{{ invite.player.lookaddons }}"></td>
-					<td>
-						<a href="/community/player/{{ invite.player.name }}">{{ invite.player.name }}</a>
-						<br>
-						<small>Level {{ invite.player.level }}, {{ invite.player.vocation | vocation }}</small>
-					</td>
-					{% if invite.own %}
-					<td>
-						<a href="/community/guild/{{ invite.guild_id }}/join/{{ invite.player_id }}"><button class="btn btn-default">Join</button></a>
-					</td>
-					{% endif %}
-				</tr>
-			{% endfor %}
-			</tbody>
-		</table>
-	</div>
-</div>
-{% endif %}
-
-{% if wars %}
-<div class="panel panel-default">
-	<div class="panel-heading">
-		Active Wars
-	</div>
-	<div class="panel-body">
-		<table class="table table-hover table-striped">
-			<table class="table table-striped table-hover">
-			{% for war in wars %}
-				<tr>
-					<td class="middle">
-						<h2>{{ war.name1 }}</h2>
-						<img class="emblem" src="/community/guild/{{ war.g1.id }}/getlogo">
-					</td>
-					<td class="middle">
-						<h1>VS</h1>
-						<br>
-						<strong>War declared on {{ war.started | datetime }} until {{ war.frags }} frags.</strong>
-						<br><br>
-						<a href="/community/war/{{ war.id }}"><button class="btn btn-default">Frag Stats</button></a>
-					</td>
-					<td class="middle">
-						<h2>{{ war.name2 }}</h2>
-						<img class="emblem" src="/community/guild/{{ war.g2.id }}/getlogo">
-					</td>
-				</tr>
-			{% endfor %}
-			</table>
-		</table>
-	</div>
-</div>
-{% endif %}
+<script type="text/javascript">
+	$('#Tabs a').click(function(e) {
+		e.preventDefault();
+		$(this).tab('show');
+	});
+</script>
 
 {% endblock %}
