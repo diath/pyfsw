@@ -9,15 +9,19 @@
 	<div class="panel-body">
 		<div class="row">
 			<div class="col-md-2 middle">
-				<a href="/community/player/{{ thread.player.name }}">{{ thread.player.name }}</a>
-				<br>
-				<img class="outfit2" src="/outfit/{{ thread.player.looktype }}/{{ thread.player.lookhead }}/{{ thread.player.lookbody }}/{{ thread.player.looklegs }}/{{ thread.player.lookfeet }}/{{ thread.player.lookaddons }}">
-				<br>
-				Level {{ thread.player.level }}
-				<br>
-				{{ thread.player.vocation | vocation }}
-				<br>
-				Resident of {{ thread.player.town_id | town }}
+				{% if thread.player %}
+					<a href="/community/player/{{ thread.player.name }}">{{ thread.player.name }}</a>
+					<br>
+					<img class="outfit2" src="/outfit/{{ thread.player.looktype }}/{{ thread.player.lookhead }}/{{ thread.player.lookbody }}/{{ thread.player.looklegs }}/{{ thread.player.lookfeet }}/{{ thread.player.lookaddons }}">
+					<br>
+					Level {{ thread.player.level }}
+					<br>
+					{{ thread.player.vocation | vocation }}
+					<br>
+					Resident of {{ thread.player.town_id | town }}
+				{% else %}
+					Author Deleted
+				{% endif %}
 			</div>
 			<div class="col-md-10 left">
 			{% autoescape off %}
@@ -36,15 +40,19 @@
 	<div class="panel-body">
 		<div class="row">
 			<div class="col-md-2 middle">
-				<a href="/community/player/{{ post.player.name }}">{{ post.player.name }}</a>
-				<br>
-				<img class="outfit2" src="/outfit/{{ post.player.looktype }}/{{ post.player.lookhead }}/{{ post.player.lookbody }}/{{ post.player.looklegs }}/{{ post.player.lookfeet }}/{{ post.player.lookaddons }}">
-				<br>
-				Level {{ post.player.level }}
-				<br>
-				{{ post.player.vocation | vocation }}
-				<br>
-				Resident of {{ post.player.town_id | town }}
+				{% if post.player %}
+					<a href="/community/player/{{ post.player.name }}">{{ post.player.name }}</a>
+					<br>
+					<img class="outfit2" src="/outfit/{{ post.player.looktype }}/{{ post.player.lookhead }}/{{ post.player.lookbody }}/{{ post.player.looklegs }}/{{ post.player.lookfeet }}/{{ post.player.lookaddons }}">
+					<br>
+					Level {{ post.player.level }}
+					<br>
+					{{ post.player.vocation | vocation }}
+					<br>
+					Resident of {{ post.player.town_id | town }}
+				{% else %}
+					Author Deleted
+				{% endif %}
 			</div>
 			<div class="col-md-10 left">
 				{{ post.content }}

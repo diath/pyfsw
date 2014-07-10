@@ -112,7 +112,8 @@ def route_forum_thread(thread):
 		Player.name, Player.level, Player.vocation, Player.town_id,
 		Player.looktype, Player.lookhead, Player.lookbody, Player.looklegs, Player.lookfeet, Player.lookaddons
 	).filter(Player.id == thread.author_id).first()
-	thread.player = player
+	if player:
+		thread.player = player
 
 	posts = ForumPost.query.filter(ForumPost.thread_id == thread.id).all()
 	for post in posts:
@@ -120,7 +121,8 @@ def route_forum_thread(thread):
 			Player.name, Player.level, Player.vocation, Player.town_id,
 			Player.looktype, Player.lookhead, Player.lookbody, Player.looklegs, Player.lookfeet, Player.lookaddons
 		).filter(Player.id == post.author_id).first()
-		post.player = player
+		if player:
+			post.player = player
 
 	user = current_user()
 	characters = None

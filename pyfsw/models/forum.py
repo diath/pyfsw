@@ -46,7 +46,7 @@ class ForumThread(db.Model):
 	locked = Column(Integer, default=0)
 	pinned = Column(Integer, default=0)
 	lastpost = Column(Integer, default=0)
-	author_id = Column(Integer, ForeignKey('players.id'))
+	author_id = Column(Integer)
 	content = Column(Text)
 
 	# Methods
@@ -61,7 +61,7 @@ class ForumPost(db.Model):
 
 	# Standard columns
 	id = Column(Integer, primary_key=True, unique=True)
-	author_id = Column(Integer, ForeignKey('players.id'))
+	author_id = Column(Integer)
 	content = Column(Text)
 	timestamp = Column(Integer)
 	thread_id = Column(Integer, ForeignKey('forum_threads.id'))
