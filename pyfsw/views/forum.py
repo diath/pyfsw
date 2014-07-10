@@ -1,6 +1,9 @@
-from flask import render_template, redirect, url_for, flash
+from flask import render_template, redirect, url_for, flash, request
+
+from time import time
 
 from pyfsw import app, db
+from pyfsw import current_user, login_required
 from pyfsw import Player
 from pyfsw import ForumCategory, ForumBoard, ForumThread, ForumPost
 
@@ -29,7 +32,7 @@ def route_forum_board(board):
 
 	return render_template('forum/board.htm', board=board, threads=threads)
 
-@app.route('/forum/thread/<int:thread>')
+@app.route('/forum/thread/<int:thread>', methods=['GET'])
 def route_forum_thread(thread):
 	thread = ForumThread.query.filter(ForumThread.id == thread).first()
 	if not thread:
@@ -49,4 +52,55 @@ def route_forum_thread(thread):
 		).filter(Player.id == post.author_id).first()
 		post.player = player
 
-	return render_template('forum/thread.htm', thread=thread, posts=posts)
+	user = current_user()
+	characters = None
+
+	if user:
+		characters = db.session().query(Player.id, Player.name).filter(Player.account_id == user.id).all()
+
+	return render_template('forum/thread.htm', thread=thread, posts=posts, characters=characters)
+
+@app.route('/forum/thread/<int:id>', methods=['POST'])
+@login_required
+def route_forum_thread_post(id):
+	thread = ForumThread.query.filter(ForumThread.id == id).first()
+	if not thread:
+		flash('The thread you are trying to reply to does not exist.', 'error')
+		return redirect(url_for('route_forum'))
+
+	character = request.form.get('character', 0, type=int)
+	content = request.form.get('content', '', type=str)
+	error = False
+
+	user = current_user()
+	found = False
+	for player in user.players:
+		if player.id == character:
+			found = True
+
+	if not found:
+		flash('You can not post from a character that does not belong to you.', 'error')
+		error = True
+
+	timestamp = int(time())
+	if user.lastpost + 30 > timestamp:
+		flash('You must wait 30 seconds before posting again.', 'error')
+		error = True
+
+	if len(content) > 512:
+		content = content[:512]
+
+	if not error:
+		post = ForumPost()
+		post.author_id = character
+		post.content = content
+		post.timestamp = timestamp
+		post.thread_id = id
+
+		thread.lastpost = timestamp
+		user.lastpost = timestamp
+
+		db.session().add(post)
+		db.session().commit()
+
+	return redirect(url_for('route_forum_thread', thread=id))

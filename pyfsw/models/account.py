@@ -13,6 +13,7 @@ class Account(db.Model):
 	lastday = Column(Integer, default=0)
 	email = Column(String(255))
 	creation = Column(Integer)
+	lastpost = Column(Integer, default=0)
 
 	# Custom columns
 	key = Column(String(19))

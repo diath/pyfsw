@@ -1,10 +1,10 @@
 {% extends "template.htm" %}
-{% block title %} Forum {% endblock %}
+{% block title %} Forum - {{ thread.subject }} {% endblock %}
 {% block body %}
 
 <div class="panel panel-default">
 	<div class="panel-heading">
-		Thread #{{ thread.id }} - {{ thread.subject }}
+		Forum - Thread #{{ thread.id }} - {{ thread.subject }}
 	</div>
 	<div class="panel-body">
 		<div class="row">
@@ -53,5 +53,30 @@
 	</div>
 </div>
 {% endfor %}
+
+{% if characters %}
+<div class="panel panel-default">
+	<div class="panel-heading">
+		Reply Box
+	</div>
+	<div class="panel-body">
+		<form method="post" action="/forum/thread/{{ thread.id }}">
+			<div class="form-group">
+				<label for="inputCharacter">Character</label>
+				<select class="form-control" id="inputCharacter" name="character">
+				{% for character in characters %}
+					<option value="{{ character.id }}">{{ character.name }}</option>
+				{% endfor %}
+				</select>
+			</div>
+			<div class="form-group">
+				<label for="inputContent">Content</label>
+				<textarea name="content" id="inputContent" class="form-control" placeholder="Reply content..."></textarea>
+			</div>
+			<button type="submit" class="btn btn-default">Reply</button>
+		</form>
+	</div>
+</div>
+{% endif %}
 
 {% endblock %}

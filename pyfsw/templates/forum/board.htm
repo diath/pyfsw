@@ -1,10 +1,10 @@
 {% extends "template.htm" %}
-{% block title %} Forum {% endblock %}
+{% block title %} Forum - {{ board.name }} {% endblock %}
 {% block body %}
 
 <div class="panel panel-default">
 	<div class="panel-heading">
-		{{ board.name }}
+		Forum - {{ board.name }}
 	</div>
 	<div class="panel-body">
 		<table class="table table-hover table-striped">
