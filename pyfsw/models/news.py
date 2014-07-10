@@ -11,7 +11,8 @@ class News(db.Model):
 	timestamp = Column(Integer)
 	header = Column(String(64))
 	content = Column(Text)
-	author_id = Column(Integer, ForeignKey(Player.id))
+	author_id = Column(Integer, ForeignKey('players.id'))
+	thread_id = Column(Integer, ForeignKey('forum_threads.id'))
 
 	# Methods
 	def __init__(self):

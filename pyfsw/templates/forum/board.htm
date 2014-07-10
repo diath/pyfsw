@@ -1,0 +1,33 @@
+{% extends "template.htm" %}
+{% block title %} Forum {% endblock %}
+{% block body %}
+
+<div class="panel panel-default">
+	<div class="panel-heading">
+		{{ board.name }}
+	</div>
+	<div class="panel-body">
+		<table class="table table-hover table-striped">
+			<thead>
+				<tr>
+					<th>Thread</th>
+					<th>Created</th>
+					<th>Last Post</th>
+					<th>Replies</th>
+				</tr>
+			</thead>
+			<tbody>
+			{% for thread in threads %}
+				<tr>
+					<td><a href="/forum/thread/{{ thread.id }}">{{ thread.subject }}</a></td>
+					<td>{{ thread.timestamp | datetime }}</td>
+					<td>{{ thread.lastpost | datetime }}</td>
+					<td>{{ thread.posts }}</td>
+				</tr>
+			{% endfor %}
+			</tbody>
+		</table>
+	</div>
+</div>
+
+{% endblock %}

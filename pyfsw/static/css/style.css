@@ -41,6 +41,14 @@ a:hover {
 	z-index: 100;
 }
 
+.outfit2 {
+	top: -16px;
+	left: -16px;
+	text-align: right;
+	position: relative;
+	z-index: 100;
+}
+
 .progress-bar-custom {
 	background-color: #5E58AF;
 }

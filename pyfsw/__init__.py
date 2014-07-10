@@ -38,6 +38,7 @@ from pyfsw.models.guild import Guild, GuildInvite, GuildMembership, GuildRank, G
 from pyfsw.models.player import Player, PlayerItem, PlayerStorage, PlayerDeath, PlayerOnline
 from pyfsw.models.house import House
 from pyfsw.models.news import News
+from pyfsw.models.forum import ForumCategory, ForumBoard, ForumThread, ForumPost
 from pyfsw.models.library import Library
 from pyfsw.models.shop import ShopCategory, ShopItem, ShopOrder, ShopHistory
 from pyfsw.models.market import MarketOffer, MarketHistory
@@ -45,5 +46,5 @@ from pyfsw.models.market import MarketOffer, MarketHistory
 from pyfsw.filters import *
 from pyfsw.helpers import *
 
-from pyfsw.views import news, account, community, community_guilds, library, shop
+from pyfsw.views import news, forum, account, community, community_guilds, library, shop
 from pyfsw.views import error, captcha, outfit, paypal

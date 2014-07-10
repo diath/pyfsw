@@ -2,6 +2,7 @@ from flask import render_template
 
 from pyfsw import app, db
 from pyfsw import News, Player
+from pyfsw import ForumPost
 
 @app.route('/')
 def route_news():
@@ -9,6 +10,9 @@ def route_news():
 	for entry in news:
 		player = db.session().query(Player.name).filter(Player.id == entry.author_id).first()
 		entry.author = player.name
+
+		posts = db.session().query(ForumPost.id).filter(ForumPost.thread_id == entry.thread_id).count()
+		entry.comments = posts
 
 	return render_template('news/news.htm', news=news)
 
@@ -20,6 +24,9 @@ def route_news_single(id):
 
 	player = db.session().query(Player.name).filter(Player.id == entry.author_id).first()
 	entry.author = player.name
+
+	posts = db.session().query(ForumPost.id).filter(ForumPost.thread_id == entry.thread_id).count()
+	entry.comments = posts
 
 	return render_template('news/single.htm', entry=entry)
 
