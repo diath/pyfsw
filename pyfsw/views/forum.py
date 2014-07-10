@@ -18,19 +18,83 @@ def route_forum():
 
 	return render_template('forum/main.htm', categories=categories)
 
-@app.route('/forum/<int:board>')
+@app.route('/forum/<int:board>', methods=['GET'])
 def route_forum_board(board):
 	board = ForumBoard.query.filter(ForumBoard.id == board).first()
 	if not board:
 		return redirect(url_for('route_forum'))
 
-	threads = ForumThread.query.all()
+	threads = ForumThread.query.filter(ForumThread.board_id == board.id).all()
 
 	for thread in threads:
 		posts = db.session().query(ForumPost.id).filter(ForumPost.thread_id == thread.id).count()
 		thread.posts = posts
 
-	return render_template('forum/board.htm', board=board, threads=threads)
+	user = current_user()
+	characters = None
+
+	if user:
+		characters = db.session().query(Player.id, Player.name).filter(Player.account_id == user.id).all()
+
+	return render_template('forum/board.htm', board=board, threads=threads, characters=characters)
+
+@app.route('/forum/<int:id>', methods=['POST'])
+@login_required
+def route_forum_board_post(id):
+	board = ForumBoard.query.filter(ForumBoard.id == id).first()
+	if not board:
+		flash('The board you are trying to create a thread on does not exist.', 'error')
+		return redirect(url_for('route_forum'))
+
+	subject = request.form.get('subject', '', type=str)
+	character = request.form.get('character', 0, type=int)
+	content = request.form.get('content', '', type=str)
+	error = False
+
+	user = current_user()
+	found = False
+	for player in user.players:
+		if player.id == character:
+			found = True
+
+	if not found:
+		flash('You can not post from a character that does not belong to you.', 'error')
+		error = True
+
+	timestamp = int(time())
+	if user.lastpost + 30 > timestamp:
+		flash('You must wait 30 seconds before posting again.', 'error')
+		error = True
+
+	if len(subject) < 5:
+		flash('Yout thread subject must be at least 5 characters long', 'error')
+
+	if len(content) < 15:
+		flash('Your thread content must be at least 15 characters long.', 'error')
+		error = True
+
+	if len(content) > 512:
+		content = content[:512]
+
+	if not error:
+		thread = ForumThread()
+		thread.subject = subject
+		thread.timestamp = timestamp
+		thread.board_id = id
+		thread.locked = 0
+		thread.pinned = 0
+		thread.lastpost = timestamp
+		thread.author_id = character
+		thread.content = content
+
+		user.lastpost = timestamp
+
+		db.session().add(thread)
+		db.session().commit()
+
+		return redirect(url_for('route_forum_thread', thread=thread.id))
+
+	return redirect(url_for('route_forum_board', board=id))
 
 @app.route('/forum/thread/<int:thread>', methods=['GET'])
 def route_forum_thread(thread):
@@ -85,6 +149,10 @@ def route_forum_thread_post(id):
 	timestamp = int(time())
 	if user.lastpost + 30 > timestamp:
 		flash('You must wait 30 seconds before posting again.', 'error')
+		error = True
+
+	if len(content) < 4:
+		flash('Your reply must be at least 4 characters long.', 'error')
 		error = True
 
 	if len(content) > 512:
