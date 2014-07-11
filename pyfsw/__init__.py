@@ -40,7 +40,7 @@ from pyfsw.models.house import House
 from pyfsw.models.news import News
 from pyfsw.models.forum import ForumCategory, ForumBoard, ForumThread, ForumPost
 from pyfsw.models.library import Library
-from pyfsw.models.shop import ShopCategory, ShopItem, ShopOrder, ShopHistory
+from pyfsw.models.shop import ShopCategory, ShopItem, ShopOrder, ShopHistory, PaypalHistory
 from pyfsw.models.market import MarketOffer, MarketHistory
 
 from pyfsw.filters import *

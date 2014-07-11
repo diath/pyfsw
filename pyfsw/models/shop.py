@@ -90,3 +90,23 @@ class ShopHistory(db.Model):
 
 	def __repr__(self):
 		return '<ShopHistory.{}>'.format(self.id)
+
+class PaypalHistory(db.Model):
+	__tablename__ = 'paypal_history'
+
+	# Standard columns
+	id = Column(Integer, primary_key=True, unique=True)
+	account_id = Column(Integer)
+	timestamp = Column(Integer)
+	status = Column(String(32))
+	test = Column(Integer)
+	origin = Column(String(64))
+	amount = Column(String(16))
+	points = Column(Integer)
+
+	# Methods
+	def __init__(self):
+		pass
+
+	def __repr__(self):
+		return '<PaypalHistory.{}>'.format(self.id)

@@ -48,3 +48,16 @@ CREATE TABLE IF NOT EXISTS `shop_history` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `id` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
+
+CREATE TABLE IF NOT EXISTS `paypal_history` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `account_id` int(11) DEFAULT NULL,
+  `timestamp` int(11) DEFAULT NULL,
+  `status` varchar(32) DEFAULT NULL,
+  `test` int(11) DEFAULT NULL,
+  `origin` varchar(64) DEFAULT NULL,
+  `amount` varchar(16) DEFAULT NULL,
+  `points` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `id` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;

@@ -1,61 +1,75 @@
-from flask import render_template
+from flask import render_template, request
+
+import socket
+from time import time
 
 from pyfsw import app, db
 from pyfsw import login_required, current_user
-
-import http.client
-import socket
+from pyfsw import PAYPAL_BUTTONS
+from pyfsw import Account, PaypalHistory
 
 @app.route('/paypal/donate')
 @login_required
 def route_paypal():
-	return render_template('paypal/donate.htm')
+	return render_template('paypal/donate.htm', buttons=PAYPAL_BUTTONS, account_id=current_user().id)
 
-@app.route('/paypal/donated')
+@app.route('/paypal/success')
 def route_paypal_donated():
 	return render_template('paypal/donated.htm')
 
-@app.route('/paypal/reversed')
-def route_paypal_reversed():
-	return render_template('paypal/reversed.htm')
+@app.route('/paypal/canceled')
+def route_paypal_canceled():
+	return render_template('paypal/canceled.htm')
 
-@app.route('/paypal/ipn')
+@app.route('/paypal/ipn', methods=['POST'])
 def route_paypal_ipn():
+	error = False
+
 	host = socket.getfqdn(request.remote_addr)
 	if host != 'notify.paypal.com':
-		# POST not received from PayPal.
-		return ''
+		error = True
 
-	txn = request.args.get('txn_id', '')
-	aid = request.args.get('custom', '')
-	status = request.args.get('payment_status', '')
-	currency = request.args.get('mc_currency', '')
+	test = request.form.get('test_ipn', 1, type=int)
+	if test:
+		error = True
 
+	status = request.form.get('payment_status', '', type=str)
+	if status != 'Completed':
+		error = True
+
+	currency = request.form.get('mc_currency', '', type=str)
 	if currency != 'USD':
-		# Payment not received in USD.
-		return ''
+		error = True
 
-	account = db.session().query(Account).filter(Account.id == aid).first()
-
+	account_id = request.form.get('custom', 0, type=int)
+	account = db.session().query(Account).filter(Account.id == account_id).first()
 	if not account:
-		# Unknown account donated.
-		# Perhaps refund the transaction?
-		return ''
+		error = True
 
-	raw_ipn = request.url[len(request.base_url) + 1:]
-	verify = httplib.HTTPSConnection('www.sandbox.paypal.com')
-	verify.request('GET', 'cgi-bin/webscr?cmd=_notify-validate&{}'.format(raw_ipn))
+	amount = request.form.get('mc_gross', '', type=str)
+	button = None
+	for v in PAYPAL_BUTTONS:
+		if v['amount'] == amount:
+			button = v
+			break
 
-	if verify.getresponse().read() == 'VERIFIED':
-		if status == 'Completed':
-			# Add Points
-			# Log transaction
-			# Redirect to /paypal/donated
-			print('ok')
-		elif status == 'Reversed':
-			# Delete account
-			# Log transaction (blacklist?)
-			# Redirect to /paypal/reversed
-			print('boo')
+	if not button:
+		button = {'amount': '0.00', 'points': 0}
 
-	return ''
+	if not error:
+		account.points += button['points']
+		db.session().commit()
+
+	history = PaypalHistory()
+	history.account_id = account_id
+	history.timestamp = int(time())
+	history.status = status
+	history.test = test
+	history.origin = host
+	history.amount = button['amount']
+	history.points = button['points']
+
+	db.session().add(history)
+	db.session().commit()
+
+	return '', 200

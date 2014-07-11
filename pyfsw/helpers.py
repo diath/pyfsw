@@ -1,4 +1,4 @@
-from flask import redirect, url_for, session
+from flask import redirect, url_for, session, request
 from functools import wraps
 
 from pyfsw import app, db
