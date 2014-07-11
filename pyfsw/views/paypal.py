@@ -30,7 +30,7 @@ def route_paypal_ipn():
 		error = True
 
 	test = request.form.get('test_ipn', 1, type=int)
-	if test:
+	if test != 0:
 		error = True
 
 	status = request.form.get('payment_status', '', type=str)

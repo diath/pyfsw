@@ -75,3 +75,8 @@ QUESTS = [
 ACHIEVEMENTS = [
 	{'name': 'Example Achievement', 'key': 12101, 'value': 1}
 ]
+
+# Paypal Buttons
+PAYPAL_BUTTONS = [
+	{'id': 'id', 'amount': 'price', 'points': 0},
+]
