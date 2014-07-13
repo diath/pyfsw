@@ -9,7 +9,8 @@ def route_news():
 	news = db.session().query(News).order_by(News.id.desc()).limit(5).all()
 	for entry in news:
 		player = db.session().query(Player.name).filter(Player.id == entry.author_id).first()
-		entry.author = player.name
+		if player:
+			entry.author = player.name
 
 		posts = db.session().query(ForumPost.id).filter(ForumPost.thread_id == entry.thread_id).count()
 		entry.comments = posts
@@ -23,7 +24,8 @@ def route_news_single(id):
 		return redirect(url_for('route_news'))
 
 	player = db.session().query(Player.name).filter(Player.id == entry.author_id).first()
-	entry.author = player.name
+	if player:
+		entry.author = player.name
 
 	posts = db.session().query(ForumPost.id).filter(ForumPost.thread_id == entry.thread_id).count()
 	entry.comments = posts
@@ -35,6 +37,7 @@ def route_news_archive():
 	news = db.session().query(News).order_by(News.id.desc()).all()
 	for entry in news:
 		player = db.session().query(Player.name).filter(Player.id == entry.author_id).first()
-		entry.author = player.name
+		if player:
+			entry.author = player.name
 
 	return render_template('news/archive.htm', news=news)

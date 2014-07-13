@@ -22,7 +22,11 @@
 					<td>#{{ entry.id }}</td>
 					<td><a href="/news/{{ entry.id }}">{{ entry.header }}</a></td>
 					<td>{{ entry.timestamp | datetime }}</td>
+					{% if entry.author %}
 					<td><a href="/community/player/{{ entry.author }}">{{ entry.author }}</a></td>
+					{% else %}
+					<td>Unknown</td>
+					{% endif %}
 				</tr>
 			{% endfor %}
 			</tbody>

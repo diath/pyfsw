@@ -13,7 +13,13 @@
 		<hr>
 		<div class="row">
 			<div class="col-xs-6 left">
-				Posted by <a href="/community/player/{{ entry.author }}">{{ entry.author }}</a> on {{ entry.timestamp | datetime }}.
+				Posted by 
+				{% if entry.author %}
+					<a href="/community/player/{{ entry.author }}">{{ entry.author }}</a>
+				{% else %}
+					Unknown
+				{% endif %}
+				 on {{ entry.timestamp | datetime }}.
 			</div>
 			<div class="col-xs-6 right">
 				<a href="/forum/thread/{{ entry.thread_id }}/1">{{ entry.comments }} comments</a>
