@@ -9,6 +9,7 @@ from PIL import Image
 
 from pyfsw import app, db, cache
 from pyfsw import CACHE_TIME, UPLOAD_PATH
+from pyfsw import filter_rank
 from pyfsw import current_user, login_required, is_guild_leader, is_guild_vice
 from pyfsw import Player
 from pyfsw import Guild, GuildInvite, GuildMembership, GuildRank, GuildWar
@@ -103,7 +104,7 @@ def route_community_guild_create_post():
 	db.session().add(guild)
 	db.session().commit()
 
-	rank = db.session.query(GuildRank.id).filter(GuildRank.guild_id == guild.id).filter(GuildRank.level == 3).first()
+	rank = db.session().query(GuildRank.id).filter(GuildRank.guild_id == guild.id).filter(GuildRank.level == 3).first()
 
 	membership = GuildMembership()
 	membership.player_id = character.id
@@ -113,7 +114,7 @@ def route_community_guild_create_post():
 	db.session().add(membership)
 	db.session().commit()
 
-	flash('The guild has been created.')
+	flash('The guild has been created.', 'success')
 
 	return redirect(url_for('route_community_guild', id=guild.id))
 
@@ -293,12 +294,12 @@ def route_community_guild_ranks_post(id):
 		value = request.form.get('rank{}'.format(level), '', type=str)
 		error = False
 
-		if re.compile('^[a-zA-Z ]$').search(value):
-			flash('The rank name may only contain latin characters (A-Z, a-z and spaces).', 'error')
+		if not GUILD_NAME_EXPR.match(value):
+			flash('{} rank name may only contain latin characters (A-Z, a-z and spaces).'.format(filter_rank(level)), 'error')
 			error = True
 
 		if len(value) < 4 or len(value) > 16:
-			flash('The rank name must be between 4 and 16 characters long.', 'error')
+			flash('{} rank name must be between 4 and 16 characters long.'.format(filter_rank(level)), 'error')
 			error = True
 
 		if not error:
@@ -307,7 +308,9 @@ def route_community_guild_ranks_post(id):
 
 			db.session().commit()
 
-	return redirect(url_for('route_community_guild', id=id))
+			flash('{} rank name has been updated.'.format(filter_rank(level)), 'success')
+
+	return redirect(url_for('route_community_guild_ranks', id=id))
 
 @app.route('/community/guild/<int:id>/rank', methods=['GET'])
 @login_required

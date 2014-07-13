@@ -88,6 +88,7 @@ def route_forum_board_post(id):
 
 	if len(subject) < 5:
 		flash('Yout thread subject must be at least 5 characters long', 'error')
+		error = True
 
 	if len(content) < 15:
 		flash('Your thread content must be at least 15 characters long.', 'error')
