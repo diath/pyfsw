@@ -26,6 +26,7 @@ CREATE TABLE IF NOT EXISTS `forum_threads` (
   `lastpost` int(11) DEFAULT NULL,
   `author_id` int(11) DEFAULT NULL,
   `content` text NOT NULL,
+  `noescape` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `id` (`id`),
   KEY `board_id` (`board_id`),

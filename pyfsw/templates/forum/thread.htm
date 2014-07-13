@@ -24,9 +24,13 @@
 				{% endif %}
 			</div>
 			<div class="col-md-10 left">
-			{% autoescape off %}
+			{% if thread.noescape %}
+				{% autoescape off %}
 				{{ thread.content }}
-			{% endautoescape %}
+				{% endautoescape %}
+			{% else %}
+				{{ thread.content }}
+			{% endif %}
 			</div>
 		</div>
 	</div>
