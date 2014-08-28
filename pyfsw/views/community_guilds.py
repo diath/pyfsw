@@ -19,7 +19,7 @@ GUILD_NAME_EXPR = re.compile('^([a-zA-Z ]+)$')
 @app.route('/community/guilds')
 @cache.cached(timeout=CACHE_TIME)
 def route_community_guilds():
-	guilds = Guild.query.all()
+	guilds = Guild.query.order_by(Guild.name).all()
 	return render_template('community/guilds/list.htm', guilds=guilds, user=current_user())
 
 @app.route('/community/guild/<int:id>')
