@@ -73,7 +73,7 @@ QUESTS = [
 
 # Achievements List
 ACHIEVEMENTS = [
-	{'name': 'Example Achievement', 'key': 12101, 'value': 1}
+	{'name': 'Example Achievement', 'key': 12101, 'value': 1, 'tier': 1}
 ]
 
 # Paypal Buttons
