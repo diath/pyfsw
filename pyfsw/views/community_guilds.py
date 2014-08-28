@@ -30,17 +30,19 @@ def route_community_guild(id):
 	invites = GuildInvite.query.filter(GuildInvite.guild_id == guild.id).all()
 	wars = GuildWar.query.filter(or_(GuildWar.guild1 == id, GuildWar.guild2 == id)).filter(GuildWar.status == GuildWar.Active).all()
 
-	ids = []
-	for player in current_user().players:
-		ids.append(player.id)
+	user = current_user()
+	if user:
+		ids = []
+		for player in user.players:
+			ids.append(player.id)
 
-	for invite in invites:
-		if invite.player_id in ids:
-			invite.own = True
+		for invite in invites:
+			if invite.player_id in ids:
+				invite.own = True
 
-	for member in members:
-		if member.player_id in ids:
-			member.own = True
+		for member in members:
+			if member.player_id in ids:
+				member.own = True
 
 	return render_template(
 		'community/guilds/view.htm', guild=guild, members=members, invites=invites,
