@@ -2,19 +2,6 @@
 {% block title %} Browse Offer {% endblock %}
 {% block body %}
 
-{% with messages = get_flashed_messages() %}
-{% if messages %}
-<div class="alert alert-info">
-	<strong>Information:</strong>
-	<ul>
-	{% for message in messages %}
-		<li>{{ message }}</li>
-	{% endfor %}
-	</ul>
-</div>
-{% endif %}
-{% endwith %}
-
 <div class="panel panel-default">
 	<div class="panel-heading">Browse Offer</div>
 	<div class="panel-body">
