@@ -7,13 +7,13 @@
 	<div class="panel-body">
 		<ul id="Categories" class="nav nav-tabs">
 		{% for category in categories %}
-			<li{% if loop.index0 == 0 %} class="active"{% endif %}><a href="#{{ category.name }}">{{ category.name }}</a></li>
+			<li{% if loop.index0 == 0 %} class="active"{% endif %}><a href="#{{ category.name.replace(' ', '') }}">{{ category.name }}</a></li>
 		{% endfor %}
 		</ul>
 
 		<div class="tab-content">
 		{% for category in categories %}
-			<div class="tab-pane{% if loop.index0 == 0 %} active{% endif %}" id="{{ category.name }}">
+			<div class="tab-pane{% if loop.index0 == 0 %} active{% endif %}" id="{{ category.name.replace(' ', '') }}">
 				<table class="table table-hover table-striped">
 					<thead><tr>	
 						<th>&nbsp;</th>
