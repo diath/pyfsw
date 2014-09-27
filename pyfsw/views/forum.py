@@ -94,10 +94,13 @@ def route_forum_board_post(id):
 		flash('Your thread content must be at least 15 characters long.', 'error')
 		error = True
 
-	if len(content) > 512:
-		content = content[:512]
-
 	if not error:
+		if len(content) > 512:
+			content = content[:512]
+
+		content = content.strip()
+		content = ' '.join(content.split())
+
 		thread = ForumThread()
 		thread.subject = subject
 		thread.timestamp = timestamp
@@ -194,10 +197,13 @@ def route_forum_thread_post(id):
 		flash('Your reply must be at least 4 characters long.', 'error')
 		error = True
 
-	if len(content) > 512:
-		content = content[:512]
-
 	if not error:
+		if len(content) > 512:
+			content = content[:512]
+
+		content = content.strip()
+		content = ' '.join(content.split())
+
 		post = ForumPost()
 		post.author_id = character
 		post.content = content
