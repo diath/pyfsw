@@ -31,6 +31,9 @@ FONT_PATH = ''
 # Server Name
 SERVER_NAME = ''
 
+# Page Description
+SERVER_DESCR = ''
+
 # Town Names
 TOWNS = {
 	0: 'All',

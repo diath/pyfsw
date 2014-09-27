@@ -31,6 +31,7 @@ cache = Cache(app, config={'CACHE_TYPE': 'simple'})
 @app.before_request
 def init_globals():
 	g.server_name = SERVER_NAME
+	g.server_description = SERVER_DESCR
 	g.year = date.today().year
 
 from pyfsw.models.account import Account
