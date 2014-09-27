@@ -113,7 +113,7 @@ def route_forum_board_post(id):
 		db.session().add(thread)
 		db.session().commit()
 
-		return redirect(url_for('route_forum_thread', thread=thread.id))
+		return redirect(url_for('route_forum_thread', thread=thread.id, page=1))
 
 	return redirect(url_for('route_forum_board', board=id, page=1))
 
