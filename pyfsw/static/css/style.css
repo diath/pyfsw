@@ -45,6 +45,7 @@ a:hover {
 	top: -16px;
 	left: -16px;
 	text-align: right;
+	margin-top: 16px;
 	position: relative;
 	z-index: 100;
 }
