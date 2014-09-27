@@ -9,7 +9,6 @@ body {
 	font-family: sans-serif !important;
 	background: url('/static/img/background.png') no-repeat top center #272B30;
 	background-attachment: fixed;
-	margin-top: 200px;
 }
 
 a {
@@ -19,6 +18,11 @@ a {
 
 a:hover {
 	text-decoration: underline !important;
+}
+
+.logo {
+	margin-bottom: 15px;
+	text-align: center;
 }
 
 .right {
