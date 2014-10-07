@@ -79,7 +79,7 @@ def route_account_create_post():
 		flash('The account name is already in use.', 'error')
 		error = True
 
-	if captcha != session.get('captcha', ''):
+	if captcha.lower() != session.get('captcha', '').lower():
 		flash('The captcha code does not match.', 'error')
 		error = True
 

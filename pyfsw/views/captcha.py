@@ -16,7 +16,7 @@ def route_captcha():
 	while len(code) < 5:
 		code += chr(randint(65, 90))
 
-	session['captcha'] = code
+	session['captcha'] = code.lower()
 	code = list(code)
 
 	image = Image.new(mode='RGBA', size=(168, 30), color=(255, 255, 255, 255))
