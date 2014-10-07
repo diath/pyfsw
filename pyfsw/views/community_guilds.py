@@ -436,6 +436,7 @@ def route_community_guild_logo_post(id):
 
 			try:
 				image = Image.open(name)
+				image.convert('RGBA')
 				image.thumbnail((128, 128), Image.ANTIALIAS)
 				image.save(name)
 			except Exception as e:
@@ -447,7 +448,7 @@ def route_community_guild_logo_post(id):
 		error = True
 
 	if not error:
-		flash('The guild logo has been changed.', 'success')
+		flash('The guild logo has been changed. If you still see the old logo, try using CTRL+F5, which should erase the previously cached image.', 'success')
 
 	return redirect(url_for('route_community_guild', id=id))
 
