@@ -422,7 +422,7 @@ def route_community_guild_logo_post(id):
 			flash('The file extension is not allowed.', 'error')
 			error = True
 
-		if len(file.getvalue()) > 3 * 1024 * 1024:
+		if file.content_length > 3 * 1024 * 1024:
 			flash('The file size exceeds the limit of 3 MB.', 'error')
 			error = True
 
