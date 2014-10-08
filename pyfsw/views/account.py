@@ -47,7 +47,7 @@ def route_account_logout():
 
 @app.route('/account/create', methods=['GET'])
 def route_account_create():
-	return render_template('account/create.htm', name=request.args.get('name'), mail=request.args.get('mail'))
+	return render_template('account/create.htm', name=request.args.get('name', ''), mail=request.args.get('mail', ''))
 
 @app.route('/account/create', methods=['POST'])
 def route_account_create_post():
