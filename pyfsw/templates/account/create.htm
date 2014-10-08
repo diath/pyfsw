@@ -10,7 +10,7 @@
 		<form method="post" action="/account/create">
 			<div class="form-group">
 				<label for="inputName">Account Name</label>
-				<input type="text" class="form-control" id="inputName" name="name" placeholder="Account Name" required>
+				<input type="text" class="form-control" id="inputName" name="name" placeholder="Account Name" value="{{ name }}" required>
 			</div>
 			<div class="form-group">
 				<label for="inputPswd">Password</label>
@@ -28,7 +28,7 @@
 			</div>
 			<div class="form-group">
 				<label for="inputMail">E-mail Address</label>
-				<input type="mail" class="form-control" id="inputMail" name="mail" placeholder="E-mail Address" required>
+				<input type="mail" class="form-control" id="inputMail" name="mail" placeholder="E-mail Address" value="{{ mail }}" required>
 			</div>
 			<div class="form-group">
 				<label for="inputCaptcha">Captcha Code</label>

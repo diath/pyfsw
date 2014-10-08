@@ -47,7 +47,7 @@ def route_account_logout():
 
 @app.route('/account/create', methods=['GET'])
 def route_account_create():
-	return render_template('account/create.htm')
+	return render_template('account/create.htm', name=request.args.get('name'), mail=request.args.get('mail'))
 
 @app.route('/account/create', methods=['POST'])
 def route_account_create_post():
@@ -84,7 +84,7 @@ def route_account_create_post():
 		error = True
 
 	if error:
-		return redirect(url_for('route_account_create'))
+		return redirect(url_for('route_account_create', name=name, mail=mail))
 
 	hash = sha1()
 	hash.update(pswd.encode('utf-8'))
