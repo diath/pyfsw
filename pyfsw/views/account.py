@@ -221,6 +221,36 @@ def route_account_delete_post(id):
 
 	return redirect(url_for('route_account_manage'))
 
+@app.route('/account/hide/<int:id>', methods=['GET'])
+@login_required
+def route_account_hide(id):
+	account = current_user()
+	player = db.session().query(Player).filter(Player.id == id).first()
+	if player and account.id == player.account_id:
+		player.hidden = 1
+		db.session().commit()
+
+		flash('The characted is now hidden.', 'success')
+	else:
+		flash('You cannot hide a character that does not belong to you.', 'error')
+
+	return redirect(url_for('route_account_manage'))
+
+@app.route('/account/show/<int:id>', methods=['GET'])
+@login_required
+def route_account_show(id):
+	account = current_user()
+	player = db.session().query(Player).filter(Player.id == id).first()
+	if player and account.id == player.account_id:
+		player.hidden = 0
+		db.session().commit()
+
+		flash('The characted is no longer hidden.', 'success')
+	else:
+		flash('You cannot show a character that does not belong to you.', 'error')
+
+	return redirect(url_for('route_account_manage'))
+
 @app.route('/account/character')
 @login_required
 def route_account_character():

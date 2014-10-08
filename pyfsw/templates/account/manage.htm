@@ -64,6 +64,11 @@
 					<td class="right">
 						<a href="/account/edit/{{ player.id }}"><button class="btn btn-default btn-sm">Edit Comment</button></a>
 						<a href="/account/delete/{{ player.id }}"><button class="btn btn-default btn-sm">Delete</button></a>
+						{% if player.hidden == 1 %}
+						<a href="/account/show/{{ player.id }}"><button class="btn btn-default btn-sm">Show</button></a>
+						{% else %}
+						<a href="/account/hide/{{ player.id }}"><button class="btn btn-default btn-sm">Hide</button></a>
+						{% endif %}
 					</td>
 				</tr>
 			{% endfor %}

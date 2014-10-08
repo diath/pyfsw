@@ -226,10 +226,12 @@
 			<div class="tab-pane" id="Characters">
 				<table class="table table-striped table-hover">
 				{% for character in characters %}
+				{% if character.hidden == 0 %}
 					<tr>
 						<td><a href="/community/player/{{ character.name }}">{{ character.name }}</a></td>
 						<td>Level {{ character.level }}, {{ character.vocation | vocation }}</td>
 					</tr>
+				{% endif %}
 				{% endfor %}
 				</table>
 			</div>
