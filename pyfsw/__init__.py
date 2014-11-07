@@ -49,3 +49,4 @@ from pyfsw.helpers import *
 
 from pyfsw.views import news, forum, account, community, community_guilds, library, shop
 from pyfsw.views import error, captcha, outfit, paypal
+from pyfsw.views.admin import dashboard
