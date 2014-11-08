@@ -15,6 +15,19 @@ def login_required(f):
 
 	return decorated
 
+def admin_required(f):
+	@wraps(f)
+	def decorated(*args, **kwargs):
+		if 'account' not in session:
+			return redirect(url_for('route_account_login', next=request.path))
+
+		if session.get('access', 1) != 6:
+			return redirect(url_for('route_account_login', next=request.path))
+
+		return f(*args, **kwargs)
+
+	return decorated
+
 def current_user():
 	if 'account' in session:
 		return db.session().query(Account).filter(Account.id == session['account']).first()

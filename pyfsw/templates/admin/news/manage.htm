@@ -1,0 +1,44 @@
+{% extends "admin.htm" %}
+{% block body %}
+
+<div class="panel panel-primary">
+	<div class="panel-heading">
+		Manage News
+	</div>
+	<div class="panel-body">
+		<table class="table table-striped table-hover">
+			<thead>
+				<tr>
+					<th>#</th>
+					<th>Title</th>
+					<th>Author</th>
+					<th>Date</th>
+					<th class="right">Options</th>
+				</tr>
+			</thead>
+			<tbody>
+			{% for entry in news %}
+				<tr>
+					<td>{{ entry.id }}</td>
+					<td>{{ entry.header }}</td>
+					<td>
+					{% if entry.author %}
+						<a href="/community/player/{{ entry.author }}">{{ entry.author }}</a>
+					{% else %}
+						Unknown
+					{% endif %}
+					</td>
+					<td>{{ entry.timestamp | datetime }}</td>
+					<td class="right">
+						<a href="/news/{{ entry.id }}"><button class="btn btn-sm btn-primary">View</button></a>
+						<a href="/admin/news/edit/{{ entry.id }}"><button class="btn btn-sm btn-primary">Edit</button></a>
+						<a href="/admin/news/delete/{{ entry.id }}"><button class="btn btn-sm btn-danger">Delete</button></a>
+					</td>
+				</tr>
+			{% endfor %}
+			</tbody>
+		</table>
+	</div>
+</div>
+
+{% endblock %}

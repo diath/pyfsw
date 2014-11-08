@@ -1,0 +1,31 @@
+{% extends "admin.htm" %}
+{% block body %}
+
+<div class="panel panel-primary">
+	<div class="panel-heading">
+		Edit News
+	</div>
+	<div class="panel-body">
+		<form method="POST" action="/admin/news/edit/{{ news.id }}">
+			<div class="form-group">
+				<label for="inputTitle">Title</label>
+				<input type="text" class="form-control" id="inputTitle" name="title" placeholder="News Title" value="{{ news.header }}" required>
+			</div>
+			<div class="form-group">
+				<label for="inputContent">Content</label>
+				<textarea class="form-control" id="inputContent" name="content" placeholder="News Content" required>{{ news.content }}</textarea>
+			</div>
+			<div class="form-group">
+				<label for="inputPoster">Poster</label>
+				<select class="form-control" id="inputPoster" name="poster">
+				{% for character in characters %}
+					<option value="{{ character.id }}">{{ character.name }}</option>
+				{% endfor %}
+				</select>
+			</div>
+			<button type="submit" class="btn btn-primary btn-block">Save</button>
+		</form>
+	</div>
+</div>
+
+{% endblock %}
