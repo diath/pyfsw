@@ -19,11 +19,17 @@
 				<label for="inputPoster">Poster</label>
 				<select class="form-control" id="inputPoster" name="poster">
 				{% for character in characters %}
-					<option value="{{ character.id }}">{{ character.name }}</option>
+					{% if character.id == news.author_id %}
+						<option value="{{ character.id }}" selected>{{ character.name }}</option>
+					{% else %}
+						<option value="{{ character.id }}">{{ character.name }}</option>
+					{% endif %}
 				{% endfor %}
 				</select>
 			</div>
-			<button type="submit" class="btn btn-primary btn-block">Save</button>
+			<button type="submit" class="btn btn-primary btn-block">
+				<span class="glyphicon glyphicon-ok"></span> Save
+			</button>
 		</form>
 	</div>
 </div>
