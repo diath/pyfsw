@@ -1,0 +1,21 @@
+{% extends "admin.htm" %}
+{% block body %}
+
+<div class="panel panel-primary">
+	<div class="panel-heading">
+		Edit Forum Category
+	</div>
+	<div class="panel-body">
+		<form method="POST" action="/admin/forum/category/edit/{{ category.id }}">
+			<div class="form-group">
+				<label for="inputName">Name</label>
+				<input type="text" class="form-control" id="inputName" name="name" placeholder="Category Name" value="{{ category.name }}" required>
+			</div>
+			<button type="submit" class="btn btn-primary btn-block">
+				<span class="glyphicon glyphicon-ok"></span> Save
+			</button>
+		</form>
+	</div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,54 @@
+{% extends "admin.htm" %}
+{% block body %}
+
+<div class="panel panel-primary">
+	<div class="panel-heading">
+		Add Forum Category
+	</div>
+	<div class="panel-body">
+		<form method="POST" action="/admin/forum/category/add">
+			<div class="form-group">
+				<label for="inputName">Name</label>
+				<input type="text" class="form-control" id="inputName" name="name" placeholder="Category Name" required>
+			</div>
+			<button type="submit" class="btn btn-primary btn-block">
+				<span class="glyphicon glyphicon-ok"></span> Add
+			</button>
+		</form>
+	</div>
+</div>
+
+<div class="panel panel-primary">
+	<div class="panel-heading">
+		Manage Forum Categories
+	</div>
+	<div class="panel-body">
+		<table class="table table-striped table-hover">
+			<thead>
+				<tr>
+					<th>#</th>
+					<th>Name</th>
+					<th class="right">Options</th>
+				</tr>
+			</thead>
+			<tbody>
+			{% for category in categories %}
+				<tr>
+					<td>{{ category.id }}</td>
+					<td>{{ category.name }}</td>
+					<td class="right">
+						<a href="/admin/forum/category/edit/{{ category.id }}"><button class="btn btn-sm btn-primary">
+							<span class="glyphicon glyphicon-pencil"></span> Edit
+						</button></a>
+						<a href="/admin/forum/category/delete/{{ category.id }}"><button class="btn btn-sm btn-danger">
+							<span class="glyphicon glyphicon-trash"></span> Delete
+						</button></a>
+					</td>
+				</tr>
+			{% endfor %}
+			</tbody>
+		</table>
+	</div>
+</div>
+
+{% endblock %}
