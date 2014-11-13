@@ -1,0 +1,77 @@
+{% extends "admin.htm" %}
+{% block body %}
+
+<div class="panel panel-primary">
+	<div class="panel-heading">
+		Edit Shop Item
+	</div>
+	<div class="panel-body">
+		<form id="ItemForm" method="POST" action="/admin/shop/item/add">
+			<div class="form-group">
+				<label for="inputName">Name</label>
+				<input type="text" class="form-control" id="inputName" name="name" placeholder="Item Name" value="{{ item.name }}" required>
+			</div>
+			<div class="form-group">
+				<label for="inputDescription">Description</label>
+				<textarea class="form-control" id="inputDescription" name="description" placeholder="Item Description" required>{{ item.description }}</textarea>
+			</div>
+			<div class="form-group">
+				<label for="inputCategory">Category</label>
+				<select class="form-control" id="inputCategory" name="category">
+				{% for category in categories %}
+					{% if category.id == item.category_id %}
+						<option value="{{ category.id }}" selected>{{ category.name }}</option>
+					{% else %}
+						<option value="{{ category.id }}">{{ category.name }}</option>
+					{% endif %}
+				{% endfor %}
+				</select>
+			</div>
+			<div class="form-group">
+				<label for="inputType">Type</label>
+				<select class="form-control" id="inputType" name="type">
+					<option value="1">Item</option>
+					<option value="2">Container</option>
+					<option value="3">Addon</option>
+					<option value="4">Mount</option>
+				</select>
+			</div>
+			<div class="form-group">
+				<label for="inputKey">Key <span class="label label-primary" data-toggle="tooltip" data-placement="top" title="Item - The item ID.<br>Container - The ID of items inside of the container.<br>Addon - ((Male ID << 16) | Female ID)<br>Mount - The mount ID.">Info</span></label>
+				<input type="text" class="form-control" id="inputKey" name="key" placeholder="Key" value="{{ item.key }}" required>
+			</div>
+			<div class="form-group">
+				<label for="inputValue">Value <span class="label label-primary" data-toggle="tooltip" data-placement="top" title="Item - The stack size.<br>Container - The count of items inside of a container.<br>Addon - Any number.<br>Mount - Any number.">Info</span></label>
+				<input type="text" class="form-control" id="inputValue" name="value" placeholder="Value" value="{{ item.value }}" required>
+			</div>
+			<div class="form-group">
+				<label for="inputPrice">Price</label>
+				<input type="text" class="form-control" id="inputPrice" name="price" placeholder="Price" value="{{ item.price }}" required>
+			</div>
+			<div class="form-group">
+				<label for="inputImage">Custom Image</label>
+				<input type="text" class="form-control" id="inputImage" name="image" placeholder="Custom Image URL" value="{{ item.custom_image }}">
+			</div>
+			<div class="checkbox">
+				<label>
+					{% if item.enabled %}
+						<input type="checkbox" name="enabled" checked> Tick this checkbox to make the item enabled.
+					{% else %}
+						<input type="checkbox" name="enabled"> Tick this checkbox to make the item enabled.
+					{% endif %}
+				</label>
+			</div>
+			<button type="submit" class="btn btn-primary btn-block">
+				<span class="glyphicon glyphicon-ok"></span> Save
+			</button>
+		</form>
+	</div>
+</div>
+
+<script type="text/javascript">
+	$(function() {
+		$('[data-toggle="tooltip"]').tooltip({html: true});
+	});
+</script>
+
+{% endblock %}

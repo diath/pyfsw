@@ -1,0 +1,30 @@
+{% extends "admin.htm" %}
+{% block body %}
+
+<div class="panel panel-primary">
+	<div class="panel-heading">
+		Edit Shop Category
+	</div>
+	<div class="panel-body">
+		<form method="POST" action="/admin/shop/category/edit/{{ category.id }}">
+			<div class="form-group">
+				<label for="inputName">Name</label>
+				<input type="text" class="form-control" id="inputName" name="name" placeholder="Category Name" value="{{ category.name }}" required>
+			</div>
+			<div class="checkbox">
+				<label>
+				{% if category.enabled %}
+					<input type="checkbox" name="enabled" checked> Tick this checkbox to make the category enabled.
+				{% else %}
+					<input type="checkbox" name="enabled"> Tick this checkbox to make the category enabled.
+				{% endif %}
+				</label>
+			</div>
+			<button type="submit" class="btn btn-primary btn-block">
+				<span class="glyphicon glyphicon-ok"></span> Save
+			</button>
+		</form>
+	</div>
+</div>
+
+{% endblock %}

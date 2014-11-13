@@ -67,3 +67,14 @@ def filter_stamina(value):
 		minutes = '00'
 
 	return '{} hours, {} minutes'.format(hours, minutes)
+
+ITEM_TYPES = {
+	1: 'Item',
+	2: 'Container',
+	3: 'Addon',
+	4: 'Mount'
+}
+
+@app.template_filter('itemtype')
+def filter_itemtype(value):
+	return ITEM_TYPES.get(value, 'Unknown')

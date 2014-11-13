@@ -1,0 +1,67 @@
+{% extends "admin.htm" %}
+{% block body %}
+
+<div class="panel panel-primary">
+	<div class="panel-heading">
+		Add Shop Category
+	</div>
+	<div class="panel-body">
+		<form method="POST" action="/admin/shop/category/add">
+			<div class="form-group">
+				<label for="inputName">Name</label>
+				<input type="text" class="form-control" id="inputName" name="name" placeholder="Category Name" required>
+			</div>
+			<div class="checkbox">
+				<label>
+					<input type="checkbox" name="enabled"> Tick this checkbox to make the category enabled.
+				</label>
+			</div>
+			<button type="submit" class="btn btn-primary btn-block">
+				<span class="glyphicon glyphicon-ok"></span> Add
+			</button>
+		</form>
+	</div>
+</div>
+
+<div class="panel panel-primary">
+	<div class="panel-heading">
+		Manage Shop Categories
+	</div>
+	<div class="panel-body">
+		<table class="table table-striped table-hover">
+			<thead>
+				<tr>
+					<th>#</th>
+					<th>Name</th>
+					<th class="middle">Enabled</th>
+					<th class="right">Options</th>
+				</tr>
+			</thead>
+			<tbody>
+			{% for category in categories %}
+				<tr>
+					<td>{{ category.id }}</td>
+					<td>{{ category.name }}</td>
+					<td class="middle">
+					{% if category.enabled %}
+						<span class="glyphicon glyphicon-ok" title="Enabled"></span>
+					{% else %}
+						<span class="glyphicon glyphicon-remove" title="Disabled"></span>
+					{% endif %}
+					</td>
+					<td class="right">
+						<a href="/admin/shop/category/edit/{{ category.id }}"><button class="btn btn-sm btn-primary">
+							<span class="glyphicon glyphicon-pencil"></span> Edit
+						</button></a>
+						<a href="/admin/shop/category/delete/{{ category.id }}"><button class="btn btn-sm btn-danger">
+							<span class="glyphicon glyphicon-trash"></span> Delete
+						</button></a>
+					</td>
+				</tr>
+			{% endfor %}
+			</tbody>
+		</table>
+	</div>
+</div>
+
+{% endblock %}

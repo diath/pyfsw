@@ -1,0 +1,120 @@
+{% extends "admin.htm" %}
+{% block body %}
+
+<div class="panel panel-primary">
+	<div class="panel-heading">
+		Add Shop Item
+	</div>
+	<div class="panel-body">
+		<button id="ItemFormBtn" class="btn btn-primary btn-block">Press the button to show the form.</button>
+		<form id="ItemForm" style="display: none;" method="POST" action="/admin/shop/item/add">
+			<div class="form-group">
+				<label for="inputName">Name</label>
+				<input type="text" class="form-control" id="inputName" name="name" placeholder="Item Name" required>
+			</div>
+			<div class="form-group">
+				<label for="inputDescription">Description</label>
+				<textarea class="form-control" id="inputDescription" name="description" placeholder="Item Description" required></textarea>
+			</div>
+			<div class="form-group">
+				<label for="inputCategory">Category</label>
+				<select class="form-control" id="inputCategory" name="category">
+				{% for category in categories %}
+					<option value="{{ category.id }}">{{ category.name }}</option>
+				{% endfor %}
+				</select>
+			</div>
+			<div class="form-group">
+				<label for="inputType">Type</label>
+				<select class="form-control" id="inputType" name="type">
+					<option value="1">Item</option>
+					<option value="2">Container</option>
+					<option value="3">Addon</option>
+					<option value="4">Mount</option>
+				</select>
+			</div>
+			<div class="form-group">
+				<label for="inputKey">Key <span class="label label-primary" data-toggle="tooltip" data-placement="top" title="Item - The item ID.<br>Container - The ID of items inside of the container.<br>Addon - ((Male ID << 16) | Female ID)<br>Mount - The mount ID.">Info</span></label>
+				<input type="text" class="form-control" id="inputKey" name="key" placeholder="Key" required>
+			</div>
+			<div class="form-group">
+				<label for="inputValue">Value <span class="label label-primary" data-toggle="tooltip" data-placement="top" title="Item - The stack size.<br>Container - The count of items inside of a container.<br>Addon - Any number.<br>Mount - Any number.">Info</span></label>
+				<input type="text" class="form-control" id="inputValue" name="value" placeholder="Value" required>
+			</div>
+			<div class="form-group">
+				<label for="inputPrice">Price</label>
+				<input type="text" class="form-control" id="inputPrice" name="price" placeholder="Price" required>
+			</div>
+			<div class="form-group">
+				<label for="inputImage">Custom Image</label>
+				<input type="text" class="form-control" id="inputImage" name="image" placeholder="Custom Image URL">
+			</div>
+			<div class="checkbox">
+				<label>
+					<input type="checkbox" name="enabled"> Tick this checkbox to make the item enabled.
+				</label>
+			</div>
+			<button type="submit" class="btn btn-primary btn-block">
+				<span class="glyphicon glyphicon-ok"></span> Add
+			</button>
+		</form>
+	</div>
+</div>
+
+<div class="panel panel-primary">
+	<div class="panel-heading">
+		Manage Shop Items
+	</div>
+	<div class="panel-body">
+		<table class="table table-striped table-hover">
+			<thead>
+				<tr>
+					<th>#</th>
+					<th>Name</th>
+					<th>Category</th>
+					<th>Type</th>
+					<th class="middle">Enabled</th>
+					<th class="right">Options</th>
+				</tr>
+			</thead>
+			<tbody>
+			{% for item in items %}
+				<tr>
+					<td>{{ item.id }}</td>
+					<td>{{ item.name }}</td>
+					<td>{{ item.category_id }}</td>
+					<td>{{ item.type | itemtype }}</td>
+					<td class="middle">
+					{% if item.enabled %}
+						<span class="glyphicon glyphicon-ok" title="Enabled"></span>
+					{% else %}
+						<span class="glyphicon glyphicon-remove" title="Disabled"></span>
+					{% endif %}
+					</td>
+					<td class="right">
+						<a href="/admin/shop/item/edit/{{ item.id }}"><button class="btn btn-sm btn-primary">
+							<span class="glyphicon glyphicon-pencil"></span> Edit
+						</button></a>
+						<a href="/admin/shop/item/delete/{{ item.id }}"><button class="btn btn-sm btn-danger">
+							<span class="glyphicon glyphicon-trash"></span> Delete
+						</button></a>
+					</td>
+				</tr>
+			{% endfor %}
+			</tbody>
+		</table>
+	</div>
+</div>
+
+<script type="text/javascript">
+	$('#ItemFormBtn').on('click', function() {
+		$('#ItemFormBtn').hide();
+		$('#ItemForm').show();
+	});
+
+	$(function() {
+		$('[data-toggle="tooltip"]').tooltip({html: true});
+	});
+</script>
+
+{% endblock %}
