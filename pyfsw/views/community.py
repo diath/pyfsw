@@ -51,7 +51,7 @@ def route_community_player_get_name(name):
 		target = db.session.query(Player.name).filter(Player.id == kill.player_id).first()
 		kill.target = target.name
 
-	characters = db.session().query(Player.name, Player.level, Player.vocation, Player.hidden)
+	characters = db.session().query(Player.name, Player.level, Player.vocation, Player.hidden, Player.group_id)
 	characters = characters.filter(Player.account_id == player.account_id).all()
 
 	return render_template(
