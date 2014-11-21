@@ -56,6 +56,14 @@ VOCATIONS = {
 	8: 'Elite Knight'
 }
 
+# Staff Positions
+STAFF_POSITIONS = {
+	0: 'Player',
+	1: 'Player',
+	2: 'Gamemaster',
+	3: 'God'
+}
+
 # Gender Names
 GENDERS = {
 	0: 'Female',

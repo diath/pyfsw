@@ -2,7 +2,7 @@ from datetime import datetime
 from math import floor
 
 from pyfsw import app
-from pyfsw import DATE_FORMAT, GENDERS, VOCATIONS, TOWNS
+from pyfsw import DATE_FORMAT, GENDERS, VOCATIONS, TOWNS, STAFF_POSITIONS
 
 @app.template_filter('datetime')
 def filter_datetime(value):
@@ -24,8 +24,15 @@ def filter_gender(value):
 	return GENDERS.get(value, 'Unknown')
 
 @app.template_filter('vocation')
-def filter_vocation(value):
+def filter_vocation(value, group = -1):
+	if group != -1 and value == 0:
+		return STAFF_POSITIONS.get(group, 'Unknown')
+
 	return VOCATIONS.get(value, 'Unknown')
+
+@app.template_filter('staffrank')
+def filter_staffpos(value):
+	return STAFF_POSITIONS.get(value, 'Unknown')
 
 @app.template_filter('town')
 def filter_town(value):

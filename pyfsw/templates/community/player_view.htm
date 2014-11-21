@@ -229,7 +229,7 @@
 				{% if character.hidden == 0 %}
 					<tr>
 						<td><a href="/community/player/{{ character.name }}">{{ character.name }}</a></td>
-						<td>Level {{ character.level }}, {{ character.vocation | vocation }}</td>
+						<td>Level {{ character.level }}, {{ character.vocation | vocation(character.group_id) }}</td>
 					</tr>
 				{% endif %}
 				{% endfor %}
