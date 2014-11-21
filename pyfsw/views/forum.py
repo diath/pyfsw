@@ -127,7 +127,7 @@ def route_forum_thread(thread, page):
 		return redirect(url_for('route_forum'))
 
 	player = db.session().query(
-		Player.name, Player.level, Player.vocation, Player.town_id,
+		Player.name, Player.level, Player.vocation, Player.town_id, Player.group_id,
 		Player.looktype, Player.lookhead, Player.lookbody, Player.looklegs, Player.lookfeet, Player.lookaddons
 	).filter(Player.id == thread.author_id).first()
 	if player:
@@ -143,7 +143,7 @@ def route_forum_thread(thread, page):
 
 	for post in posts:
 		player = db.session().query(
-			Player.name, Player.level, Player.vocation, Player.town_id,
+			Player.name, Player.level, Player.vocation, Player.town_id, Player.group_id,
 			Player.looktype, Player.lookhead, Player.lookbody, Player.looklegs, Player.lookfeet, Player.lookaddons
 		).filter(Player.id == post.author_id).first()
 		if player:

@@ -16,7 +16,7 @@
 					<br>
 					Level {{ thread.player.level }}
 					<br>
-					{{ thread.player.vocation | vocation }}
+					{{ thread.player.vocation | vocation(thread.player.group_id) }}
 					<br>
 					Resident of {{ thread.player.town_id | town }}
 				{% else %}
@@ -51,7 +51,7 @@
 					<br>
 					Level {{ post.player.level }}
 					<br>
-					{{ post.player.vocation | vocation }}
+					{{ post.player.vocation | vocation(post.player.group_id) }}
 					<br>
 					Resident of {{ post.player.town_id | town }}
 				{% else %}
