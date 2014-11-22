@@ -4,6 +4,7 @@ from functools import wraps
 from pyfsw import app, db
 from pyfsw import Account, Library, Guild, GuildMembership, GuildRank
 from pyfsw import PlayerItem
+from pyfsw import ADMIN_ACCOUNT_TYPE
 
 def login_required(f):
 	@wraps(f)
@@ -21,7 +22,7 @@ def admin_required(f):
 		if 'account' not in session:
 			return redirect(url_for('route_account_login', next=request.path))
 
-		if session.get('access', 1) != 6:
+		if session.get('access', 1) != ADMIN_ACCOUNT_TYPE:
 			return redirect(url_for('route_account_login', next=request.path))
 
 		return f(*args, **kwargs)
