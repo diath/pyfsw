@@ -86,7 +86,7 @@ def route_community_player_post():
 		target = db.session.query(Player.name).filter(Player.id == kill.player_id).first()
 		kill.target = target.name
 
-	characters = db.session().query(Player.name, Player.level, Player.vocation)
+	characters = db.session().query(Player.name, Player.level, Player.vocation, Player.group_id)
 	characters = characters.filter(Player.account_id == player.account_id).all()
 
 	return render_template(
@@ -185,7 +185,7 @@ def route_community_online():
 		ids.append(entry.player_id)
 
 	online = db.session().query(
-		Player.name, Player.experience, Player.level, Player.vocation, 
+		Player.name, Player.experience, Player.level, Player.vocation, Player.group_id, 
 		Player.looktype, Player.lookhead, Player.lookbody, Player.looklegs, Player.lookfeet, Player.lookaddons
 	)
 

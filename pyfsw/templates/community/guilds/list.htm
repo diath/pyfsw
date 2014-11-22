@@ -41,7 +41,7 @@
 					<td>
 						<a href="/community/player/{{ guild.owner.name }}">{{ guild.owner.name }}</a>
 						<br>
-						<small>Level {{ guild.owner.level }}, {{ guild.owner.vocation | vocation }}</small>
+						<small>Level {{ guild.owner.level }}, {{ guild.owner.vocation | vocation(guild.owner.group_id) }}</small>
 					</td>
 					<td>
 						{{ guild.memberCount() }} members

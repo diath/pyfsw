@@ -54,7 +54,7 @@
 							<td>
 								<a href="/community/player/{{ player.name }}">{{ player.name }}</a>
 								<br>
-								<small>Level {{ player.level }}, {{ player.vocation | vocation }}</small>
+								<small>Level {{ player.level }}, {{ player.vocation | vocation(player.group_id) }}</small>
 							</td>
 							<td>
 								Level {{ player.value }}

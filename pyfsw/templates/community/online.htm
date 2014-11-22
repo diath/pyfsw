@@ -24,7 +24,7 @@
 						<a href="/community/player/{{ player.name }}">{{ player.name }}</a>
 					</td>
 					<td>Level {{ player.level }} ({{ '{:,}'.format(player.experience) }} xp)</td>
-					<td>{{ player.vocation | vocation }}</td>
+					<td>{{ player.vocation | vocation(player.group_id) }}</td>
 				</tr>
 			{% endfor %}
 			</tbody>

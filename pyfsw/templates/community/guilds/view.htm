@@ -39,7 +39,7 @@
 							<td>
 								<a href="/community/player/{{ member.player.name }}">{{ member.player.name }}</a>
 								<br>
-								<small>Level {{ member.player.level }}, {{ member.player.vocation | vocation }}</small>
+								<small>Level {{ member.player.level }}, {{ member.player.vocation | vocation(member.player.group_id) }}</small>
 							</td>
 							{% if member.own %}
 							<td>
@@ -76,7 +76,7 @@
 							<td>
 								<a href="/community/player/{{ invite.player.name }}">{{ invite.player.name }}</a>
 								<br>
-								<small>Level {{ invite.player.level }}, {{ invite.player.vocation | vocation }}</small>
+								<small>Level {{ invite.player.level }}, {{ invite.player.vocation | vocation(invite.player.group_id) }}</small>
 							</td>
 							{% if invite.own %}
 							<td>
