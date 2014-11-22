@@ -10,3 +10,18 @@ body {
 .middle {
 	text-align: center;
 }
+
+/*
+	Progress bars with centered text
+	http://stackoverflow.com/questions/12937470/twitter-bootstrap-center-text-on-progress-bar
+*/
+
+.progress {
+	position: relative;
+}
+
+.progress span {
+	position: absolute;
+	display: block;
+	width: 100%;
+}

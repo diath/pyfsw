@@ -80,25 +80,25 @@
 								<div class="middle">Health</div>
 								<div class="progress">
 									<div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="{{ player.health }}" aria-valuemin="0" aria-valuemax="{{ player.healthmax }}" style="width: {{ hp }}%;">
-										{{ player.health }} / {{ player.healthmax }}
+										<span>{{ player.health }} / {{ player.healthmax }}</span>
 									</div>
 								</div>
 								<div class="middle">Mana</div>
 								<div class="progress">
 									<div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="{{ player.mana }}" aria-valuemin="0" aria-valuemax="{{ player.manamax }}" style="width: {{ mp }}%">
-										{{ player.mana }} / {{ player.manamax }}
+										<span>{{ player.mana }} / {{ player.manamax }}</span>
 									</div>
 								</div>
 								<div class="middle">Soul</div>
 								<div class="progress">
 									<div class="progress-bar progress-bar-custom" role="progressbar" aria-valuenow="{{ player.soul }}" aria-valuemin="0" aria-valuemax="200" style="width: {{ up }}%">
-										{{ player.soul }} / 200
+										<span>{{ player.soul }} / 200</span>
 									</div>
 								</div>
 								<div class="middle">Stamina</div>
 								<div class="progress">
 									<div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="{{ player.stamina }}" aria-valuemin="0" aria-valuemax="2520" style="width: {{ sp }}%">
-										{{ player.stamina | stamina }}
+										<span>{{ player.stamina | stamina }}</span>
 									</div>
 								</div>
 							</div>
