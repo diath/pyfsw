@@ -7,6 +7,7 @@ from pyfsw import app, db
 from pyfsw import current_user, login_required
 from pyfsw import Player
 from pyfsw import ForumCategory, ForumBoard, ForumThread, ForumPost
+from pyfsw import POST_COOLDOWN
 
 @app.route('/forum')
 def route_forum():
@@ -82,8 +83,8 @@ def route_forum_board_post(id):
 		error = True
 
 	timestamp = int(time())
-	if user.lastpost + 30 > timestamp:
-		flash('You must wait 30 seconds before posting again.', 'error')
+	if user.lastpost + POST_COOLDOWN > timestamp:
+		flash('You must wait {} seconds before posting again.'.format(POST_COOLDOWN), 'error')
 		error = True
 
 	if len(subject) < 5:
@@ -189,8 +190,8 @@ def route_forum_thread_post(id):
 		error = True
 
 	timestamp = int(time())
-	if user.lastpost + 30 > timestamp:
-		flash('You must wait 30 seconds before posting again.', 'error')
+	if user.lastpost + POST_COOLDOWN > timestamp:
+		flash('You must wait {} seconds before posting again.'.format(POST_COOLDOWN), 'error')
 		error = True
 
 	if len(content) < 4:

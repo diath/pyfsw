@@ -34,6 +34,9 @@ SERVER_NAME = ''
 # Page Description
 SERVER_DESCR = ''
 
+# Post Cooldown (A cooldown between creating a new forum thread/post)
+POST_COOLDOWN = 30
+
 # Town Names
 TOWNS = {
 	0: 'All',
@@ -70,6 +73,7 @@ GENDERS = {
 	1: 'Male'
 }
 
+# New Character Options
 NEW_CHARACTER = {
 	'genders': [0, 1],
 	'vocations': [5, 6, 7, 8],
