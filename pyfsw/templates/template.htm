@@ -41,6 +41,9 @@
 								{% if session.account %}
 								<li><a href="/account/manage">Manage</a></li>
 								<li><a href="/account/logout">Logout</a></li>
+								{% if session.access == g.admin_account_type %}
+								<li><a href="/admin/dashboard">Admin Dashboard</a></li>
+								{% endif %}
 								{% else %}
 								<li><a href="/account/create">Create Account</a></li>
 								<li><a href="/account/login">Login</a></li>

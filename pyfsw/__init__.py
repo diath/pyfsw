@@ -33,6 +33,7 @@ def init_globals():
 	g.server_name = SERVER_NAME
 	g.server_description = SERVER_DESCR
 	g.year = date.today().year
+	g.admin_account_type = ADMIN_ACCOUNT_TYPE
 
 from pyfsw.models.account import Account
 from pyfsw.models.guild import Guild, GuildInvite, GuildMembership, GuildRank, GuildWar, GuildWarKill

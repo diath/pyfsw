@@ -34,6 +34,9 @@ SERVER_NAME = ''
 # Page Description
 SERVER_DESCR = ''
 
+# Admin Account Type
+ADMIN_ACCOUNT_TYPE = 5
+
 # Post Cooldown (A cooldown between creating a new forum thread/post, seconds)
 POST_COOLDOWN = 30
 
