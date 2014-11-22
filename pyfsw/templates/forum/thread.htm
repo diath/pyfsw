@@ -38,8 +38,8 @@
 
 {% for post in posts %}
 <div class="panel panel-default">
-	<div class="panel-heading">
-		Reply #{{ post.id }}
+	<div class="panel-heading" id="post-{{ post.id }}">
+		<a href="#post-{{ post.id }}">Reply #{{ post.id }}</a>
 	</div>
 	<div class="panel-body">
 		<div class="row">
