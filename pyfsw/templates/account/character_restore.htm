@@ -1,16 +1,16 @@
 {% extends "template.htm" %}
-{% block title %} Delete Character {% endblock %}
+{% block title %} Restore Character {% endblock %}
 {% block body %}
 
 <div class="panel panel-default">
 	<div class="panel-heading">
-		Delete Character
+		Restore Character
 	</div>
 	<div class="panel-body">
-		<form method="post" action="/account/delete/{{ id }}">
-			Are you sure you want to delete the character <strong>{{ name }}</strong>?
+		<form method="post" action="/account/restore/{{ id }}">
+			Are you sure you want to restore the character <strong>{{ name }}</strong>?
 			<br><br>
-			<button type="submit" class="btn btn-default">Delete</button>
+			<button type="submit" class="btn btn-default">Restore</button>
 			<a href="/account/manage"><button type="button" class="btn btn-default">Return</button></a>
 		</form>
 	</div>
