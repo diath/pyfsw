@@ -7,6 +7,11 @@
 		Player Information
 	</div>
 	<div class="panel-body">
+		{% if player.deletion != 0 %}
+		<div class="alert alert-danger">
+			This character is scheduled to be deleted on {{ player.deletion | datetime }}.
+		</div>
+		{% endif %}
 		<ul id="Tabs" class="nav nav-tabs">
 			<li class="active"><a href="#General">General</a></li>
 			<li><a href="#Extra">Equipment/Skills</a></li>

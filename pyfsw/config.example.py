@@ -49,6 +49,9 @@ TOWNS = {
 # House Price (per SQM)
 HOUSE_PRICE = 1000
 
+# Deletion Delay (A delay before the server handles hard deleting a character in days)
+DELETION_DELAY = 60
+
 # Vocation Names
 VOCATIONS = {
 	0: 'No Vocation',

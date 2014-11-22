@@ -6,7 +6,7 @@ import random, string, re
 from pyfsw import app, db
 from pyfsw import Account, Player
 from pyfsw import login_required, current_user
-from pyfsw import NEW_CHARACTER
+from pyfsw import NEW_CHARACTER, DELETION_DELAY
 
 CHAR_NAME_EXPR = re.compile('^([a-zA-Z ]+)$')
 
@@ -215,12 +215,37 @@ def route_account_delete_post(id):
 	account = current_user()
 	player = db.session().query(Player).filter(Player.id == id).first()
 	if player and account.id == player.account_id:
-		db.session().delete(player)
+		player.deletion = int(time()) + (DELETION_DELAY * 86400)
 		db.session().commit()
 
-		flash('The character has been deleted.', 'success')
+		flash('The character has been scheduled for deletion.', 'success')
 	else:
 		flash('You cannot delete a character that does not belong to you.', 'error')
+
+	return redirect(url_for('route_account_manage'))
+
+@app.route('/account/restore/<int:id>', methods=['GET'])
+@login_required
+def route_account_restore(id):
+	account = current_user()
+	player = db.session().query(Player.account_id, Player.name).filter(Player.id == id).first()
+	if not player or account.id != player.account_id:
+		return redirect(url_for('route_account_manage'))
+
+	return render_template('account/character_restore.htm', id=id, name=player.name)
+
+@app.route('/account/restore/<int:id>', methods=['POST'])
+@login_required
+def route_account_restore_post(id):
+	account = current_user()
+	player = db.session().query(Player).filter(Player.id == id).first()
+	if player and account.id == player.account_id:
+		player.deletion = 0
+		db.session().commit()
+
+		flash('The character has been restored.', 'success')
+	else:
+		flash('You cannot restore a character that does not belong to you.', 'error')
 
 	return redirect(url_for('route_account_manage'))
 
