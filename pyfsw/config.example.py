@@ -25,7 +25,7 @@ CACHE_TIME = 0
 # Guild Logo Upload Path
 UPLOAD_PATH = ''
 
-# Font Path (Captcha)
+# Captcha Font Path (Optional)
 FONT_PATH = ''
 
 # Server Name
@@ -34,7 +34,7 @@ SERVER_NAME = ''
 # Page Description
 SERVER_DESCR = ''
 
-# Post Cooldown (A cooldown between creating a new forum thread/post)
+# Post Cooldown (A cooldown between creating a new forum thread/post, seconds)
 POST_COOLDOWN = 30
 
 # Town Names

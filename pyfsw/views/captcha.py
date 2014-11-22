@@ -6,9 +6,10 @@ from PIL import ImageDraw
 
 from random import randint
 from io import BytesIO
+from os import path
 
 from pyfsw import app, db
-from pyfsw import FONT_PATH
+from pyfsw import BASE_PATH, FONT_PATH
 
 @app.route('/captcha')
 def route_captcha():
@@ -19,8 +20,12 @@ def route_captcha():
 	session['captcha'] = code.lower()
 	code = list(code)
 
+	font = FONT_PATH
+	if len(font) == 0:
+		font = path.join(BASE_PATH, 'static', 'fonts', 'captcha.ttf')
+
 	image = Image.new(mode='RGBA', size=(168, 30), color=(255, 255, 255, 255))
-	font  = ImageFont.truetype(FONT_PATH, 20)
+	font  = ImageFont.truetype(font, 20)
 	draw  = ImageDraw.Draw(image)
 
 	x = randint(15, 25)
