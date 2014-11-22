@@ -2,6 +2,7 @@
 {% block title %} Forum {% endblock %}
 {% block body %}
 
+{% if categories %}
 {% for category in categories %}
 <div class="panel panel-default">
 	<div class="panel-heading">
@@ -33,5 +34,15 @@
 	</div>
 </div>
 {% endfor %}
+{% else %}
+<div class="panel panel-default">
+	<div class="panel-heading">
+		Forum
+	</div>
+	<div class="panel-body">
+		Currently there are no boards configured.
+	</div>
+</div>
+{% endif %}
 
 {% endblock %}
