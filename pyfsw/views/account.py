@@ -6,8 +6,7 @@ import random, string, re
 from pyfsw import app, db
 from pyfsw import Account, Player
 from pyfsw import login_required, current_user
-from pyfsw import NEW_CHARACTER
-from pyfsw import DELETION_DELAY
+from pyfsw import NEW_CHARACTER, DELETION_DELAY
 
 CHAR_NAME_EXPR = re.compile('^([a-zA-Z ]+)$')
 
@@ -216,7 +215,7 @@ def route_account_delete_post(id):
 	account = current_user()
 	player = db.session().query(Player).filter(Player.id == id).first()
 	if player and account.id == player.account_id:
-		player.deletion = time() + (DELETION_DELAY * 86400)
+		player.deletion = int(time()) + (DELETION_DELAY * 86400)
 		db.session().commit()
 
 		flash('The character has been scheduled for deletion.', 'success')
