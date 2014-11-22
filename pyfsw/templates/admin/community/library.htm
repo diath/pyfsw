@@ -1,0 +1,80 @@
+{% extends "admin.htm" %}
+{% block body %}
+
+<div class="panel panel-primary">
+	<div class="panel-heading">
+		Add Library Page
+	</div>
+	<div class="panel-body">
+		<form method="POST" action="/admin/community/library/add">
+			<div class="form-group">
+				<label for="inputName">Name</label>
+				<input type="text" class="form-control" id="inputName" name="name" placeholder="Page Name" required>
+			</div>
+			<div class="form-group">
+				<label for="inputURI">URI</label>
+				<input type="text" class="form-control" id="inputURI" name="uri" placeholder="Page URI" required>
+			</div>
+			<div class="form-group">
+				<label for="inputContent">Content</label>
+				<textarea class="form-control" id="inputContent" name="content" placeholder="Page Content" required></textarea>
+			</div>
+			<div class="checkbox">
+				<label>
+					<input type="checkbox" name="enabled"> Tick this checkbox to make the page enabled.
+				</label>
+			</div>
+			<button type="submit" class="btn btn-primary btn-block">
+				<span class="glyphicon glyphicon-ok"></span> Add
+			</button>
+		</form>
+	</div>
+</div>
+
+<div class="panel panel-primary">
+	<div class="panel-heading">
+		Library Pages
+	</div>
+	<div class="panel-body">
+		<table class="table table-striped table-hover">
+			<thead>
+				<tr>
+					<th>#</th>
+					<th>Name</th>
+					<th>URI</th>
+					<th class="middle">Active</th>
+					<th class="right">Options</th>
+				</tr>
+			</thead>
+			<tbody>
+			{% for page in pages %}
+				<tr>
+					<td>{{ page.id }}</td>
+					<td>{{ page.name }}</td>
+					<td>{{ page.uri }}</td>
+					<td class="middle">
+					{% if page.enabled %}
+						<span class="glyphicon glyphicon-ok" title="Enabled"></span>
+					{% else %}
+						<span class="glyphicon glyphicon-remove" title="Disabled"></span>
+					{% endif %}
+					</td>
+					<td class="right">
+						<a href="/library/{{ page.uri }}"><button class="btn btn-sm btn-primary">
+							<span class="glyphicon glyphicon-search"></span> View
+						</button></a>
+						<a href="/admin/community/library/edit/{{ page.id }}"><button class="btn btn-sm btn-primary">
+							<span class="glyphicon glyphicon-pencil"></span> Edit
+						</button></a>
+						<a href="/admin/community/library/delete/{{ page.id }}"><button class="btn btn-sm btn-danger">
+							<span class="glyphicon glyphicon-trash"></span> Delete
+						</button></a>
+					</td>
+				</tr>
+			{% endfor %}
+			</tbody>
+		</table>
+	</div>
+</div>
+
+{% endblock %}

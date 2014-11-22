@@ -1,0 +1,38 @@
+{% extends "admin.htm" %}
+{% block body %}
+
+<div class="panel panel-primary">
+	<div class="panel-heading">
+		Edit Library Page
+	</div>
+	<div class="panel-body">
+		<form method="POST" action="/admin/community/library/edit/{{ page.id }}">
+			<div class="form-group">
+				<label for="inputName">Name</label>
+				<input type="text" class="form-control" id="inputName" name="name" placeholder="Page Name" value="{{ page.name }}" required>
+			</div>
+			<div class="form-group">
+				<label for="inputURI">URI</label>
+				<input type="text" class="form-control" id="inputURI" name="uri" placeholder="Page URI" value="{{ page.uri }}" required>
+			</div>
+			<div class="form-group">
+				<label for="inputContent">Content</label>
+				<textarea class="form-control" id="inputContent" name="content" placeholder="Page Content" required>{{ page.content }}</textarea>
+			</div>
+			<div class="checkbox">
+				<label>
+				{% if page.enabled %}
+					<input type="checkbox" name="enabled" checked> Tick this checkbox to make the page enabled.
+				{% else %}
+					<input type="checkbox" name="enabled"> Tick this checkbox to make the page enabled.
+				{% endif %}
+				</label>
+			</div>
+			<button type="submit" class="btn btn-primary btn-block">
+				<span class="glyphicon glyphicon-ok"></span> Save
+			</button>
+		</form>
+	</div>
+</div>
+
+{% endblock %}
