@@ -51,7 +51,7 @@
 					</tr>
 					<tr>
 						<td>Last Seen</td>
-						<td>{{ (player.lastlogout if player.lastlogout > player.lastlogin else player.lastlogout) | datetime }}</td>
+						<td>{{ (player.lastlogout if player.lastlogout > player.lastlogin else player.lastlogin) | datetime }}</td>
 					</tr>
 					<tr>
 						<td>Online Time</td>
