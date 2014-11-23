@@ -4,7 +4,7 @@
 
 <div class="panel panel-default">
 	<div class="panel-heading">
-		Game Masters
+		Staff
 	</div>
 	<div class="panel-body">
 		<table class="table table-hover table-striped">
@@ -12,41 +12,17 @@
 				<tr>
 					<th>&nbsp;</th>
 					<th>Name</th>
+					<th>Position</th>
 					<th>Last Seen</th>
 				</tr>
 			</thead>
 			<tbody>
-			{% for gm in gms %}
+			{% for character in staff %}
 				<tr>
-					<td><img class="outfit" src="/outfit/{{ gm.looktype }}/{{ gm.lookhead }}/{{ gm.lookbody }}/{{ gm.looklegs }}/{{ gm.lookfeet }}/{{ gm.lookaddons }}"></td>
-					<td><a href="/community/player/{{ gm.name }}">{{ gm.name }}</a></td>
-					<td>{{ (gm.lastlogout if gm.lastlogout > gm.lastlogin else gm.lastlogout) | datetime }}</td>
-				</tr>
-			{% endfor %}
-			</tbody>
-		</table>
-	</div>
-</div>
-
-<div class="panel panel-default">
-	<div class="panel-heading">
-		Tutors
-	</div>
-	<div class="panel-body">
-		<table class="table table-hover table-striped">
-			<thead>
-				<tr>
-					<th>&nbsp;</th>
-					<th>Name</th>
-					<th>Last Seen</th>
-				</tr>
-			</thead>
-			<tbody>
-			{% for tutor in tutors %}
-				<tr>
-					<td><img class="outfit" src="/outfit/{{ tutor.looktype }}/{{ tutor.lookhead }}/{{ tutor.lookbody }}/{{ tutor.looklegs }}/{{ tutor.lookfeet }}/{{ tutor.lookaddons }}"></td>
-					<td><a href="/community/player/{{ tutor.name }}">{{ tutor.name }}</a></td>
-					<td>{{ (tutor.lastlogout if tutor.lastlogout > tutor.lastlogin else tutor.lastlogout) | datetime }}</td>
+					<td><img class="outfit" src="/outfit/{{ character.looktype }}/{{ character.lookhead }}/{{ character.lookbody }}/{{ character.looklegs }}/{{ character.lookfeet }}/{{ character.lookaddons }}"></td>
+					<td><a href="/community/player/{{ character.name }}">{{ character.name }}</a></td>
+					<td>{{ character.group_id | staffrank }}</td>
+					<td>{{ (character.lastlogout if character.lastlogout > character.lastlogin else character.lastlogin) | datetime }}</td>
 				</tr>
 			{% endfor %}
 			</tbody>
