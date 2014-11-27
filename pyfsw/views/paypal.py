@@ -5,13 +5,16 @@ from time import time
 
 from pyfsw import app, db
 from pyfsw import login_required, current_user
+from pyfsw import Account, PayPalHistory
 from pyfsw import PAYPAL_BUTTONS
-from pyfsw import Account, PaypalHistory
 
 @app.route('/paypal/donate')
 @login_required
 def route_paypal():
-	return render_template('paypal/donate.htm', buttons=PAYPAL_BUTTONS, account_id=current_user().id)
+	return render_template(
+		'paypal/donate.htm',
+		buttons=PAYPAL_BUTTONS, account_id=current_user().id
+	)
 
 @app.route('/paypal/success')
 def route_paypal_donated():
@@ -60,7 +63,7 @@ def route_paypal_ipn():
 		account.points += button['points']
 		db.session().commit()
 
-	history = PaypalHistory()
+	history = PayPalHistory()
 	history.account_id = account_id
 	history.timestamp = int(time())
 	history.status = status

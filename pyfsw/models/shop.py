@@ -91,7 +91,7 @@ class ShopHistory(db.Model):
 	def __repr__(self):
 		return '<ShopHistory.{}>'.format(self.id)
 
-class PaypalHistory(db.Model):
+class PayPalHistory(db.Model):
 	__tablename__ = 'paypal_history'
 
 	# Standard columns
@@ -109,4 +109,23 @@ class PaypalHistory(db.Model):
 		pass
 
 	def __repr__(self):
-		return '<PaypalHistory.{}>'.format(self.id)
+		return '<PayPalHistory.{}>'.format(self.id)
+
+class ZayPayHistory(db.Model):
+	__tablename__ = 'zaypay_history'
+
+	# Standard columns
+	id = Column(Integer, primary_key=True, unique=True)
+	account_id = Column(Integer)
+	timestamp = Column(Integer)
+	payment_id = Column(Integer)
+	price_setting_id = Column(Integer)
+	amount = Column(Integer)
+	points = Column(Integer)
+
+	# Methods
+	def __init__(self):
+		pass
+
+	def __repr__(self):
+		return '<ZayPayHistory.{}>'.format(self.id)

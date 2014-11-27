@@ -97,7 +97,12 @@ ACHIEVEMENTS = [
 	{'name': 'Example Achievement', 'key': 12101, 'value': 1, 'tier': 1}
 ]
 
-# Paypal Buttons
+# PayPal Buttons
 PAYPAL_BUTTONS = [
 	{'id': 'id', 'amount': 'price', 'points': 0},
 ]
+
+# ZayPay Options
+ZAYPAY_OPTIONS = {
+	ID: {'name': 'name', 'payalogue_id': 0, 'price_id': 0, 'price_key': '', 'points': 0}
+}
