@@ -6,7 +6,7 @@
 		Edit Shop Item
 	</div>
 	<div class="panel-body">
-		<form id="ItemForm" method="POST" action="/admin/shop/item/add">
+		<form id="ItemForm" method="POST" action="/admin/shop/item/edit/{{ item.id }}">
 			<div class="form-group">
 				<label for="inputName">Name</label>
 				<input type="text" class="form-control" id="inputName" name="name" placeholder="Item Name" value="{{ item.name }}" required>
