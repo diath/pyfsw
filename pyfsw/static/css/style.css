@@ -6,7 +6,7 @@ body {
 	cursor: default !important;
 	padding-top: 20px !important;
 	font-size: 12px !important;
-	font-family: sans-serif !important;
+	font-family: 'DejaVu Sans', 'Verdana', sans-serif !important;
 	background: url('/static/img/background.png') no-repeat top center #272B30;
 	background-attachment: fixed;
 }
