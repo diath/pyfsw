@@ -41,7 +41,8 @@ def route_community_player_get_name(name):
 	up = int((player.soul / 200) * 100)
 	eq = get_player_equipment(player.id)
 
-	player.deaths = PlayerDeath.query.filter(PlayerDeath.player_id == player.id).limit(10).all()
+	player.deaths = PlayerDeath.query.filter(PlayerDeath.player_id == player.id)
+	player.deaths = player.deaths.order_by(PlayerDeath.time.desc()).limit(10).all()
 
 	kills = db.session().query(PlayerDeath.player_id, PlayerDeath.level, PlayerDeath.time)
 	kills = kills.filter(PlayerDeath.is_player == 1).filter(PlayerDeath.killed_by == player.name)
@@ -76,7 +77,8 @@ def route_community_player_post():
 	up = int((player.soul / 200) * 100)
 	eq = get_player_equipment(player.id)
 
-	player.deaths = PlayerDeath.query.filter(PlayerDeath.player_id == player.id).limit(10).all()
+	player.deaths = PlayerDeath.query.filter(PlayerDeath.player_id == player.id)
+	player.deaths = player.deaths.order_by(PlayerDeath.time.desc()).limit(10).all()
 
 	kills = db.session().query(PlayerDeath.player_id, PlayerDeath.level, PlayerDeath.time)
 	kills = kills.filter(PlayerDeath.is_player == 1).filter(PlayerDeath.killed_by == player.name)
@@ -160,7 +162,7 @@ def route_community_staff():
 @app.route('/community/deaths')
 @cache.memoize(timeout=CACHE_TIME)
 def route_community_deaths():
-	deaths = PlayerDeath.query.limit(25).all()
+	deaths = PlayerDeath.query.order_by(PlayerDeath.time.desc()).limit(25).all()
 	for death in deaths:
 		player = db.session().query(Player.name).filter(Player.id == death.player_id).first()
 		if player:

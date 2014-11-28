@@ -141,7 +141,7 @@ class PlayerDeath(db.Model):
 
 	# Standard columns
 	player_id = Column(Integer, ForeignKey('players.id'), primary_key=True)
-	time = Column(BigInteger)
+	time = Column(BigInteger, primary_key=True)
 	level = Column(Integer)
 	killed_by = Column(String(255), primary_key=True)
 	is_player = Column(Integer)
