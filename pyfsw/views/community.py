@@ -27,7 +27,7 @@ def route_community_player_get():
 	return render_template('community/player_search.htm')
 
 @app.route('/community/player/<string:name>')
-@cache.cached(timeout=CACHE_TIME)
+@cache.memoize(timeout=CACHE_TIME)
 def route_community_player_get_name(name):
 	player = Player.query.filter(Player.name == name).first()
 
@@ -61,7 +61,7 @@ def route_community_player_get_name(name):
 	)
 
 @app.route('/community/player', methods=['POST'])
-@cache.cached(timeout=CACHE_TIME)
+@cache.memoize(timeout=CACHE_TIME)
 def route_community_player_post():
 	name = request.form.get('name', '', type=str)
 	player = Player.query.filter(Player.name == name).first()
@@ -96,7 +96,7 @@ def route_community_player_post():
 	)
 
 @app.route('/community/highscores/<string:type>/<int:page>')
-@cache.cached(timeout=CACHE_TIME)
+@cache.memoize(timeout=CACHE_TIME)
 def route_community_highscores(type, page):
 	current = HS_TYPES.get(type)
 	if not current:
@@ -131,7 +131,7 @@ def route_community_highscores(type, page):
 	)
 
 @app.route('/community/houses/<int:town_id>')
-@cache.cached(timeout=CACHE_TIME)
+@cache.memoize(timeout=CACHE_TIME)
 def route_community_houses(town_id):
 	houses = House.query.order_by(House.id)
 
@@ -148,7 +148,7 @@ def route_community_houses(town_id):
 	return render_template('community/houses.htm', towns=TOWNS, town_id=town_id, price=HOUSE_PRICE, houses=houses)
 
 @app.route('/community/staff')
-@cache.cached(timeout=CACHE_TIME)
+@cache.memoize(timeout=CACHE_TIME)
 def route_community_staff():
 	staff = db.session().query(
 		Player.name, Player.lastlogin, Player.lastlogout, Player.group_id,
@@ -158,7 +158,7 @@ def route_community_staff():
 	return render_template('community/staff.htm', staff=staff)
 
 @app.route('/community/deaths')
-@cache.cached(timeout=CACHE_TIME)
+@cache.memoize(timeout=CACHE_TIME)
 def route_community_deaths():
 	deaths = PlayerDeath.query.limit(25).all()
 	for death in deaths:
@@ -171,7 +171,7 @@ def route_community_deaths():
 	return render_template('community/deaths.htm', deaths=deaths)
 
 @app.route('/community/online')
-@cache.cached(timeout=CACHE_TIME)
+@cache.memoize(timeout=CACHE_TIME)
 def route_community_online():
 	ids = []
 	for entry in PlayerOnline.query.all():
@@ -190,7 +190,7 @@ def route_community_online():
 	return render_template('community/online.htm', online=online)
 
 @app.route('/community/market')
-@cache.cached(timeout=CACHE_TIME)
+@cache.memoize(timeout=CACHE_TIME)
 def route_community_market():
 	sell = MarketOffer.query.filter(MarketOffer.sale == 1).all()
 	for offer in sell:
@@ -210,7 +210,7 @@ def route_community_market():
 	return render_template('community/market.htm', sell=sell, buy=buy, history=history)
 
 @app.route('/community/wars')
-@cache.cached(timeout=CACHE_TIME)
+@cache.memoize(timeout=CACHE_TIME)
 def route_community_wars():
 	active = GuildWar.query.filter(GuildWar.status == GuildWar.Active).all()
 	pending = GuildWar.query.filter(GuildWar.status == GuildWar.Pending).all()
@@ -219,7 +219,7 @@ def route_community_wars():
 	return render_template('community/wars.htm', active=active, pending=pending, ended=ended)
 
 @app.route('/community/war/<int:id>')
-@cache.cached(timeout=CACHE_TIME)
+@cache.memoize(timeout=CACHE_TIME)
 def route_community_war(id):
 	war = db.session().query(GuildWar.id, GuildWar.guild1, GuildWar.guild2).filter(GuildWar.id == id).first()
 	if not war:
