@@ -22,6 +22,7 @@ def route_admin_news_compose():
 def route_admin_news_compose_post():
 	title = request.form.get('title', '')
 	content = request.form.get('content', '')
+	thread_content = request.form.get('threadContent', '')
 	poster_id = request.form.get('poster', 0)
 	board_id = request.form.get('board', 0)
 	error = False
@@ -32,6 +33,10 @@ def route_admin_news_compose_post():
 
 	if len(content) == 0:
 		flash('The news content cannot be empty.', 'error')
+		error = True
+
+	if len(thread_content) == 0:
+		flash('The thread content cannot be empty.', 'error')
 		error = True
 
 	if not error:
@@ -48,7 +53,7 @@ def route_admin_news_compose_post():
 		thread.pinned = 0
 		thread.lastpost = timestamp
 		thread.author_id = poster_id
-		thread.content = content
+		thread.content = thread_content
 
 		db.session().add(thread)
 		db.session().commit()
@@ -88,6 +93,7 @@ def route_admin_news_edit(id):
 	news = News.query.filter(News.id == id).first()
 	user = current_user()
 	boards = ForumBoard.query.all()
+	news.thread_content = db.session().query(ForumThread.content).filter(ForumThread.id == news.thread_id).first().content
 
 	return render_template(
 		'admin/news/edit.htm',
@@ -102,6 +108,9 @@ def route_admin_news_edit_post(id):
 	news.header = request.form.get('title', '')
 	news.content = request.form.get('content', '')
 	news.author_id = request.form.get('poster', 0)
+
+	thread = ForumThread.query.filter(ForumThread.id == news.thread_id).first()
+	thread.content = request.form.get('threadContent', '')
 
 	db.session().commit()
 	flash('The news has been edited.', 'success')
