@@ -73,6 +73,7 @@ def route_forum_board_post(id):
 	for player in user.players:
 		if player.id == character:
 			found = True
+			break
 
 	if board.locked:
 		flash('You can not create a thread in a locked board.', 'error')
@@ -113,6 +114,7 @@ def route_forum_board_post(id):
 		thread.content = content
 
 		user.lastpost = timestamp
+		player.postcount = player.postcount + 1
 
 		db.session().add(thread)
 		db.session().commit()
@@ -128,7 +130,7 @@ def route_forum_thread(thread, page):
 		return redirect(url_for('route_forum'))
 
 	player = db.session().query(
-		Player.name, Player.level, Player.vocation, Player.town_id, Player.group_id,
+		Player.name, Player.level, Player.vocation, Player.town_id, Player.group_id, Player.postcount,
 		Player.looktype, Player.lookhead, Player.lookbody, Player.looklegs, Player.lookfeet, Player.lookaddons
 	).filter(Player.id == thread.author_id).first()
 	if player:
@@ -144,7 +146,7 @@ def route_forum_thread(thread, page):
 
 	for post in posts:
 		player = db.session().query(
-			Player.name, Player.level, Player.vocation, Player.town_id, Player.group_id,
+			Player.name, Player.level, Player.vocation, Player.town_id, Player.group_id, Player.postcount,
 			Player.looktype, Player.lookhead, Player.lookbody, Player.looklegs, Player.lookfeet, Player.lookaddons
 		).filter(Player.id == post.author_id).first()
 		if player:
@@ -180,6 +182,7 @@ def route_forum_thread_post(id):
 	for player in user.players:
 		if player.id == character:
 			found = True
+			break
 
 	if thread.locked:
 		flash('You can not post in a locked thread.', 'error')
@@ -213,6 +216,7 @@ def route_forum_thread_post(id):
 
 		thread.lastpost = timestamp
 		user.lastpost = timestamp
+		player.postcount = player.postcount + 1
 
 		db.session().add(post)
 		db.session().commit()

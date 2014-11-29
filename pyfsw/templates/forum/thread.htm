@@ -19,6 +19,8 @@
 					{{ thread.player.vocation | vocation(thread.player.group_id) }}
 					<br>
 					Resident of {{ thread.player.town_id | town }}
+					<br>
+					Posts: {{ thread.player.postcount }}
 				{% else %}
 					Author Deleted
 				{% endif %}
@@ -54,6 +56,8 @@
 					{{ post.player.vocation | vocation(post.player.group_id) }}
 					<br>
 					Resident of {{ post.player.town_id | town }}
+					<br>
+					Posts: {{ post.player.postcount }}
 				{% else %}
 					Author Deleted
 				{% endif %}
