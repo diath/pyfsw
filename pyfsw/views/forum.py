@@ -92,7 +92,7 @@ def route_forum_board_post(id):
 			flash('You must wait {} seconds before posting again.'.format(POST_COOLDOWN), 'error')
 			error = True
 
-		if session.get('creation', 0) + (60 * 60 * 24 * FORUM_ACCOUNT_AGE_REQUIREMENT) > timestamp:
+		if user.creation + (60 * 60 * 24 * FORUM_ACCOUNT_AGE_REQUIREMENT) > timestamp:
 			flash('Your account must be at least {} days old before you are allowed to post on the forum.'.format(FORUM_ACCOUNT_AGE_REQUIREMENT), 'error')
 			error = True
 
@@ -217,7 +217,7 @@ def route_forum_thread_post(id):
 			flash('You must wait {} seconds before posting again.'.format(POST_COOLDOWN), 'error')
 			error = True
 
-		if session.get('creation', 0) + (60 * 60 * 24 * FORUM_ACCOUNT_AGE_REQUIREMENT) > timestamp:
+		if user.creation + (60 * 60 * 24 * FORUM_ACCOUNT_AGE_REQUIREMENT) > timestamp:
 			flash('Your account must be at least {} days old before you are allowed to post on the forum.'.format(FORUM_ACCOUNT_AGE_REQUIREMENT), 'error')
 			error = True
 

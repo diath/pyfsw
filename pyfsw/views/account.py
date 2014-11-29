@@ -46,7 +46,6 @@ def route_account_login_post():
 	session['account'] = account.id
 	session['access'] = account.type
 	session['web_access'] = account.web_access
-	session['creation'] = account.creation
 
 	history.status = 1
 	db.session().add(history)
