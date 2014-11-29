@@ -1,7 +1,7 @@
 from flask import render_template, request
 
 from pyfsw import app, db
-from pyfsw import login_required
+from pyfsw import login_required, current_user
 from pyfsw import Account, ZayPayHistory
 from pyfsw import ZAYPAY_OPTIONS
 
