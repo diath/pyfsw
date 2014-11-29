@@ -7,7 +7,7 @@ from pyfsw import admin_required, current_user
 from pyfsw import ForumCategory, ForumBoard
 
 @app.route('/admin/forum/categories')
-@admin_required
+@admin_required(5)
 def route_admin_forum_categories():
 	categories = ForumCategory.query.all()
 
@@ -17,7 +17,7 @@ def route_admin_forum_categories():
 	)
 
 @app.route('/admin/forum/category/add', methods=['POST'])
-@admin_required
+@admin_required(5)
 def route_admin_forum_category_add():
 	name = request.form.get('name', '')
 
@@ -35,7 +35,7 @@ def route_admin_forum_category_add():
 	return redirect(url_for('route_admin_forum_categories'))
 
 @app.route('/admin/forum/category/edit/<int:id>')
-@admin_required
+@admin_required(5)
 def route_admin_forum_category_edit(id):
 	category = ForumCategory.query.filter(ForumCategory.id == id).first()
 
@@ -45,7 +45,7 @@ def route_admin_forum_category_edit(id):
 	)
 
 @app.route('/admin/forum/category/edit/<int:id>', methods=['POST'])
-@admin_required
+@admin_required(5)
 def route_admin_forum_category_edit_post(id):
 	category = ForumCategory.query.filter(ForumCategory.id == id).first()
 
@@ -57,7 +57,7 @@ def route_admin_forum_category_edit_post(id):
 	return redirect(url_for('route_admin_forum_categories'))
 
 @app.route('/admin/forum/category/delete/<int:id>')
-@admin_required
+@admin_required(5)
 def route_admin_forum_category_delete(id):
 	category = ForumCategory.query.filter(ForumCategory.id == id).first()
 
@@ -69,7 +69,7 @@ def route_admin_forum_category_delete(id):
 	return redirect(url_for('route_admin_forum_categories'))
 
 @app.route('/admin/forum/boards')
-@admin_required
+@admin_required(5)
 def route_admin_forum_boards():
 	boards = ForumBoard.query.all()
 	categories = ForumCategory.query.all()
@@ -87,7 +87,7 @@ def route_admin_forum_boards():
 	)
 
 @app.route('/admin/forum/board/add', methods=['POST'])
-@admin_required
+@admin_required(5)
 def route_admin_forum_board_add():
 	name = request.form.get('name', '')
 	description = request.form.get('description', '')
@@ -118,7 +118,7 @@ def route_admin_forum_board_add():
 	return redirect(url_for('route_admin_forum_boards'))
 
 @app.route('/admin/forum/board/edit/<int:id>')
-@admin_required
+@admin_required(5)
 def route_admin_forum_board_edit(id):
 	board = ForumBoard.query.filter(ForumBoard.id == id).first()
 	categories = ForumCategory.query.all()
@@ -129,7 +129,7 @@ def route_admin_forum_board_edit(id):
 	)
 
 @app.route('/admin/forum/board/edit/<int:id>', methods=['POST'])
-@admin_required
+@admin_required(5)
 def route_admin_forum_board_edit_post(id):
 	board = ForumBoard.query.filter(ForumBoard.id == id).first()
 
@@ -144,7 +144,7 @@ def route_admin_forum_board_edit_post(id):
 	return redirect(url_for('route_admin_forum_boards'))
 
 @app.route('/admin/forum/board/delete/<int:id>')
-@admin_required
+@admin_required(5)
 def route_admin_forum_board_delete(id):
 	board = ForumBoard.query.filter(ForumBoard.id == id).first()
 

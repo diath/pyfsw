@@ -28,12 +28,13 @@ def route_account_login_post():
 		hash.update(pswd.encode('utf-8'))
 		pswd = hash.hexdigest()
 
-	account = db.session().query(Account.id, Account.type).filter(Account.name == name).filter(Account.password == pswd).first()
+	account = db.session().query(Account.id, Account.type, Account.web_access).filter(Account.name == name).filter(Account.password == pswd).first()
 	if not account:
 		return render_template('account/login.htm', error=True)
 
 	session['account'] = account.id
 	session['access'] = account.type
+	session['web_access'] = account.web_access
 
 	if 'next' in request.form:
 		return redirect(request.form['next'])
@@ -45,6 +46,7 @@ def route_account_login_post():
 def route_account_logout():
 	session.pop('account')
 	session.pop('access')
+	session.pop('web_access')
 
 	return redirect(url_for('route_account_login'))
 

@@ -7,7 +7,7 @@ from pyfsw import admin_required, current_user
 from pyfsw import News, ForumBoard, ForumThread, Player
 
 @app.route('/admin/news/compose', methods=['GET'])
-@admin_required
+@admin_required(5)
 def route_admin_news_compose():
 	user = current_user()
 	boards = ForumBoard.query.all()
@@ -18,7 +18,7 @@ def route_admin_news_compose():
 	)
 
 @app.route('/admin/news/compose', methods=['POST'])
-@admin_required
+@admin_required(5)
 def route_admin_news_compose_post():
 	title = request.form.get('title', '')
 	content = request.form.get('content', '')
@@ -73,7 +73,7 @@ def route_admin_news_compose_post():
 	return redirect(url_for('route_admin_news_compose'))
 
 @app.route('/admin/news/manage', methods=['GET'])
-@admin_required
+@admin_required(5)
 def route_admin_news_manage():
 	news = News.query.all()
 
@@ -88,7 +88,7 @@ def route_admin_news_manage():
 	)
 
 @app.route('/admin/news/edit/<int:id>', methods=['GET'])
-@admin_required
+@admin_required(5)
 def route_admin_news_edit(id):
 	news = News.query.filter(News.id == id).first()
 	user = current_user()
@@ -101,7 +101,7 @@ def route_admin_news_edit(id):
 	)
 
 @app.route('/admin/news/edit/<int:id>', methods=['POST'])
-@admin_required
+@admin_required(5)
 def route_admin_news_edit_post(id):
 	news = News.query.filter(News.id == id).first()
 
@@ -118,7 +118,7 @@ def route_admin_news_edit_post(id):
 	return redirect(url_for('route_admin_news_manage'))
 
 @app.route('/admin/news/delete/<int:id>', methods=['GET'])
-@admin_required
+@admin_required(5)
 def route_admin_news_delete(id):
 	news = News.query.filter(News.id == id).first()
 	thread = ForumThread.query.filter(ForumThread.id == news.thread_id).first()

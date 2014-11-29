@@ -5,7 +5,7 @@ from pyfsw import admin_required, current_user
 from pyfsw import ShopCategory, ShopItem, ShopOrder
 
 @app.route('/admin/shop/categories')
-@admin_required
+@admin_required(5)
 def route_admin_shop_categories():
 	categories = ShopCategory.query.all()
 
@@ -15,7 +15,7 @@ def route_admin_shop_categories():
 	)
 
 @app.route('/admin/shop/category/add', methods=['POST'])
-@admin_required
+@admin_required(5)
 def route_admin_shop_category_add():
 	name = request.form.get('name', '')
 	enabled = request.form.get('enabled', None)
@@ -35,7 +35,7 @@ def route_admin_shop_category_add():
 	return redirect(url_for('route_admin_shop_categories'))
 
 @app.route('/admin/shop/category/edit/<int:id>')
-@admin_required
+@admin_required(5)
 def route_admin_shop_category_edit(id):
 	category = ShopCategory.query.filter(ShopCategory.id == id).first()
 
@@ -45,7 +45,7 @@ def route_admin_shop_category_edit(id):
 	)
 
 @app.route('/admin/shop/category/edit/<int:id>', methods=['POST'])
-@admin_required
+@admin_required(5)
 def route_admin_shop_category_edit_post(id):
 	category = ShopCategory.query.filter(ShopCategory.id == id).first()
 	category.name = request.form.get('name', '')
@@ -57,7 +57,7 @@ def route_admin_shop_category_edit_post(id):
 	return redirect(url_for('route_admin_shop_categories'))
 
 @app.route('/admin/shop/category/delete/<int:id>')
-@admin_required
+@admin_required(5)
 def route_admin_shop_category_delete(id):
 	category = ShopCategory.query.filter(ShopCategory.id == id).first()
 
@@ -69,7 +69,7 @@ def route_admin_shop_category_delete(id):
 	return redirect(url_for('route_admin_shop_categories'))
 
 @app.route('/admin/shop/items')
-@admin_required
+@admin_required(5)
 def route_admin_shop_items():
 	items = ShopItem.query.all()
 	categories = ShopCategory.query.all()
@@ -80,7 +80,7 @@ def route_admin_shop_items():
 	)
 
 @app.route('/admin/shop/item/add', methods=['POST'])
-@admin_required
+@admin_required(5)
 def route_admin_shop_item_add():
 	name = request.form.get('name', '')
 	description = request.form.get('description', '')
@@ -115,7 +115,7 @@ def route_admin_shop_item_add():
 	return redirect(url_for('route_admin_shop_items'))
 
 @app.route('/admin/shop/item/edit/<int:id>')
-@admin_required
+@admin_required(5)
 def route_admin_shop_item_edit(id):
 	item = ShopItem.query.filter(ShopItem.id == id).first()
 	categories = ShopCategory.query.all()
@@ -126,7 +126,7 @@ def route_admin_shop_item_edit(id):
 	)
 
 @app.route('/admin/shop/item/edit/<int:id>', methods=['POST'])
-@admin_required
+@admin_required(5)
 def route_admin_shop_item_edit_post(id):
 	item = ShopItem.query.filter(ShopItem.id == id).first()
 
@@ -148,7 +148,7 @@ def route_admin_shop_item_edit_post(id):
 	return redirect(url_for('route_admin_shop_items'))
 
 @app.route('/admin/shop/item/delete/<int:id>')
-@admin_required
+@admin_required(5)
 def route_admin_shop_item_delete(id):
 	item = ShopItem.query.filter(ShopItem.id == id).first()
 

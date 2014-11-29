@@ -5,7 +5,7 @@ from pyfsw import admin_required
 from pyfsw import Library
 
 @app.route('/admin/community/library')
-@admin_required
+@admin_required(5)
 def route_admin_library():
 	pages = Library.query.all()
 
@@ -15,7 +15,7 @@ def route_admin_library():
 	)
 
 @app.route('/admin/community/library/add', methods=['POST'])
-@admin_required
+@admin_required(5)
 def route_admin_library_add():
 	uri = request.form.get('uri', '')
 	name = request.form.get('name', '')
@@ -36,7 +36,7 @@ def route_admin_library_add():
 	return redirect(url_for('route_admin_library'))
 
 @app.route('/admin/community/library/edit/<int:id>', methods=['GET'])
-@admin_required
+@admin_required(5)
 def route_admin_library_edit(id):
 	page = Library.query.filter(Library.id == id).first()
 
@@ -46,7 +46,7 @@ def route_admin_library_edit(id):
 	)
 
 @app.route('/admin/community/library/edit/<int:id>', methods=['POST'])
-@admin_required
+@admin_required(5)
 def route_admin_library_edit_post(id):
 	page = Library.query.filter(Library.id == id).first()
 	page.uri = request.form.get('uri', '')
@@ -60,7 +60,7 @@ def route_admin_library_edit_post(id):
 	return redirect(url_for('route_admin_library'))
 
 @app.route('/admin/community/library/delete/<int:id>', methods=['GET'])
-@admin_required
+@admin_required(5)
 def route_admin_library_delete(id):
 	page = Library.query.filter(Library.id == id).first()
 

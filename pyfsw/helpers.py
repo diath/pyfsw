@@ -16,18 +16,21 @@ def login_required(f):
 
 	return decorated
 
-def admin_required(f):
-	@wraps(f)
-	def decorated(*args, **kwargs):
-		if 'account' not in session:
-			return redirect(url_for('route_account_login', next=request.path))
+def admin_required(access):
+	def decorator(f):
+		@wraps(f)
+		def decorated(*args, **kwargs):
+			if 'account' not in session:
+				return redirect(url_for('route_account_login', next=request.path))
 
-		if session.get('access', 1) != ADMIN_ACCOUNT_TYPE:
-			return redirect(url_for('route_account_login', next=request.path))
+			if session.get('web_access', 0) < access:
+				return redirect(url_for('route_account_login', next=request.path))
 
-		return f(*args, **kwargs)
+			return f(*args, **kwargs)
 
-	return decorated
+		return decorated
+
+	return decorator
 
 def current_user():
 	if 'account' in session:

@@ -18,6 +18,7 @@ class Account(db.Model):
 	# Custom columns
 	key = Column(String(19))
 	points = Column(Integer, default=0)
+	web_access = Column(Integer, default=0)
 
 	# Relationships
 	players = db.relationship('Player', backref='accounts')
