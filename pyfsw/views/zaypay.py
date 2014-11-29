@@ -20,7 +20,7 @@ def zaypay_show_payment(payment_id, option):
 	data = BeautifulSoup(request.text)
 	return data.response
 
-@app.route('/zaypay/buy')
+@app.route('/zaypay/pay')
 @login_required
 def route_zaypay():
 	return render_template(
