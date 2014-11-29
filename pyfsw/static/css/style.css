@@ -76,3 +76,63 @@ a:hover {
 	display: block;
 	width: 100%;
 }
+
+/*
+	Defined button sizes to allow an alternative to inline css.
+*/
+
+.btn-custom-tiny {
+	padding: 5px 10px;
+	font-size: 12px;
+	line-height: 1.5;
+	border-radius: 3px;
+	width: 45px;
+}
+
+.btn-custom-xsmall {
+	padding: 5px 10px;
+	font-size: 12px;
+	line-height: 1.5;
+	border-radius: 3px;
+	width: 55px;
+}
+
+.btn-custom-small {
+	padding: 5px 10px;
+	font-size: 12px;
+	line-height: 1.5;
+	border-radius: 3px;
+	width: 65px;
+}
+
+.btn-custom-medium {
+	padding: 5px 10px;
+	font-size: 12px;
+	line-height: 1.5;
+	border-radius: 3px;
+	width: 75px;
+}
+
+.btn-custom-large {
+	padding: 5px 10px;
+	font-size: 12px;
+	line-height: 1.5;
+	border-radius: 3px;
+	width: 85px;
+}
+
+.btn-custom-xlarge {
+	padding: 5px 10px;
+	font-size: 12px;
+	line-height: 1.5;
+	border-radius: 3px;
+	width: 95px;
+}
+
+.btn-custom-huge {
+	padding: 5px 10px;
+	font-size: 12px;
+	line-height: 1.5;
+	border-radius: 3px;
+	width: 105px;
+}
