@@ -1,10 +1,10 @@
 {% extends "template.htm" %}
-{% block title %} Paypal Donation {% endblock %}
+{% block title %} PayPal Donation {% endblock %}
 {% block body %}
 
 {% for button in buttons %}
 <div class="panel panel-default">
-	<div class="panel-heading">Donate ${{ button.amount }} USD</div>
+	<div class="panel-heading">Donate ${{ button.amount }} USD and get {{ button.points }} premium points!</div>
 	<div class="panel-body middle">
 		<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
 			<input type="hidden" name="cmd" value="_s-xclick">
