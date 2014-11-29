@@ -7,7 +7,7 @@ from pyfsw import app, db
 from pyfsw import current_user, login_required
 from pyfsw import Player
 from pyfsw import ForumCategory, ForumBoard, ForumThread, ForumPost
-from pyfsw import POST_COOLDOWN, ADMIN_ACCOUNT_TYPE
+from pyfsw import POST_COOLDOWN, ADMIN_ACCOUNT_TYPE, FORUM_LEVEL_REQUIREMENT, FORUM_ACCOUNT_AGE_REQUIREMENT
 
 @app.route('/forum')
 def route_forum():
@@ -78,26 +78,35 @@ def route_forum_board_post(id):
 			found = True
 			break
 
-	if board.locked:
-		flash('You can not create a thread in a locked board.', 'error')
-		error = True
-
 	if not found:
 		flash('You can not post from a character that does not belong to you.', 'error')
 		error = True
 
 	timestamp = int(time())
-	if user.lastpost + POST_COOLDOWN > timestamp:
-		flash('You must wait {} seconds before posting again.'.format(POST_COOLDOWN), 'error')
-		error = True
+	if session.get('access', 0) != ADMIN_ACCOUNT_TYPE:
+		if board.locked:
+			flash('You can not create a thread in a locked board.', 'error')
+			error = True
 
-	if len(subject) < 5:
-		flash('Yout thread subject must be at least 5 characters long', 'error')
-		error = True
+		if user.lastpost + POST_COOLDOWN > timestamp:
+			flash('You must wait {} seconds before posting again.'.format(POST_COOLDOWN), 'error')
+			error = True
 
-	if len(content) < 15:
-		flash('Your thread content must be at least 15 characters long.', 'error')
-		error = True
+		if session.get('creation', 0) + (60 * 60 * 24 * FORUM_ACCOUNT_AGE_REQUIREMENT) > timestamp:
+			flash('Your account must be at least {} days old before you are allowed to post on the forum.'.format(FORUM_ACCOUNT_AGE_REQUIREMENT), 'error')
+			error = True
+
+		if player.level < FORUM_LEVEL_REQUIREMENT:
+			flash('Your character must be at least level {} before you are allowed to post on the forum.'.format(FORUM_LEVEL_REQUIREMENT), 'error')
+			error = True
+
+		if len(subject) < 5:
+			flash('Yout thread subject must be at least 5 characters long', 'error')
+			error = True
+
+		if len(content) < 15:
+			flash('Your thread content must be at least 15 characters long.', 'error')
+			error = True
 
 	if not error:
 		if len(content) > 512:
@@ -194,22 +203,32 @@ def route_forum_thread_post(id):
 			found = True
 			break
 
-	if thread.locked:
-		flash('You can not post in a locked thread.', 'error')
-		error = True
-
 	if not found:
 		flash('You can not post from a character that does not belong to you.', 'error')
 		error = True
 
 	timestamp = int(time())
-	if user.lastpost + POST_COOLDOWN > timestamp:
-		flash('You must wait {} seconds before posting again.'.format(POST_COOLDOWN), 'error')
-		error = True
+	if session.get('access', 0) != ADMIN_ACCOUNT_TYPE:
+		if board.locked:
+			flash('You can not create a thread in a locked board.', 'error')
+			error = True
 
-	if len(content) < 4:
-		flash('Your reply must be at least 4 characters long.', 'error')
-		error = True
+		if user.lastpost + POST_COOLDOWN > timestamp:
+			flash('You must wait {} seconds before posting again.'.format(POST_COOLDOWN), 'error')
+			error = True
+
+		if session.get('creation', 0) + (60 * 60 * 24 * FORUM_ACCOUNT_AGE_REQUIREMENT) > timestamp:
+			flash('Your account must be at least {} days old before you are allowed to post on the forum.'.format(FORUM_ACCOUNT_AGE_REQUIREMENT), 'error')
+			error = True
+
+		if player.level < FORUM_LEVEL_REQUIREMENT:
+			flash('Your character must be at least level {} before you are allowed to post on the forum.'.format(FORUM_LEVEL_REQUIREMENT), 'error')
+			error = True
+
+		if len(content) < 4:
+			flash('Your reply must be at least 4 characters long.', 'error')
+			error = True
+
 
 	if not error:
 		if len(content) > 512:
