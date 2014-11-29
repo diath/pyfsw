@@ -66,6 +66,7 @@ class Player(db.Model):
 	# Custom columns
 	comment = Column(String(255), default='')
 	hidden = Column(Integer, default=0)
+	postcount = Column(Integer, default=0)
 
 	# Relationships
 	storages = db.relationship('PlayerStorage', primaryjoin='Player.id == PlayerStorage.player_id', backref='players', passive_deletes=True)
