@@ -24,7 +24,8 @@ def zaypay_show_payment(payment_id, option):
 @login_required
 def route_zaypay():
 	return render_template(
-		'zaypay/donate.htm'
+		'zaypay/pay.htm',
+		options = ZAYPAY_OPTIONS, account_id = current_user().id
 	)
 
 @app.route('/zaypay/ipn')
@@ -61,7 +62,7 @@ def route_zaypay_ipn():
 	# Fetch the account
 	var = data.get('your-variables', '')
 	var = var.split('&')
-	var = var[0].split('=')[0]
+	var = var[0].split('=')[1]
 
 	account = db.session().query(Account).filter(Account.id == int(var)).first()
 	if not account:

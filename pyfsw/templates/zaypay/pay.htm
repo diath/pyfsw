@@ -1,0 +1,24 @@
+{% extends "template.htm" %}
+{% block title %} Paypal Donation {% endblock %}
+{% block body %}
+
+<div class="panel panel-default">
+	<div class="panel-heading">Pay via ZayPay!</div>
+	<div class="panel-body">
+		Here you can make a payment via ZayPay service using your mobile phone by either a call or a text message. The availability of the service depends on the ZayPay's coverage. Check their website for more details if you are unable to make a payment via ZayPay. Completing a payment will add premium points to your account which then can be exchanged for virtual goods in our shop system. The server owners reserve the right to change the pricing plans at any time without a prior notice. Should the system fail to deliver the premium points for your account, please make a forum thread containing as many details regarding the payment as possible so it's easier for us to identify a bug and verify your payment.
+	</div>
+</div>
+
+{% for option in options %}
+<div class="panel panel-default">
+	<div class="panel-heading">Pay ${{ option.amount }} USD for {{ option.points }} premium points.</div>
+	<div class="panel-body">
+		<script src="http://www.zaypay.com/pay/{{ option.payalogue_id }}.js" type="text/javascript"></script>
+		Pay ${{ option.amount }} USD to receive {{ option.points }} premium points.
+		<br>
+		<a href="http://www.zaypay.com/pay/{{ option.payalogue_id }}?account_id={{ account_id }}" onclick="ZPayment(this); return false">Click here to start the payment process</a>
+	</div>
+</div>
+{% endfor %}
+
+{% endblock %}
