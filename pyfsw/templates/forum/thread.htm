@@ -55,6 +55,32 @@
 			{% endif %}
 			</div>
 		</div>
+		{% if session.access == g.admin_account_type %}
+		<br>
+		<div class="row">
+			<div class="col-md-12">
+				<button class="btn btn-sm btn-default"><span class="glyphicon glyphicon-remove"></span> Hard Delete</button>
+
+				{% if thread.deleted %}
+				<a href="/forum/thread/soft/{{ thread.id }}"><button class="btn btn-sm btn-default active"><span class="glyphicon glyphicon-minus"></span> Restore Thread</button></a>
+				{% else %}
+				<a href="/forum/thread/soft/{{ thread.id }}"><button class="btn btn-sm btn-default"><span class="glyphicon glyphicon-minus"></span> Soft Delete</button></a>
+				{% endif %}
+
+				{% if thread.locked %}
+				<a href="/forum/thread/lock/{{ thread.id }}"><button class="btn btn-sm btn-default active"><span class="glyphicon glyphicon-lock"></span> Unlock</button></a>
+				{% else %}
+				<a href="/forum/thread/lock/{{ thread.id }}"><button class="btn btn-sm btn-default"><span class="glyphicon glyphicon-lock"></span> Lock</button></a>
+				{% endif %}
+
+				{% if thread.pinned %}
+				<a href="/forum/thread/pin/{{ thread.id }}"><button class="btn btn-sm btn-default active"><span class="glyphicon glyphicon-pushpin"></span> Unpin</button></a>
+				{% else %}
+				<a href="/forum/thread/pin/{{ thread.id }}"><button class="btn btn-sm btn-default"><span class="glyphicon glyphicon-pushpin"></span> Pin</button></a>
+				{% endif %}
+			</div>
+		</div>
+		{% endif %}
 	</div>
 </div>
 
@@ -91,6 +117,20 @@
 				{{ post.content }}
 			</div>
 		</div>
+		{% if session.access == g.admin_account_type %}
+		<br>
+		<div class="row">
+			<div class="col-md-12">
+				<a href="/forum/post/hard/{{ post.id }}"><button class="btn btn-sm btn-default"><span class="glyphicon glyphicon-remove"></span> Hard Delete</button></a>
+
+				{% if post.deleted %}
+				<a href="/forum/post/soft/{{ post.id }}"><button class="btn btn-sm btn-default active"><span class="glyphicon glyphicon-minus"></span> Restore Post</button></a>
+				{% else %}
+				<a href="/forum/post/soft/{{ post.id }}"><button class="btn btn-sm btn-default"><span class="glyphicon glyphicon-minus"></span> Soft Delete</button></a>
+				{% endif %}
+			</div>
+		</div>
+		{% endif %}
 	</div>
 </div>
 {% endif %}

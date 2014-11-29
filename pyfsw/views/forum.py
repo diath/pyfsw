@@ -4,7 +4,7 @@ from flask.ext.sqlalchemy import Pagination
 from time import time
 
 from pyfsw import app, db
-from pyfsw import current_user, login_required
+from pyfsw import current_user, login_required, admin_required
 from pyfsw import Player
 from pyfsw import ForumCategory, ForumBoard, ForumThread, ForumPost
 from pyfsw import POST_COOLDOWN, ADMIN_ACCOUNT_TYPE, FORUM_LEVEL_REQUIREMENT, FORUM_ACCOUNT_AGE_REQUIREMENT
@@ -251,3 +251,139 @@ def route_forum_thread_post(id):
 		db.session().commit()
 
 	return redirect(url_for('route_forum_thread', thread=id, page=1))
+
+# Views related to thread/post management
+@app.route('/forum/thread/hard/<int:id>')
+@admin_required(ADMIN_ACCOUNT_TYPE)
+def route_forum_thread_hard(id):
+	thread = ForumThread.query.filter(ForumThread.id == id).first()
+	if not thread:
+		return redirect(url_for('route_forum'))
+
+	character = Player.query.filter(Player.id == thread.author_id).first()
+	character.postcount = character.postcount - 1
+
+	posts = ForumPost.query.filter(ForumPost.thread_id == thread.id).all()
+	for post in posts:
+		character = Player.query.filter(Player.id == post.author_id).first()
+		character.postcount = character.postcount - 1
+
+		db.session().delete(post)
+
+	db.session().delete(thread)
+	db.session().commit()
+
+	flash('The thread has been permanently deleted.', 'success')
+
+	return redirect(url_for('route_forum'))
+
+@app.route('/forum/thread/soft/<int:id>')
+@admin_required(ADMIN_ACCOUNT_TYPE)
+def route_forum_thread_soft(id):
+	thread = ForumThread.query.filter(ForumThread.id == id).first()
+	if not thread:
+		return redirect(url_for('route_forum'))
+
+	posts = db.session().query(ForumPost.author_id).filter(ForumPost.thread_id == thread.id).all()
+
+	if thread.deleted:
+		character = Player.query.filter(Player.id == thread.author_id).first()
+		character.postcount = character.postcount + 1
+
+		for post in posts:
+			character = Player.query.filter(Player.id == post.author_id).first()
+			character.postcount = character.postcount + 1
+
+		thread.deleted = 0
+		flash('The thread has been restored.', 'success')
+	else:
+		character = Player.query.filter(Player.id == thread.author_id).first()
+		character.postcount = character.postcount - 1
+
+		for post in posts:
+			character = Player.query.filter(Player.id == post.author_id).first()
+			character.postcount = character.postcount - 1
+
+		thread.deleted = 1
+		flash('The thread has been soft-deleted.', 'success')
+
+	db.session().commit()
+	return redirect(url_for('route_forum_thread', thread=thread.id, page=1))
+
+@app.route('/forum/thread/lock/<int:id>')
+@admin_required(ADMIN_ACCOUNT_TYPE)
+def route_forum_thread_lock(id):
+	thread = ForumThread.query.filter(ForumThread.id == id).first()
+	if not thread:
+		return redirect(url_for('route_forum'))
+
+	if thread.locked:
+		thread.locked = 0
+		flash('The thread has been unlocked.', 'success')
+	else:
+		thread.locked = 1
+		flash('The thread has been locked.', 'success')
+
+	db.session().commit()
+	return redirect(url_for('route_forum_thread', thread=thread.id, page=1))
+
+@app.route('/forum/thread/pin/<int:id>')
+@admin_required(ADMIN_ACCOUNT_TYPE)
+def route_forum_thread_pin(id):
+	thread = ForumThread.query.filter(ForumThread.id == id).first()
+	if not thread:
+		return redirect(url_for('route_forum'))
+
+	if thread.pinned:
+		thread.pinned = 0
+		flash('The thread has been unpinned.', 'success')
+	else:
+		thread.pinned = 1
+		flash('The thread has been pinned.', 'success')
+
+	db.session().commit()
+	return redirect(url_for('route_forum_thread', thread=thread.id, page=1))
+
+@app.route('/forum/post/hard/<int:id>')
+@admin_required(ADMIN_ACCOUNT_TYPE)
+def route_forum_post_hard(id):
+	post = ForumPost.query.filter(ForumPost.id == id).first()
+	if not post:
+		return redirect(url_for('route_forum'))
+
+	thread_id = post.thread_id
+
+	character = Player.query.filter(Player.id == post.author_id).first()
+	character.postcount = character.postcount - 1
+
+	db.session().delete(post)
+	db.session().commit()
+
+	flash('The post has been permanently deleted.', 'success')
+	return redirect(url_for('route_forum_thread', thread=thread_id, page=1))
+
+@app.route('/forum/post/soft/<int:id>')
+@admin_required(ADMIN_ACCOUNT_TYPE)
+def route_forum_post_soft(id):
+	post = ForumPost.query.filter(ForumPost.id == id).first()
+	if not post:
+		return redirect(url_for('route_forum'))
+
+	if post.deleted:
+		character = Player.query.filter(Player.id == post.author_id).first()
+		character.postcount = character.postcount + 1
+
+		post.deleted = 0
+
+		flash('The post has been restored.', 'success')
+	else:
+		character = Player.query.filter(Player.id == post.author_id).first()
+		character.postcount = character.postcount - 1
+
+		post.deleted = 1
+
+		flash('The post has been soft-deleted.', 'success')
+
+	db.session().commit()
+
+	return redirect(url_for('route_forum_thread', thread=post.thread_id, page=1))
