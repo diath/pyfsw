@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, Integer, String, ForeignKey
 from pyfsw import db
 
 class Account(db.Model):
@@ -29,3 +29,22 @@ class Account(db.Model):
 
 	def __repr__(self):
 		return '<Account.{}>'.format(self.id)
+
+class LoginHistory(db.Model):
+	__tablename__ = 'login_history'
+
+	# Standard columns
+	id = Column(Integer, primary_key=True, unique=True)
+	account = Column(String(32))
+	ip = Column(String(32))
+	platform = Column(String(32))
+	browser = Column(String(32))
+	status = Column(Integer)
+	time = Column(Integer)
+
+	# Methods
+	def __init__(self):
+		pass
+
+	def __repr__(self):
+		return '<LoginHistory.{}>'.format(self.id)

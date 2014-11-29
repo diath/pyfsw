@@ -35,7 +35,7 @@ def init_globals():
 	g.year = date.today().year
 	g.admin_account_type = ADMIN_ACCOUNT_TYPE
 
-from pyfsw.models.account import Account
+from pyfsw.models.account import Account, LoginHistory
 from pyfsw.models.guild import Guild, GuildInvite, GuildMembership, GuildRank, GuildWar, GuildWarKill
 from pyfsw.models.player import Player, PlayerItem, PlayerStorage, PlayerDeath, PlayerOnline
 from pyfsw.models.house import House

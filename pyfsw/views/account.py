@@ -4,7 +4,7 @@ from time import time
 import random, string, re
 
 from pyfsw import app, db
-from pyfsw import Account, Player
+from pyfsw import Account, Player, LoginHistory
 from pyfsw import login_required, current_user
 from pyfsw import NEW_CHARACTER, DELETION_DELAY
 
@@ -28,13 +28,28 @@ def route_account_login_post():
 		hash.update(pswd.encode('utf-8'))
 		pswd = hash.hexdigest()
 
+	history = LoginHistory()
+	history.account = name
+	history.ip = request.environ.get('HTTP_X_REAL_IP', request.remote_addr)
+	history.platform = request.user_agent.platform
+	history.browser = request.user_agent.browser
+	history.time = int(time())
+
 	account = db.session().query(Account.id, Account.type, Account.web_access).filter(Account.name == name).filter(Account.password == pswd).first()
 	if not account:
+		history.status = 0
+		db.session().add(history)
+		db.session().commit()
+
 		return render_template('account/login.htm', error=True)
 
 	session['account'] = account.id
 	session['access'] = account.type
 	session['web_access'] = account.web_access
+
+	history.status = 1
+	db.session().add(history)
+	db.session().commit()
 
 	if 'next' in request.form:
 		return redirect(request.form['next'])
