@@ -8,16 +8,20 @@ from pyfsw import ZAYPAY_OPTIONS
 import requests
 from bs4 import BeautifulSoup
 from time import time
+from urllib.parse import parse_qs
 
 def zaypay_show_payment(payment_id, option):
 	request = requests.get('https://secure.zaypay.com///pay/{}/payments/{}/?key={}'.format(
-		option.price_id, payment_id, option.price_key
-	))
+		option.get('price_id', 0), payment_id, option.get('price_key', 0)
+	), headers={'Accept': 'application/xml'})
 
 	if request.status_code != 200:
 		return None
 
 	data = BeautifulSoup(request.text)
+	if not data.response:
+		return None
+
 	return data.response
 
 @app.route('/zaypay/pay')
@@ -27,6 +31,10 @@ def route_zaypay():
 		'zaypay/pay.htm',
 		options = ZAYPAY_OPTIONS, account_id = current_user().id
 	)
+
+@app.route('/zaypay/paid')
+def route_zaypay_paid():
+	return render_template('zaypay/paid.htm')
 
 @app.route('/zaypay/ipn')
 def route_zaypay_ipn():
@@ -49,20 +57,28 @@ def route_zaypay_ipn():
 
 	# Fetch the payment status
 	data = zaypay_show_payment(payment_id, option)
+	if not data:
+		# In case of a shitty payment, just send that it's been processed.
+		return '*ok*', 200
 
 	# Check the payment status
-	if data.payment.status != 'paid':
+	try:
+		if data.payment.findAll('status')[0].text != 'paid':
+			error = True
+	except Exception:
 		error = True
 
 	# Check if the code was already used
-	que = db.session().query(ZayPayHistory).filter(ZayPayHistory.payment_id == payment_id).first()
-	if que:
+	exists = db.session().query(ZayPayHistory).filter(ZayPayHistory.payment_id == payment_id).first()
+	if exists:
 		error = True
 
 	# Fetch the account
-	var = data.get('your-variables', '')
-	var = var.split('&')
-	var = var[0].split('=')[1]
+	try:
+		var = parse_qs(data.payment.findAll('your-variables')[0].text)
+		var = var.get('account_id')[0]
+	except Exception:
+		var = 0		
 
 	account = db.session().query(Account).filter(Account.id == int(var)).first()
 	if not account:
@@ -71,7 +87,7 @@ def route_zaypay_ipn():
 	# Add premium points and history entry
 	# Unlike with PayPal, we don't actually log failed transactions for ZayPay
 	if not error:
-		account.points += option.points
+		account.points += option.get('points', 0)
 
 		history = ZayPayHistory()
 		history.account_id = account.id
