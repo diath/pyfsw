@@ -35,7 +35,7 @@ def route_account_login_post():
 	history.browser = request.user_agent.browser
 	history.time = int(time())
 
-	account = db.session().query(Account.id, Account.type, Account.web_access).filter(Account.name == name).filter(Account.password == pswd).first()
+	account = db.session().query(Account.id, Account.type, Account.web_access, Account.creation).filter(Account.name == name).filter(Account.password == pswd).first()
 	if not account:
 		history.status = 0
 		db.session().add(history)

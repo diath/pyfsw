@@ -10,6 +10,14 @@
 </div>
 {% endif %}
 
+{% if thread.locked %}
+<div class="alert alert-danger">
+	<strong>Information</strong>
+	<br>
+	This thread is locked from further replies.
+</div>
+{% endif %}
+
 <div class="panel panel-default">
 	<div class="panel-heading">
 		Forum - Thread #{{ thread.id }} - {{ thread.subject }}
@@ -102,7 +110,7 @@
 	</ul>
 </div>
 
-{% if characters and not thread.locked %}
+{% if characters and not thread.locked or (thread.locked and session.access == g.admin_account_type) %}
 <div class="panel panel-default">
 	<div class="panel-heading">
 		Reply Box

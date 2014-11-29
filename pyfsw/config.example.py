@@ -40,6 +40,10 @@ ADMIN_ACCOUNT_TYPE = 5
 # Post Cooldown (A cooldown between creating a new forum thread/post, seconds)
 POST_COOLDOWN = 30
 
+# Forum Posting Requirements. (Account age in days)
+FORUM_LEVEL_REQUIREMENT = 20
+FORUM_ACCOUNT_AGE_REQUIREMENT = 7
+
 # Town Names
 TOWNS = {
 	0: 'All',
