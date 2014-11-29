@@ -14,9 +14,13 @@
 					<br>
 					<img class="outfit2" src="/outfit/{{ thread.player.looktype }}/{{ thread.player.lookhead }}/{{ thread.player.lookbody }}/{{ thread.player.looklegs }}/{{ thread.player.lookfeet }}/{{ thread.player.lookaddons }}">
 					<br>
+					{% if thread.player.group_id > 1 %}
+					{{ thread.player.group_id | staffrank }}
+					{% else %}
 					Level {{ thread.player.level }}
 					<br>
 					{{ thread.player.vocation | vocation(thread.player.group_id) }}
+					{% endif %}
 					<br>
 					Resident of {{ thread.player.town_id | town }}
 					<br>
@@ -51,9 +55,13 @@
 					<br>
 					<img class="outfit2" src="/outfit/{{ post.player.looktype }}/{{ post.player.lookhead }}/{{ post.player.lookbody }}/{{ post.player.looklegs }}/{{ post.player.lookfeet }}/{{ post.player.lookaddons }}">
 					<br>
+					{% if post.player.group_id > 1 %}
+					{{ post.player.group_id | staffrank }}
+					{% else %}
 					Level {{ post.player.level }}
 					<br>
 					{{ post.player.vocation | vocation(post.player.group_id) }}
+					{% endif %}
 					<br>
 					Resident of {{ post.player.town_id | town }}
 					<br>
