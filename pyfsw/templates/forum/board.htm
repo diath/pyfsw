@@ -18,7 +18,7 @@
 			</thead>
 			<tbody>
 			{% for thread in threads %}
-				<tr>
+				<tr{% if thread.deleted %} class="danger"{% endif %}>
 					<td>
 						{% if thread.pinned %}
 							<span class="glyphicon glyphicon-pushpin" title="Pinned"></span>

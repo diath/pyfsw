@@ -49,6 +49,7 @@ class ForumThread(db.Model):
 	author_id = Column(Integer)
 	content = Column(Text)
 	noescape = Column(Integer, default=0)
+	deleted = Column(Integer, default=0)
 
 	# Methods
 	def __init__(self):
@@ -66,6 +67,7 @@ class ForumPost(db.Model):
 	content = Column(Text)
 	timestamp = Column(Integer)
 	thread_id = Column(Integer, ForeignKey('forum_threads.id'))
+	deleted = Column(Integer, default=0)
 
 	# Methods
 	def __init__(self):

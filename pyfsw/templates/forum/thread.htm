@@ -2,6 +2,14 @@
 {% block title %} Forum - {{ thread.subject }} {% endblock %}
 {% block body %}
 
+{% if thread.deleted %}
+<div class="alert alert-danger">
+	<strong>Information</strong>
+	<br>
+	This thread has been deleted and is visible for staff only.
+</div>
+{% endif %}
+
 <div class="panel panel-default">
 	<div class="panel-heading">
 		Forum - Thread #{{ thread.id }} - {{ thread.subject }}
@@ -43,7 +51,8 @@
 </div>
 
 {% for post in posts %}
-<div class="panel panel-default">
+{% if not post.deleted or (post.deleted and session.access == g.admin_account_type) %}
+<div class="panel panel-default{% if post.deleted %} panel-danger{% endif %}">
 	<div class="panel-heading" id="post-{{ post.id }}">
 		<a href="#post-{{ post.id }}">Reply #{{ post.id }}</a>
 	</div>
@@ -76,6 +85,7 @@
 		</div>
 	</div>
 </div>
+{% endif %}
 {% endfor %}
 
 <div class="middle">

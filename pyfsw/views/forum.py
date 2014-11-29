@@ -1,4 +1,4 @@
-from flask import render_template, redirect, url_for, flash, request
+from flask import render_template, redirect, url_for, flash, request, session
 from flask.ext.sqlalchemy import Pagination
 
 from time import time
@@ -7,7 +7,7 @@ from pyfsw import app, db
 from pyfsw import current_user, login_required
 from pyfsw import Player
 from pyfsw import ForumCategory, ForumBoard, ForumThread, ForumPost
-from pyfsw import POST_COOLDOWN
+from pyfsw import POST_COOLDOWN, ADMIN_ACCOUNT_TYPE
 
 @app.route('/forum')
 def route_forum():
@@ -30,6 +30,9 @@ def route_forum_board(board, page):
 	perpage = 20
 
 	threads = ForumThread.query.filter(ForumThread.board_id == board.id)
+
+	if session.get('access', 0) != ADMIN_ACCOUNT_TYPE:
+		threads = threads.filter(ForumThread.deleted == 0)
 
 	if page == 1:
 		threads = threads.order_by(ForumThread.pinned.desc())
@@ -129,6 +132,9 @@ def route_forum_thread(thread, page):
 	if not thread:
 		return redirect(url_for('route_forum'))
 
+	if thread.deleted and session.get('access', 0) != ADMIN_ACCOUNT_TYPE:
+		return redirect(url_for('route_forum'))
+
 	player = db.session().query(
 		Player.name, Player.level, Player.vocation, Player.town_id, Player.group_id, Player.postcount,
 		Player.looktype, Player.lookhead, Player.lookbody, Player.looklegs, Player.lookfeet, Player.lookaddons
@@ -140,6 +146,10 @@ def route_forum_thread(thread, page):
 	perpage = 3
 
 	posts = ForumPost.query.filter(ForumPost.thread_id == thread.id)
+
+	if session.get('access', 0) != ADMIN_ACCOUNT_TYPE:
+		posts = posts.filter(ForumThread.deleted == 0)
+
 	posts = posts.order_by(ForumPost.timestamp.asc())
 	posts = posts.offset((page - 1) * perpage)
 	posts = posts.limit(perpage).all()
