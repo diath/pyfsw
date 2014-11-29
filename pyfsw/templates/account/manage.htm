@@ -64,14 +64,14 @@
 					<td class="right">
 						<a href="/account/edit/{{ player.id }}"><button class="btn btn-default btn-sm">Edit Comment</button></a>
 						{% if player.deletion == 0 %}
-						<a href="/account/delete/{{ player.id }}"><button class="btn btn-default btn-sm">Delete</button></a>
+						<a href="/account/delete/{{ player.id }}"><button class="btn btn-default btn-custom-small">Delete</button></a>
 						{% else %}
-						<a href="/account/restore/{{ player.id }}"><button class="btn btn-default btn-sm">Restore</button></a>
+						<a href="/account/restore/{{ player.id }}"><button class="btn btn-default btn-custom-small">Restore</button></a>
 						{% endif %}
 						{% if player.hidden == 1 %}
-						<a href="/account/show/{{ player.id }}"><button class="btn btn-default btn-sm">Show</button></a>
+						<a href="/account/show/{{ player.id }}"><button class="btn btn-default btn-custom-small">Show</button></a>
 						{% else %}
-						<a href="/account/hide/{{ player.id }}"><button class="btn btn-default btn-sm">Hide</button></a>
+						<a href="/account/hide/{{ player.id }}"><button class="btn btn-default btn-custom-small">Hide</button></a>
 						{% endif %}
 					</td>
 				</tr>
