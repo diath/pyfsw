@@ -40,7 +40,7 @@ ADMIN_ACCOUNT_TYPE = 5
 # Post Cooldown (A cooldown between creating a new forum thread/post, seconds)
 POST_COOLDOWN = 30
 
-# Forum Posting Requirements. (Account age in days)
+# Forum Posting Requirements (Account age in days)
 FORUM_LEVEL_REQUIREMENT = 20
 FORUM_ACCOUNT_AGE_REQUIREMENT = 7
 
@@ -52,6 +52,9 @@ TOWNS = {
 
 # House Price (per SQM)
 HOUSE_PRICE = 1000
+
+# Guild Level Requirement
+GUILD_LEVEL = 100
 
 # Deletion Delay (A delay before the server handles hard deleting a character in days)
 DELETION_DELAY = 60
