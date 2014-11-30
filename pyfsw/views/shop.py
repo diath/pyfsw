@@ -8,7 +8,12 @@ from pyfsw import login_required, current_user
 @app.route('/shop/offer')
 def route_shop():
 	categories = db.session.query(ShopCategory).all()
-	return render_template('shop/browse.htm', categories=categories)
+	user = current_user()
+
+	return render_template(
+		'shop/browse.htm',
+		categories=categories, user=user
+	)
 
 @app.route('/shop/order/<int:id>', methods=['GET'])
 @login_required

@@ -3,7 +3,12 @@
 {% block body %}
 
 <div class="panel panel-default">
-	<div class="panel-heading">Browse Offer</div>
+	<div class="panel-heading">
+		Browse Offer
+		{% if user %}
+			({{ user.points}} premium points)
+		{% endif %}
+	</div>
 	<div class="panel-body">
 		<ul id="Categories" class="nav nav-tabs">
 		{% for category in categories %}
