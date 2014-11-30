@@ -13,6 +13,7 @@ from pyfsw import filter_rank
 from pyfsw import current_user, login_required, is_guild_leader, is_guild_vice
 from pyfsw import Player
 from pyfsw import Guild, GuildInvite, GuildMembership, GuildRank, GuildWar
+from pyfsw import GUILD_LEVEL
 
 GUILD_NAME_EXPR = re.compile('^([a-zA-Z ]+)$')
 
@@ -69,8 +70,8 @@ def route_community_guild_create_post():
 		flash('You can not create a guild with not your own character.', 'error')
 		error = True
 
-	if character and character.level < 100:
-		flash('The character needs to be at least level 100.', 'error')
+	if character and character.level < GUILD_LEVEL:
+		flash('The character needs to be at least level {}.'.format(GUILD_LEVEL), 'error')
 		error = True
 
 	if character and character.getGuild():
