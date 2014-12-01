@@ -209,8 +209,12 @@ def route_forum_thread_post(id):
 
 	timestamp = int(time())
 	if session.get('access', 0) != ADMIN_ACCOUNT_TYPE:
-		if board.locked:
-			flash('You can not create a thread in a locked board.', 'error')
+		if thread.deleted:
+			flash('You can not post in a deleted thread.', 'error')
+			error = True
+
+		if thread.locked:
+			flash('You can not post in a locked thread.', 'error')
 			error = True
 
 		if user.lastpost + POST_COOLDOWN > timestamp:
