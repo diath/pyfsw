@@ -9,12 +9,14 @@
 	</div>
 </div>
 
-{% for _, option in options.items() %}
+{% for option in options %}
 <div class="panel panel-default">
-	<div class="panel-heading">Pay {{ option.amount }} EUR for {{ option.points }} premium points.</div>
+	<div class="panel-heading">Pay to receive {{ option.points }} premium points.</div>
 	<div class="panel-body">
 		<script src="http://www.zaypay.com/pay/{{ option.payalogue_id }}.js" type="text/javascript"></script>
-		Pay {{ option.amount }} EUR to receive {{ option.points }} premium points.
+		Pay to receive {{ option.points }} premium points.
+		<br>
+		The price varies depending on your country. The exact price will be shown on the payment screen once you proceed with the payment process.
 		<br>
 		<a href="http://www.zaypay.com/pay/{{ option.payalogue_id }}?account_id={{ account_id }}" onclick="ZPayment(this); return false">Click here to start the payment process</a>.
 	</div>

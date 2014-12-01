@@ -9,6 +9,7 @@ import requests
 from bs4 import BeautifulSoup
 from time import time
 from urllib.parse import parse_qs
+from collections import OrderedDict
 
 def zaypay_show_payment(payment_id, option):
 	request = requests.get('https://secure.zaypay.com///pay/{}/payments/{}/?key={}'.format(
@@ -51,9 +52,12 @@ def route_zaypay_ipn():
 		error = True
 
 	# Fetch the ZayPay option
-	option = ZAYPAY_OPTIONS.get(price_setting_id, None)
-	if not option:
-		error = True
+	option = None
+
+	for tmp in ZAYPAY_OPTIONS:
+		if tmp.price_id == price_setting_id:
+			option = tmp
+			break
 
 	# Fetch the payment status
 	data = zaypay_show_payment(payment_id, option)
