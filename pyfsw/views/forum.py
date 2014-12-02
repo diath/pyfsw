@@ -124,6 +124,7 @@ def route_forum_board_post(id):
 		thread.lastpost = timestamp
 		thread.author_id = character
 		thread.content = content
+		thread.deleted = 0
 
 		user.lastpost = timestamp
 		player.postcount = player.postcount + 1
@@ -145,7 +146,7 @@ def route_forum_thread(thread, page):
 		return redirect(url_for('route_forum'))
 
 	player = db.session().query(
-		Player.name, Player.level, Player.vocation, Player.town_id, Player.group_id, Player.postcount,
+		Player.name, Player.level, Player.vocation, Player.town_id, Player.group_id, Player.postcount, Player.signature,
 		Player.looktype, Player.lookhead, Player.lookbody, Player.looklegs, Player.lookfeet, Player.lookaddons
 	).filter(Player.id == thread.author_id).first()
 	if player:
@@ -157,7 +158,7 @@ def route_forum_thread(thread, page):
 	posts = ForumPost.query.filter(ForumPost.thread_id == thread.id)
 
 	if session.get('access', 0) != ADMIN_ACCOUNT_TYPE:
-		posts = posts.filter(ForumThread.deleted == 0)
+		posts = posts.filter(ForumPost.deleted == 0)
 
 	posts = posts.order_by(ForumPost.timestamp.asc())
 	posts = posts.offset((page - 1) * perpage)
@@ -165,7 +166,7 @@ def route_forum_thread(thread, page):
 
 	for post in posts:
 		player = db.session().query(
-			Player.name, Player.level, Player.vocation, Player.town_id, Player.group_id, Player.postcount,
+			Player.name, Player.level, Player.vocation, Player.town_id, Player.group_id, Player.postcount, Player.signature,
 			Player.looktype, Player.lookhead, Player.lookbody, Player.looklegs, Player.lookfeet, Player.lookaddons
 		).filter(Player.id == post.author_id).first()
 		if player:
@@ -233,7 +234,6 @@ def route_forum_thread_post(id):
 			flash('Your reply must be at least 4 characters long.', 'error')
 			error = True
 
-
 	if not error:
 		if len(content) > 512:
 			content = content[:512]
@@ -246,6 +246,7 @@ def route_forum_thread_post(id):
 		post.content = content
 		post.timestamp = timestamp
 		post.thread_id = id
+		post.deleted = 0
 
 		thread.lastpost = timestamp
 		user.lastpost = timestamp

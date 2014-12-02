@@ -67,6 +67,7 @@ class Player(db.Model):
 	comment = Column(String(255), default='')
 	hidden = Column(Integer, default=0)
 	postcount = Column(Integer, default=0)
+	signature = Column(String(255), default='')
 
 	# Relationships
 	storages = db.relationship('PlayerStorage', primaryjoin='Player.id == PlayerStorage.player_id', backref='players', passive_deletes=True)

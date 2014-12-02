@@ -53,6 +53,10 @@
 			{% else %}
 				{{ thread.content }}
 			{% endif %}
+			{% if thread.player.signature != '' %}
+			<hr>
+			{{ thread.player.signature }}
+			{% endif %}
 			</div>
 		</div>
 		{% if session.access == g.admin_account_type %}
@@ -115,6 +119,10 @@
 			</div>
 			<div class="col-md-10 left">
 				{{ post.content }}
+				{% if post.player.signature != '' %}
+				<hr>
+				{{ post.player.signature }}
+				{% endif %}
 			</div>
 		</div>
 		{% if session.access == g.admin_account_type %}

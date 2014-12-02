@@ -206,13 +206,52 @@ def route_account_edit(id):
 def route_account_edit_post(id):
 	account = current_user()
 	player = db.session().query(Player).filter(Player.id == id).first()
-	if player or account.id == player.account_id:
+	if player and account.id == player.account_id:
 		player.comment = request.form.get('comment', '', type=str)
 		db.session().commit()
 
 		flash('The character comment has been updated.', 'success')
 	else:
 		flash('You cannot edit the comment of a character that does not belong to you.', 'error')
+
+	return redirect(url_for('route_account_manage'))
+
+@app.route('/account/signature/<int:id>', methods=['GET'])
+@login_required
+def route_account_signature(id):
+	account = current_user()
+	player = db.session().query(Player.account_id, Player.signature).filter(Player.id == id).first()
+	if not account or not player or account.id != player.account_id:
+		return redirect(url_for('route_account_manage'))
+
+	return render_template(
+		'account/character_signature.htm',
+		id = id, signature = player.signature
+	)
+
+@app.route('/account/signature/<int:id>', methods=['POST'])
+@login_required
+def route_account_signature_post(id):
+	account = current_user()
+	player = Player.query.filter(Player.id == id).first()
+	if player and account.id == player.account_id:
+		signature = request.form.get('signature', '', type=str)
+
+		# Strip the signature
+		signature = signature.strip()
+
+		# Strip consecutive spaces
+		signature = ' '.join(signature.split())
+
+		# Make sure that len(signature) <= 255
+		signature = signature[:254]
+
+		player.signature = signature
+		db.session().commit()
+
+		flash('The character signature has been updated.', 'success')
+	else:
+		flash('You cannot edit the signature of a character that does not belong to you.', 'error')
 
 	return redirect(url_for('route_account_manage'))
 
