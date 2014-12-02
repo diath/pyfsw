@@ -110,6 +110,6 @@ PAYPAL_BUTTONS = [
 ]
 
 # ZayPay Options
-ZAYPAY_OPTIONS = {
-	ID: {'name': 'name', 'payalogue_id': 0, 'price_id': 0, 'price_key': '', 'points': 0, 'amount': '0.00'}
-}
+ZAYPAY_OPTIONS = [
+	{'name': 'name', 'payalogue_id': 0, 'price_id': 0, 'price_key': '', 'points': 0, 'amount': '0.00'}
+]

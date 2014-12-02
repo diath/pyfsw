@@ -9,7 +9,6 @@ import requests
 from bs4 import BeautifulSoup
 from time import time
 from urllib.parse import parse_qs
-from collections import OrderedDict
 
 def zaypay_show_payment(payment_id, option):
 	request = requests.get('https://secure.zaypay.com///pay/{}/payments/{}/?key={}'.format(
@@ -91,7 +90,7 @@ def route_zaypay_ipn():
 	# Add premium points and history entry
 	# Unlike with PayPal, we don't actually log failed transactions for ZayPay
 	if not error:
-		account.points += option.get('points', 0)
+		account.points += option.points
 
 		history = ZayPayHistory()
 		history.account_id = account.id
@@ -99,7 +98,7 @@ def route_zaypay_ipn():
 		history.payment_id = payment_id
 		history.price_setting_id = price_setting_id
 		history.amount = data.get('total-amount', 0.0)
-		history.points = option.get('points', 0)
+		history.points = option.points
 
 		db.session().add(history)
 		db.session().commit()
