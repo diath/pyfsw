@@ -8,6 +8,7 @@ from pyfsw import current_user, login_required, admin_required
 from pyfsw import Player
 from pyfsw import ForumCategory, ForumBoard, ForumThread, ForumPost
 from pyfsw import POST_COOLDOWN, ADMIN_ACCOUNT_TYPE, FORUM_LEVEL_REQUIREMENT, FORUM_ACCOUNT_AGE_REQUIREMENT
+from pyfsw import THREADS_PER_PAGE, POSTS_PER_PAGE
 
 @app.route('/forum')
 def route_forum():
@@ -27,7 +28,7 @@ def route_forum_board(board, page):
 		return redirect(url_for('route_forum'))
 
 	total = db.session().query(ForumThread.id).filter(ForumThread.board_id == board.id).count()
-	perpage = 20
+	perpage = THREADS_PER_PAGE
 
 	threads = ForumThread.query.filter(ForumThread.board_id == board.id)
 
@@ -153,7 +154,7 @@ def route_forum_thread(thread, page):
 		thread.player = player
 
 	total = db.session().query(ForumPost.id).filter(ForumPost.thread_id == thread.id).count()
-	perpage = 3
+	perpage = POSTS_PER_PAGE
 
 	posts = ForumPost.query.filter(ForumPost.thread_id == thread.id)
 

@@ -44,6 +44,12 @@ POST_COOLDOWN = 30
 FORUM_LEVEL_REQUIREMENT = 20
 FORUM_ACCOUNT_AGE_REQUIREMENT = 7
 
+# Threads per board page
+THREADS_PER_PAGE = 20
+
+# Posts per thread page
+POSTS_PER_PAGE = 10
+
 # Town Names
 TOWNS = {
 	0: 'All',
