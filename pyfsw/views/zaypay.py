@@ -94,7 +94,7 @@ def route_zaypay_ipn():
 	# Add premium points and history entry
 	# Unlike with PayPal, we don't actually log failed transactions for ZayPay
 	if not error:
-		account.points += option.points
+		account.points += option.get('points', 0)
 
 		history = ZayPayHistory()
 		history.account_id = account.id
@@ -102,7 +102,7 @@ def route_zaypay_ipn():
 		history.payment_id = payment_id
 		history.price_setting_id = price_setting_id
 		history.amount = data.get('total-amount', 0.0)
-		history.points = option.points
+		history.points = option.get('points', 0)
 
 		db.session().add(history)
 		db.session().commit()
