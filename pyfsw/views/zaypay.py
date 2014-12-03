@@ -54,9 +54,13 @@ def route_zaypay_ipn():
 	option = None
 
 	for tmp in ZAYPAY_OPTIONS:
-		if tmp.price_id == price_setting_id:
+		if tmp.get('price_id', 0) == price_setting_id:
 			option = tmp
 			break
+
+	# Check the option
+	if not option:
+		return '*ok*', 200
 
 	# Fetch the payment status
 	data = zaypay_show_payment(payment_id, option)
