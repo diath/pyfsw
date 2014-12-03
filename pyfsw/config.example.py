@@ -32,7 +32,7 @@ FONT_PATH = ''
 SERVER_NAME = ''
 
 # Page Description
-SERVER_DESCR = ''
+SITE_DESCR = ''
 
 # Admin Account Type
 ADMIN_ACCOUNT_TYPE = 5

@@ -31,7 +31,7 @@ cache = Cache(app, config={'CACHE_TYPE': 'simple'})
 @app.before_request
 def init_globals():
 	g.server_name = SERVER_NAME
-	g.server_description = SERVER_DESCR
+	g.site_description = SITE_DESCR
 	g.year = date.today().year
 	g.admin_account_type = ADMIN_ACCOUNT_TYPE
 
