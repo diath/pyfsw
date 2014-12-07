@@ -36,7 +36,11 @@ def filter_staffpos(value):
 
 @app.template_filter('town')
 def filter_town(value):
-	return TOWNS.get(value, 'Unknown')
+	town = TOWNS.get(value, None)
+	if not town:
+		return 'Unknown'
+
+	return town.get('name')
 
 @app.template_filter('rank')
 def filter_rank(value):

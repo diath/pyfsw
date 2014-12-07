@@ -52,8 +52,8 @@ POSTS_PER_PAGE = 10
 
 # Town Names
 TOWNS = {
-	0: 'All',
-	1: 'Some Town'
+	0: {'name': 'All', 'hidden': False},
+	1: {'name': 'Some Town', 'hidden': False},
 }
 
 # House Price (per SQM)

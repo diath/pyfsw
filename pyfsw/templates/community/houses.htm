@@ -10,9 +10,9 @@
 			</div>
 			<div class="panel-body">
 				<ul class="nav nav-pills nav-stacked">
-				{% for town in towns %}
-					{% if town != '' %}
-						<li{% if loop.index0 == town_id %} class="active"{% endif %}><a href="/community/houses/{{ loop.index0 }}">{{ town | town }}</a></li>
+				{% for id, town in towns.items() %}
+					{% if not town.hidden %}
+						<li{% if loop.index0 == town_id %} class="active"{% endif %}><a href="/community/houses/{{ loop.index0 }}">{{ id | town }}</a></li>
 					{% endif %}
 				{% endfor %}
 				</ul>
