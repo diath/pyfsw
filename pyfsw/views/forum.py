@@ -266,13 +266,16 @@ def route_forum_thread_hard(id):
 	if not thread:
 		return redirect(url_for('route_forum'))
 
-	character = Player.query.filter(Player.id == thread.author_id).first()
-	character.postcount = character.postcount - 1
+	if thread.deleted == 0:
+		character = Player.query.filter(Player.id == thread.author_id).first()
+		character.postcount = character.postcount - 1
 
 	posts = ForumPost.query.filter(ForumPost.thread_id == thread.id).all()
 	for post in posts:
-		character = Player.query.filter(Player.id == post.author_id).first()
-		character.postcount = character.postcount - 1
+		if thread.deleted == 0:
+			if post.deleted == 0:
+				character = Player.query.filter(Player.id == post.author_id).first()
+				character.postcount = character.postcount - 1
 
 		db.session().delete(post)
 
@@ -290,15 +293,16 @@ def route_forum_thread_soft(id):
 	if not thread:
 		return redirect(url_for('route_forum'))
 
-	posts = db.session().query(ForumPost.author_id).filter(ForumPost.thread_id == thread.id).all()
+	posts = db.session().query(ForumPost.author_id, ForumPost.deleted).filter(ForumPost.thread_id == thread.id).all()
 
 	if thread.deleted:
 		character = Player.query.filter(Player.id == thread.author_id).first()
 		character.postcount = character.postcount + 1
 
 		for post in posts:
-			character = Player.query.filter(Player.id == post.author_id).first()
-			character.postcount = character.postcount + 1
+			if post.deleted == 0:
+				character = Player.query.filter(Player.id == post.author_id).first()
+				character.postcount = character.postcount + 1
 
 		thread.deleted = 0
 		flash('The thread has been restored.', 'success')
@@ -307,8 +311,9 @@ def route_forum_thread_soft(id):
 		character.postcount = character.postcount - 1
 
 		for post in posts:
-			character = Player.query.filter(Player.id == post.author_id).first()
-			character.postcount = character.postcount - 1
+			if post.deleted == 0:
+				character = Player.query.filter(Player.id == post.author_id).first()
+				character.postcount = character.postcount - 1
 
 		thread.deleted = 1
 		flash('The thread has been soft-deleted.', 'success')
@@ -359,8 +364,9 @@ def route_forum_post_hard(id):
 
 	thread_id = post.thread_id
 
-	character = Player.query.filter(Player.id == post.author_id).first()
-	character.postcount = character.postcount - 1
+	if post.deleted == 0:
+		character = Player.query.filter(Player.id == post.author_id).first()
+		character.postcount = character.postcount - 1
 
 	db.session().delete(post)
 	db.session().commit()
@@ -375,16 +381,19 @@ def route_forum_post_soft(id):
 	if not post:
 		return redirect(url_for('route_forum'))
 
+	thread = ForumThread.query.filter(ForumThread.id == post.thread_id).first()
 	if post.deleted:
-		character = Player.query.filter(Player.id == post.author_id).first()
-		character.postcount = character.postcount + 1
+		if thread.deleted == 0:
+			character = Player.query.filter(Player.id == post.author_id).first()
+			character.postcount = character.postcount + 1
 
 		post.deleted = 0
 
 		flash('The post has been restored.', 'success')
 	else:
-		character = Player.query.filter(Player.id == post.author_id).first()
-		character.postcount = character.postcount - 1
+		if thread.deleted == 0:
+			character = Player.query.filter(Player.id == post.author_id).first()
+			character.postcount = character.postcount - 1
 
 		post.deleted = 1
 
