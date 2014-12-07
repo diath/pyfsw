@@ -63,7 +63,7 @@
 		<br>
 		<div class="row">
 			<div class="col-md-12">
-				<button class="btn btn-sm btn-default"><span class="glyphicon glyphicon-remove"></span> Hard Delete</button>
+				<a href="/forum/thread/hard/{{ thread.id }}"><button class="btn btn-sm btn-default"><span class="glyphicon glyphicon-remove"></span> Hard Delete</button></a>
 
 				{% if thread.deleted %}
 				<a href="/forum/thread/soft/{{ thread.id }}"><button class="btn btn-sm btn-default active"><span class="glyphicon glyphicon-minus"></span> Restore Thread</button></a>
@@ -112,7 +112,7 @@
 					<br>
 					Resident of {{ post.player.town_id | town }}
 					<br>
-					Posts: {{ post.player.postcount }}
+					Posts: {{ (post.player.postcount if post.player.postcount > 0 else 0) }}
 				{% else %}
 					Author Deleted
 				{% endif %}

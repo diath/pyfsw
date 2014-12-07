@@ -80,13 +80,13 @@ def route_forum_board_post(id):
 			break
 
 	if not found:
-		flash('You can not post from a character that does not belong to you.', 'error')
+		flash('You cannot post from a character that does not belong to you.', 'error')
 		error = True
 
 	timestamp = int(time())
 	if session.get('access', 0) != ADMIN_ACCOUNT_TYPE:
 		if board.locked:
-			flash('You can not create a thread in a locked board.', 'error')
+			flash('You cannot create a thread in a locked board.', 'error')
 			error = True
 
 		if user.lastpost + POST_COOLDOWN > timestamp:
@@ -94,20 +94,20 @@ def route_forum_board_post(id):
 			error = True
 
 		if user.creation + (60 * 60 * 24 * FORUM_ACCOUNT_AGE_REQUIREMENT) > timestamp:
-			flash('Your account must be at least {} days old before you are allowed to post on the forum.'.format(FORUM_ACCOUNT_AGE_REQUIREMENT), 'error')
+			flash('Your account must be at least {} days old to post on the forum.'.format(FORUM_ACCOUNT_AGE_REQUIREMENT), 'error')
 			error = True
 
 		if player.level < FORUM_LEVEL_REQUIREMENT:
-			flash('Your character must be at least level {} before you are allowed to post on the forum.'.format(FORUM_LEVEL_REQUIREMENT), 'error')
-			error = True
-
-		if len(subject) < 5:
-			flash('Yout thread subject must be at least 5 characters long', 'error')
+			flash('Your character must be at least level {} to post on the forum.'.format(FORUM_LEVEL_REQUIREMENT), 'error')
 			error = True
 
 		if len(content) < 15:
 			flash('Your thread content must be at least 15 characters long.', 'error')
 			error = True
+
+	if len(subject) < 5:
+		flash('Your thread subject must be at least 5 characters long', 'error')
+		error = True
 
 	if not error:
 		if len(content) > 512:
@@ -206,17 +206,17 @@ def route_forum_thread_post(id):
 			break
 
 	if not found:
-		flash('You can not post from a character that does not belong to you.', 'error')
+		flash('You cannot post from a character that does not belong to you.', 'error')
 		error = True
 
 	timestamp = int(time())
 	if session.get('access', 0) != ADMIN_ACCOUNT_TYPE:
 		if thread.deleted:
-			flash('You can not post in a deleted thread.', 'error')
+			flash('You cannot post in a deleted thread.', 'error')
 			error = True
 
 		if thread.locked:
-			flash('You can not post in a locked thread.', 'error')
+			flash('You cannot post in a locked thread.', 'error')
 			error = True
 
 		if user.lastpost + POST_COOLDOWN > timestamp:
@@ -224,11 +224,11 @@ def route_forum_thread_post(id):
 			error = True
 
 		if user.creation + (60 * 60 * 24 * FORUM_ACCOUNT_AGE_REQUIREMENT) > timestamp:
-			flash('Your account must be at least {} days old before you are allowed to post on the forum.'.format(FORUM_ACCOUNT_AGE_REQUIREMENT), 'error')
+			flash('Your account must be at least {} days old to post on the forum.'.format(FORUM_ACCOUNT_AGE_REQUIREMENT), 'error')
 			error = True
 
 		if player.level < FORUM_LEVEL_REQUIREMENT:
-			flash('Your character must be at least level {} before you are allowed to post on the forum.'.format(FORUM_LEVEL_REQUIREMENT), 'error')
+			flash('Your character must be at least level {} to post on the forum.'.format(FORUM_LEVEL_REQUIREMENT), 'error')
 			error = True
 
 		if len(content) < 4:
@@ -266,20 +266,23 @@ def route_forum_thread_hard(id):
 	if not thread:
 		return redirect(url_for('route_forum'))
 
-	character = Player.query.filter(Player.id == thread.author_id).first()
-	character.postcount = character.postcount - 1
+	if thread.deleted == 0:
+		character = Player.query.filter(Player.id == thread.author_id).first()
+		character.postcount = character.postcount - 1
 
 	posts = ForumPost.query.filter(ForumPost.thread_id == thread.id).all()
 	for post in posts:
-		character = Player.query.filter(Player.id == post.author_id).first()
-		character.postcount = character.postcount - 1
+		if thread.deleted == 0:
+			if post.deleted == 0:
+				character = Player.query.filter(Player.id == post.author_id).first()
+				character.postcount = character.postcount - 1
 
 		db.session().delete(post)
 
 	db.session().delete(thread)
 	db.session().commit()
 
-	flash('The thread has been permanently deleted.', 'success')
+	flash('The thread has been deleted permanently.', 'success')
 
 	return redirect(url_for('route_forum'))
 
@@ -290,15 +293,16 @@ def route_forum_thread_soft(id):
 	if not thread:
 		return redirect(url_for('route_forum'))
 
-	posts = db.session().query(ForumPost.author_id).filter(ForumPost.thread_id == thread.id).all()
+	posts = db.session().query(ForumPost.author_id, ForumPost.deleted).filter(ForumPost.thread_id == thread.id).all()
 
 	if thread.deleted:
 		character = Player.query.filter(Player.id == thread.author_id).first()
 		character.postcount = character.postcount + 1
 
 		for post in posts:
-			character = Player.query.filter(Player.id == post.author_id).first()
-			character.postcount = character.postcount + 1
+			if post.deleted == 0:
+				character = Player.query.filter(Player.id == post.author_id).first()
+				character.postcount = character.postcount + 1
 
 		thread.deleted = 0
 		flash('The thread has been restored.', 'success')
@@ -307,8 +311,9 @@ def route_forum_thread_soft(id):
 		character.postcount = character.postcount - 1
 
 		for post in posts:
-			character = Player.query.filter(Player.id == post.author_id).first()
-			character.postcount = character.postcount - 1
+			if post.deleted == 0:
+				character = Player.query.filter(Player.id == post.author_id).first()
+				character.postcount = character.postcount - 1
 
 		thread.deleted = 1
 		flash('The thread has been soft-deleted.', 'success')
@@ -359,13 +364,14 @@ def route_forum_post_hard(id):
 
 	thread_id = post.thread_id
 
-	character = Player.query.filter(Player.id == post.author_id).first()
-	character.postcount = character.postcount - 1
+	if post.deleted == 0:
+		character = Player.query.filter(Player.id == post.author_id).first()
+		character.postcount = character.postcount - 1
 
 	db.session().delete(post)
 	db.session().commit()
 
-	flash('The post has been permanently deleted.', 'success')
+	flash('The post has been deleted permanently.', 'success')
 	return redirect(url_for('route_forum_thread', thread=thread_id, page=1))
 
 @app.route('/forum/post/soft/<int:id>')
@@ -375,16 +381,19 @@ def route_forum_post_soft(id):
 	if not post:
 		return redirect(url_for('route_forum'))
 
+	thread = ForumThread.query.filter(ForumThread.id == post.thread_id).first()
 	if post.deleted:
-		character = Player.query.filter(Player.id == post.author_id).first()
-		character.postcount = character.postcount + 1
+		if thread.deleted == 0:
+			character = Player.query.filter(Player.id == post.author_id).first()
+			character.postcount = character.postcount + 1
 
 		post.deleted = 0
 
 		flash('The post has been restored.', 'success')
 	else:
-		character = Player.query.filter(Player.id == post.author_id).first()
-		character.postcount = character.postcount - 1
+		if thread.deleted == 0:
+			character = Player.query.filter(Player.id == post.author_id).first()
+			character.postcount = character.postcount - 1
 
 		post.deleted = 1
 
