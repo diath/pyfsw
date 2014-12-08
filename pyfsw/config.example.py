@@ -34,6 +34,15 @@ SERVER_NAME = ''
 # Page Description
 SITE_DESCR = ''
 
+# Status host
+STATUS_HOST = '127.0.0.1'
+
+# Status port
+STATUS_PORT = 7171
+
+# Status timeout (seconds, cannot be lower than statusTimeout in config.lua)
+STATUS_TIMEOUT = 5 * 60
+
 # Admin Account Type
 ADMIN_ACCOUNT_TYPE = 5
 
