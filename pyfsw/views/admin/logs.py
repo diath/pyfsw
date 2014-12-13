@@ -40,7 +40,7 @@ def route_admin_logs_login_search_post():
 	history = db.session().query(
 		LoginHistory.id, LoginHistory.account, LoginHistory.ip, LoginHistory.platform, 
 		LoginHistory.browser, LoginHistory.status, LoginHistory.time
-	)
+	).order_by(LoginHistory.time.desc())
 
 	if name != '':
 		accountName = db.session().query(Account.name).filter(Account.name == name).first()
@@ -48,13 +48,13 @@ def route_admin_logs_login_search_post():
 			flash('The account name you are trying to search for does not exist.', 'error')
 			return redirect(url_for('route_admin_logs_login'))
 
-		history = history.order_by(LoginHistory.time.desc()).filter(LoginHistory.account == accountName[0]).all()
+		history = historyfilter(LoginHistory.account == accountName[0]).all()
 
 		if not history:
 			flash('The is no login history for this account name.', 'error')
 			return redirect(url_for('route_admin_logs_login'))
 	elif ip != '':
-		history = history.order_by(LoginHistory.time.desc()).filter(LoginHistory.ip == ip).all()
+		history = history.filter(LoginHistory.ip == ip).all()
 
 		if not history:
 			flash('The submitted IP address did not match any records.', 'error')

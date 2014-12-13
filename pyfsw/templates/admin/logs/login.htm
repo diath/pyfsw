@@ -6,26 +6,24 @@
 		Search Login History
 	</div>
 	<div class="panel-body">
-		<table class="table table-default">
-			<form method="post" action="/admin/logs/login/search">
-				<div class="col-sm-10">
-					<input class="form-control" type="text" name="name" placeholder="Account Name" value="">
-				</div>
-				<div class="col-sm-2">
-					<button class="btn btn-default btm-sm btn-block btn-info" type="submit">Search</button>
-				</div>
-			</form>
-		</table>
-		<table class="table table-default">
-			<form method="post" action="/admin/logs/login/search">
-				<div class="col-sm-10">
-					<input class="form-control" type="text" name="ipAddress" placeholder="IP Address" value="">
-				</div>
-				<div class="col-sm-2">
-					<button class="btn btn-default btm-sm btn-block btn-info" type="submit">Search</button>
-				</div>
-			</form>
-		</table>
+		<form method="post" action="/admin/logs/login/search">
+			<div class="col-sm-10">
+				<input class="form-control" type="text" name="name" placeholder="Account Name" value="">
+			</div>
+			<div class="col-sm-2">
+				<button class="btn btn-default btm-sm btn-block btn-info" type="submit">Search</button>
+			</div>
+		</form>
+	</div>
+	<div class="panel-body">
+		<form method="post" action="/admin/logs/login/search">
+			<div class="col-sm-10">
+				<input class="form-control" type="text" name="ipAddress" placeholder="IP Address" value="">
+			</div>
+			<div class="col-sm-2">
+				<button class="btn btn-default btm-sm btn-block btn-info" type="submit">Search</button>
+			</div>
+		</form>
 	</div>
 </div>
 
@@ -53,12 +51,12 @@
 					<td>{{ data.id }}</td>
 					<td>{{ data.account }}</td>
 					<td><a href="http://www.ip-tracker.org/locator/ip-lookup.php?ip={{ data.ip }}" target="_blank">{{ data.ip }}</a></td>
-					<td><img src="../../../static/img/misc/platform/{{ data.platform }}.png" title="{{ data.platform }}" alt="{{ data.platform }}"/></td>
-					<td><img src="../../../static/img/misc/browser/{{ data.browser }}.png"  title="{{ data.browser }}" alt="{{ data.browser }}"/></td>
+					<td><img src="/static/img/misc/platform/{{ data.platform }}.png" title="{{ data.platform }}" alt="{{ data.platform }}"/></td>
+					<td><img src="/static/img/misc/browser/{{ data.browser }}.png"  title="{{ data.browser }}" alt="{{ data.browser }}"/></td>
 					{% if data.status == 1 %}
-					<td><img src="../../../static/img/misc/success.png" title="success" alt="success"/></td>
+					<td><img src="/static/img/misc/success.png" title="success" alt="success"/></td>
 					{% else %}
-					<td><img src="../../../static/img/misc/failure.png" title="failure" alt="failure"/></td>
+					<td><img src="/static/img/misc/failure.png" title="failure" alt="failure"/></td>
 					{% endif %}
 					<td>{{ data.time | datetime }}</td>
 					<td class="right">
