@@ -33,6 +33,11 @@
 						<a class="list-group-item active" href="#">Shop</a>
 						<a class="list-group-item" href="/admin/shop/categories">Categories</a>
 						<a class="list-group-item" href="/admin/shop/items">Items</a>
+						<!-- Logs -->
+						<a class="list-group-item active" href="#">Logs</a>
+						<a class="list-group-item" href="/admin/logs/login">Login</a>
+						<a class="list-group-item" href="/admin/logs/paypal">PayPal</a>
+						<a class="list-group-item" href="/admin/logs/zaypay">ZayPay</a>
 					</div>
 				</div>
 				<!-- Content -->
@@ -56,6 +61,34 @@
 					{% if messages %}
 					<div class="alert alert-success">
 						<strong>Success</strong>
+						<ul>
+						{% for message in messages %}
+							<li>{{ message }}</li>
+						{% endfor %}
+						</ul>
+					</div>
+					{% endif %}
+					{% endwith %}
+
+					<!-- Warning messages -->
+					{% with messages = get_flashed_messages(category_filter=['warning']) %}
+					{% if messages %}
+					<div class="alert alert-warning">
+						<strong>Warning</strong>
+						<ul>
+						{% for message in messages %}
+							<li>{{ message }}</li>
+						{% endfor %}
+						</ul>
+					</div>
+					{% endif %}
+					{% endwith %}
+
+					<!-- Info messages -->
+					{% with messages = get_flashed_messages(category_filter=['info']) %}
+					{% if messages %}
+					<div class="alert alert-info">
+						<strong>Info</strong>
 						<ul>
 						{% for message in messages %}
 							<li>{{ message }}</li>

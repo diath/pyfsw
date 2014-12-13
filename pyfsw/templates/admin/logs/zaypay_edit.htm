@@ -1,0 +1,29 @@
+{% extends "admin.htm" %}
+{% block body %}
+
+<div class="panel panel-primary">
+	<div class="panel-heading">
+		Edit Donation Entry
+	</div>
+	<div class="panel-body">
+		<form method="POST" action="/admin/logs/zaypay/edit/{{ history.id }}">
+			<div class="form-group">
+				<label for="inputAccountID">Account ID</label>
+				<input type="number" class="form-control" id="inputAccountID" name="accountID" placeholder="Account ID" value="{{ history.account_id }}" required>
+			</div>
+			<div class="form-group">
+				<label for="inputTimestamp">Timestamp (set to '0' for current timestamp)</label>
+				<input type="number" class="form-control" id="inputTimestamp" name="timestamp" placeholder="Timestamp" value="{{ history.timestamp }}" required>
+			</div>
+			<div class="form-group">
+				<label for="inputAmount">Amount</label>
+				<input type="number" class="form-control" id="inputAmount" name="amount" placeholder="Amount" value="{{ history.amount }}" required>
+			</div>
+			<button type="submit" class="btn btn-primary btn-block">
+				<span class="glyphicon glyphicon-ok"></span> Save
+			</button>
+		</form>
+	</div>
+</div>
+
+{% endblock %}

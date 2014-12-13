@@ -20,5 +20,29 @@
 		{% endfor %}
 		</ul>
 	</div>
-	{% endif %}
+{% endif %}
+{% endwith %}
+{% with messages = get_flashed_messages(category_filter=['warning']) %}
+{% if messages %}
+	<div class="alert alert-warning">
+	<strong>Warning</strong>
+		<ul>
+		{% for message in messages %}
+			<li>{{ message }}</li>
+		{% endfor %}
+		</ul>
+	</div>
+{% endif %}
+{% endwith %}
+{% with messages = get_flashed_messages(category_filter=['info']) %}
+{% if messages %}
+	<div class="alert alert-info">
+	<strong>Info</strong>
+		<ul>
+		{% for message in messages %}
+			<li>{{ message }}</li>
+		{% endfor %}
+		</ul>
+	</div>
+{% endif %}
 {% endwith %}
