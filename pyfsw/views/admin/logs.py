@@ -7,7 +7,6 @@ from sqlalchemy import func
 from pyfsw import app, db
 from pyfsw import admin_required, current_user
 from pyfsw import Account, LoginHistory, PayPalHistory, ZayPayHistory
-from pyfsw import is_number
 
 # Handle Login Logs
 @app.route('/admin/logs/login')
@@ -48,7 +47,7 @@ def route_admin_logs_login_search_post():
 			flash('The account name you are trying to search for does not exist.', 'error')
 			return redirect(url_for('route_admin_logs_login'))
 
-		history = historyfilter(LoginHistory.account == accountName[0]).all()
+		history = history.filter(LoginHistory.account == accountName[0]).all()
 
 		if not history:
 			flash('The is no login history for this account name.', 'error')
@@ -82,36 +81,23 @@ def route_admin_logs_paypal():
 		history = history
 	)
 
-@app.route('/admin/logs/paypal/sort/today')
+@app.route('/admin/logs/paypal/sort/<int:duration>')
 @admin_required(5)
-def route_admin_logs_paypal_sort_today():
-	day = int(time()) - (60 * 60 * 24)
-	history = PayPalHistory.query.filter(PayPalHistory.timestamp > day).all()
-	durationTotal = db.session().query(func.sum(PayPalHistory.amount)).filter(PayPalHistory.timestamp > day).first()
+def route_admin_logs_paypal_sort(duration):
+	durationTime = int(time()) - (60 * 60 * 24 * duration)
+	history = PayPalHistory.query.filter(PayPalHistory.timestamp > durationTime).all()
+	durationTotal = db.session().query(func.sum(PayPalHistory.amount)).filter(PayPalHistory.timestamp > durationTime).first()
 
-	return render_template(
-		'admin/logs/paypal.htm',
-		history = history, durationTotal = durationTotal
-	)
+	if not len(history):
+		flash('No donation records were found within the specified range.', 'error')
+		return redirect(url_for('route_admin_logs_paypal'))
 
-@app.route('/admin/logs/paypal/sort/week')
-@admin_required(5)
-def route_admin_logs_paypal_sort_week():
-	week = int(time()) - (60 * 60 * 24 * 7)
-	history = PayPalHistory.query.filter(PayPalHistory.timestamp > week).all()
-	durationTotal = db.session().query(func.sum(PayPalHistory.amount)).filter(PayPalHistory.timestamp > week).first()
-
-	return render_template(
-		'admin/logs/paypal.htm',
-		history = history, durationTotal = durationTotal
-	)
-
-@app.route('/admin/logs/paypal/sort/month')
-@admin_required(5)
-def route_admin_logs_paypal_sort_month():
-	month = int(time()) - (60 * 60 * 24 * 7 * 30)
-	history = PayPalHistory.query.filter(PayPalHistory.timestamp > month).all()
-	durationTotal = db.session().query(func.sum(PayPalHistory.amount)).filter(PayPalHistory.timestamp > month).first()
+	flash('You have received {} {} in the past {} {}.'.format(
+		len(history),
+		'donations' if len(history) != 1 else 'donation',
+		duration if duration != 1 else '',
+		('days' if duration != 1 else 'day')
+	), 'success')
 
 	return render_template(
 		'admin/logs/paypal.htm',
@@ -123,6 +109,7 @@ def route_admin_logs_paypal_sort_month():
 def route_admin_logs_paypal_sort_all():
 	history = PayPalHistory.query.order_by(PayPalHistory.timestamp.desc()).all()
 	durationTotal = db.session().query(func.sum(PayPalHistory.amount)).first()
+	flash('You have received {} donations total.'.format(len(history)), 'success')
 
 	return render_template(
 		'admin/logs/paypal.htm',
@@ -184,36 +171,23 @@ def route_admin_logs_zaypay():
 		history = history
 	)
 
-@app.route('/admin/logs/zaypay/sort/today')
+@app.route('/admin/logs/zaypay/sort/<int:duration>')
 @admin_required(5)
-def route_admin_logs_zaypay_sort_today():
-	day = int(time()) - (60 * 60 * 24)
-	history = ZayPayHistory.query.filter(ZayPayHistory.timestamp > day).all()
-	durationTotal = db.session().query(func.sum(ZayPayHistory.amount)).filter(ZayPayHistory.timestamp > day).first()
+def route_admin_logs_zaypay_sort(duration):
+	durationTime = int(time()) - (60 * 60 * 24 * duration)
+	history = ZayPayHistory.query.filter(ZayPayHistory.timestamp > durationTime).all()
+	durationTotal = db.session().query(func.sum(ZayPayHistory.amount)).filter(ZayPayHistory.timestamp > durationTime).first()
 
-	return render_template(
-		'admin/logs/zaypay.htm',
-		history = history, durationTotal = durationTotal
-	)
+	if not len(history):
+		flash('No donation records were found within the specified range.', 'error')
+		return redirect(url_for('route_admin_logs_zaypay'))
 
-@app.route('/admin/logs/zaypay/sort/week')
-@admin_required(5)
-def route_admin_logs_zaypay_sort_week():
-	week = int(time()) - (60 * 60 * 24 * 7)
-	history = ZayPayHistory.query.filter(ZayPayHistory.timestamp > week).all()
-	durationTotal = db.session().query(func.sum(ZayPayHistory.amount)).filter(ZayPayHistory.timestamp > week).first()
-
-	return render_template(
-		'admin/logs/zaypay.htm',
-		history = history, durationTotal = durationTotal
-	)
-
-@app.route('/admin/logs/zaypay/sort/month')
-@admin_required(5)
-def route_admin_logs_zaypay_sort_month():
-	month = int(time()) - (60 * 60 * 24 * 7 * 30)
-	history = ZayPayHistory.query.filter(ZayPayHistory.timestamp > month).all()
-	durationTotal = db.session().query(func.sum(ZayPayHistory.amount)).filter(ZayPayHistory.timestamp > month).first()
+	flash('You have received {} {} in the past {} {}.'.format(
+		len(history),
+		'donations' if len(history) != 1 else 'donation',
+		duration if duration != 1 else '',
+		('days' if duration != 1 else 'day')
+	), 'success')
 
 	return render_template(
 		'admin/logs/zaypay.htm',
@@ -225,6 +199,7 @@ def route_admin_logs_zaypay_sort_month():
 def route_admin_logs_zaypay_sort_all():
 	history = ZayPayHistory.query.order_by(ZayPayHistory.timestamp.desc()).all()
 	durationTotal = db.session().query(func.sum(ZayPayHistory.amount)).first()
+	flash('You have received {} donations total.'.format(len(history)), 'success')
 
 	return render_template(
 		'admin/logs/zaypay.htm',

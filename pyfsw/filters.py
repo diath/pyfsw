@@ -8,6 +8,17 @@ from pyfsw import DATE_FORMAT, GENDERS, VOCATIONS, TOWNS, STAFF_POSITIONS
 def filter_datetime(value):
 	return datetime.fromtimestamp(int(value)).strftime(DATE_FORMAT)
 
+@app.template_filter('worddate')
+def filter_worddate(value):
+	if value == 1:
+		return 'day'
+	elif value == 7:
+		return 'week'
+	elif value == 30:
+		return 'month'
+
+	return value
+
 @app.template_filter('timetotal')
 def filter_timetotal(value):
 	value = int(value)

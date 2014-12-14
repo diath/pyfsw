@@ -20,14 +20,14 @@
 					<tr>
 						<td>
 							<a href="/admin/logs/zaypay#"><button class="btn btn-default">Last 10</button></a>
-							<a href="/admin/logs/zaypay/sort/today"><button class="btn btn-default">Today</button></a>
-							<a href="/admin/logs/zaypay/sort/week"><button class="btn btn-default">Last week</button></a>
-							<a href="/admin/logs/zaypay/sort/month"><button class="btn btn-default">Last month</button></a>
+							<a href="/admin/logs/zaypay/sort/1"><button class="btn btn-default">Today</button></a>
+							<a href="/admin/logs/zaypay/sort/7"><button class="btn btn-default">Last week</button></a>
+							<a href="/admin/logs/zaypay/sort/30"><button class="btn btn-default">Last month</button></a>
 							<a href="/admin/logs/zaypay/sort/all"><button class="btn btn-default">All time</button></a>
 						</td>
 						{% if durationTotal %}
 						<td class="right">
-							<a href="#"><span class="btn btn-success">{{ durationTotal[0] }} EUR</span></a>
+							<a href="#"><span class="btn btn-success">{{ durationTotal[0] if durationTotal[0] else 0 }} EUR</span></a>
 						</td>
 						{%  endif %}
 					</tr>
