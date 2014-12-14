@@ -1,0 +1,77 @@
+{% extends "admin.htm" %}
+{% block body %}
+
+<div class="panel panel-primary">
+	<div class="panel-heading">
+		Sort PayPal History
+	</div>
+	<div class="panel-body">
+		<div class="tab-pane" id="Manage">
+			<table class="table table-striped table-hover">
+				<thread>
+					<tr>
+						<th>Sort Options</th>
+						{% if durationTotal %}
+						<th class="right">Total</th>
+						{%  endif %}
+					</tr>
+				</thread>
+				<tbody>
+					<tr>
+						<td>
+							<a href="/admin/logs/paypal#"><button class="btn btn-default">Last 10</button></a>
+							<a href="/admin/logs/paypal/sort/1"><button class="btn btn-default">Today</button></a>
+							<a href="/admin/logs/paypal/sort/7"><button class="btn btn-default">Last week</button></a>
+							<a href="/admin/logs/paypal/sort/30"><button class="btn btn-default">Last month</button></a>
+							<a href="/admin/logs/paypal/sort/all"><button class="btn btn-default">All time</button></a>
+						</td>
+						{% if durationTotal %}
+						<td class="right">
+							<a href="#"><span class="btn btn-success">{{ durationTotal[0] if durationTotal[0] else 0 }} USD</span></a>
+						</td>
+						{%  endif %}
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
+
+<div class="panel panel-primary">
+	<div class="panel-heading">
+		PayPal History
+	</div>
+	<div class="panel-body">
+		<table class="table table-striped table-hover">
+			<thead>
+				<tr>
+					<th>#</th>
+					<th>Account ID</th>
+					<th>Date</th>
+					<th>Amount</th>
+					<th class="right">Options</th>
+				</tr>
+			</thead>
+			<tbody>
+			{% for data in history %}
+				<tr>
+					<td>{{ data.id }}</td>
+					<td>{{ data.account_id }}</td>
+					<td>{{ data.timestamp | datetime }}</td>
+					<td>{{ data.amount }} USD</td>
+					<td class="right">
+						<a href="/admin/logs/paypal/edit/{{ data.id }}"><button class="btn btn-sm btn-primary">
+							<span class="glyphicon glyphicon-pencil"></span> Edit
+						</button></a>
+						<a href="/admin/logs/paypal/delete/{{ data.id }}"><button class="btn btn-sm btn-danger">
+							<span class="glyphicon glyphicon-trash"></span> Delete
+						</button></a>
+					</td>
+				</tr>
+			{% endfor %}
+			</tbody>
+		</table>
+	</div>
+</div>
+
+{% endblock %}

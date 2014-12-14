@@ -50,4 +50,4 @@ from pyfsw.helpers import *
 
 from pyfsw.views import news, forum, account, community, community_guilds, library, shop
 from pyfsw.views import error, captcha, messages, status, outfit, paypal, zaypay
-from pyfsw.views.admin import dashboard, news, forum, community, shop
+from pyfsw.views.admin import dashboard, news, forum, community, shop, logs

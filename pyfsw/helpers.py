@@ -107,4 +107,11 @@ def get_player_equipment(player_id):
 
 	return ret
 
+def is_number(value):
+	try:
+		float(value)
+		return True
+	except ValueError:
+		return False
+
 app.jinja_env.globals.update(get_library=get_library)
