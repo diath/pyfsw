@@ -1,8 +1,7 @@
 from flask import redirect, render_template, request, url_for, flash, session
+from sqlalchemy import func
 
 from time import time
-
-from sqlalchemy import func
 
 from pyfsw import app, db
 from pyfsw import admin_required, current_user
@@ -96,7 +95,7 @@ def route_admin_logs_paypal_sort(duration):
 		len(history),
 		'donations' if len(history) != 1 else 'donation',
 		duration if duration != 1 else '',
-		('days' if duration != 1 else 'day')
+		'days' if duration != 1 else 'day'
 	), 'success')
 
 	return render_template(
@@ -186,7 +185,7 @@ def route_admin_logs_zaypay_sort(duration):
 		len(history),
 		'donations' if len(history) != 1 else 'donation',
 		duration if duration != 1 else '',
-		('days' if duration != 1 else 'day')
+		'days' if duration != 1 else 'day'
 	), 'success')
 
 	return render_template(
