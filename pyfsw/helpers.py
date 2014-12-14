@@ -107,9 +107,9 @@ def get_player_equipment(player_id):
 
 	return ret
 
-def is_number(int):
+def is_number(value):
 	try:
-		float(int)
+		float(value)
 		return True
 	except ValueError:
 		return False
