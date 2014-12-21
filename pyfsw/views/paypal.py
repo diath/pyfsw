@@ -52,7 +52,7 @@ def route_paypal_ipn():
 	amount = request.form.get('mc_gross', '', type=str)
 	button = None
 	for v in PAYPAL_BUTTONS:
-		if v['amount'] == amount:
+		if v.get('amount', '0.00') == amount:
 			button = v
 			break
 
@@ -60,7 +60,7 @@ def route_paypal_ipn():
 		button = {'amount': '0.00', 'points': 0}
 
 	if not error:
-		account.points += button['points']
+		account.points += button.get('points', 0)
 		db.session().commit()
 
 	history = PayPalHistory()
@@ -69,8 +69,8 @@ def route_paypal_ipn():
 	history.status = status
 	history.test = test
 	history.origin = host
-	history.amount = button['amount']
-	history.points = button['points']
+	history.amount = button.get('amount', 0)
+	history.points = button.get('points', 0)
 
 	db.session().add(history)
 	db.session().commit()
