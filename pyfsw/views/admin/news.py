@@ -54,6 +54,7 @@ def route_admin_news_compose_post():
 		thread.lastpost = timestamp
 		thread.author_id = poster_id
 		thread.content = thread_content
+		thread.noescape = 1
 
 		db.session().add(thread)
 		db.session().commit()
