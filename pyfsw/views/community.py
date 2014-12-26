@@ -1,4 +1,4 @@
-from flask import render_template, request, redirect, url_for
+from flask import render_template, request, redirect, url_for, flash
 from flask.ext.sqlalchemy import Pagination
 
 from pyfsw import app, db, cache
@@ -71,31 +71,7 @@ def route_community_player_post():
 		flash('The character you are trying to search does not exist.', 'error')
 		return redirect(url_for('route_community_player_get'))
 
-	hp = int((player.health / player.healthmax) * 100)
-	mp = int((player.mana / player.manamax) * 100)
-	sp = int((player.stamina / 2520) * 100)
-	up = int((player.soul / 200) * 100)
-	eq = get_player_equipment(player.id)
-
-	player.deaths = PlayerDeath.query.filter(PlayerDeath.player_id == player.id)
-	player.deaths = player.deaths.order_by(PlayerDeath.time.desc()).limit(10).all()
-
-	kills = db.session().query(PlayerDeath.player_id, PlayerDeath.level, PlayerDeath.time)
-	kills = kills.filter(PlayerDeath.is_player == 1).filter(PlayerDeath.killed_by == player.name)
-	kills = kills.order_by(PlayerDeath.time.desc()).limit(5).all()
-
-	for kill in kills:
-		target = db.session.query(Player.name).filter(Player.id == kill.player_id).first()
-		kill.target = target.name
-
-	characters = db.session().query(Player.name, Player.level, Player.vocation, Player.group_id)
-	characters = characters.filter(Player.account_id == player.account_id).all()
-
-	return render_template(
-		'community/player_view.htm', player=player, guild=player.getGuild(),
-		quests=QUESTS, achievements=ACHIEVEMENTS, hp=hp, mp=mp,
-		sp=sp, up=up, eq=eq, kills=kills, characters=characters
-	)
+	return redirect(url_for('route_community_player_get_name', name=player.name))
 
 @app.route('/community/highscores/<string:type>/<int:page>')
 @cache.memoize(timeout=CACHE_TIME)
