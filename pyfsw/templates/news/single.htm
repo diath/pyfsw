@@ -21,7 +21,14 @@
 				 on {{ entry.timestamp | datetime }}.
 			</div>
 			<div class="col-xs-6 right">
-				<a href="/forum/thread/{{ entry.thread_id }}/1">{{ entry.comments }} comments</a>
+				<a href="/forum/thread/{{ entry.thread_id }}/1">
+					{{ entry.comments }} 
+					{% if entry.comments == 1 %}
+						comment
+					{% else %}
+						comments
+					{% endif %}
+				</a>
 			</div>
 		</div>
 		{% endautoescape %}
