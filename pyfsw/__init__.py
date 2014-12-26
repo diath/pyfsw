@@ -23,6 +23,13 @@ if DEBUG:
 		app.config['DEBUG_TB_PROFILER_ENABLED'] = True
 
 	DebugToolbarExtension(app)
+else:
+	import logging
+
+	handler = logging.FileHandler(LOG_FILE)
+	handler.setLevel(logging.WARNING)
+
+	app.logger.addHandler(handler)
 
 BASE_PATH = path.dirname(inspect.getfile(inspect.currentframe()))
 db = SQLAlchemy(app)

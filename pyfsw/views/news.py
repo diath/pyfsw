@@ -34,6 +34,7 @@ def route_news_single(id):
 
 @app.route('/news/archive')
 def route_news_archive():
+	dicks()
 	news = db.session().query(News).order_by(News.id.desc()).all()
 	for entry in news:
 		player = db.session().query(Player.name).filter(Player.id == entry.author_id).first()

@@ -1,3 +1,6 @@
+# Log File
+error.log
+
 # Text files
 * text=auto
 *.py text eol=lf

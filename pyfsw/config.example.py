@@ -13,6 +13,10 @@ NET_PORT = 5000
 # Debug Mode
 DEBUG = False
 
+# Log File
+# Warnings and errors will be logged to the file when DEBUG is set to False
+LOG_FILE = 'error.log'
+
 # Debug Profiler
 DEBUG_PROFILER = False
 
