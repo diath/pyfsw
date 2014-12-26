@@ -1,5 +1,6 @@
 *.pyc
 __pycache__
 config.py
+error.log
 
 pyfsw/static/img/logo/[0-9]*.png
