@@ -1,4 +1,4 @@
-from flask import render_template, redirect, url_for, flash, request, session
+from flask import render_template, redirect, url_for, flash, request, session, escape
 from flask.ext.sqlalchemy import Pagination
 
 from time import time
@@ -114,7 +114,10 @@ def route_forum_board_post(id):
 			content = content[:512]
 
 		content = content.strip()
-		content = ' '.join(content.split())
+		content = '\n'.join(content.split('\n'))
+
+		content = escape(content)
+		content = str(content).replace('\n', '<br>')
 
 		thread = ForumThread()
 		thread.subject = subject
@@ -240,7 +243,10 @@ def route_forum_thread_post(id):
 			content = content[:512]
 
 		content = content.strip()
-		content = ' '.join(content.split())
+		content = '\n'.join(content.split('\n'))
+
+		content = escape(content)
+		content = str(content).replace('\n', '<br>')
 
 		post = ForumPost()
 		post.author_id = character

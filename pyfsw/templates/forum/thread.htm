@@ -46,17 +46,14 @@
 				{% endif %}
 			</div>
 			<div class="col-md-10 left">
-			{% if thread.noescape %}
 				{% autoescape off %}
 				{{ thread.content }}
 				{% endautoescape %}
-			{% else %}
-				{{ thread.content }}
-			{% endif %}
-			{% if thread.player.signature != '' %}
-			<hr>
-			{{ thread.player.signature }}
-			{% endif %}
+
+				{% if thread.player.signature != '' %}
+					<hr>
+					{{ thread.player.signature }}
+				{% endif %}
 			</div>
 		</div>
 		{% if session.access == g.admin_account_type %}
@@ -118,10 +115,13 @@
 				{% endif %}
 			</div>
 			<div class="col-md-10 left">
+				{% autoescape off %}
 				{{ post.content }}
+				{% endautoescape %}
+
 				{% if post.player.signature != '' %}
-				<hr>
-				{{ post.player.signature }}
+					<hr>
+					{{ post.player.signature }}
 				{% endif %}
 			</div>
 		</div>

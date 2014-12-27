@@ -48,7 +48,6 @@ class ForumThread(db.Model):
 	lastpost = Column(Integer, default=0)
 	author_id = Column(Integer)
 	content = Column(Text)
-	noescape = Column(Integer, default=0)
 	deleted = Column(Integer, default=0)
 
 	# Methods
