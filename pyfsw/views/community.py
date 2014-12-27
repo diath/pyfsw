@@ -62,7 +62,6 @@ def route_community_player_get_name(name):
 	)
 
 @app.route('/community/player', methods=['POST'])
-@cache.memoize(timeout=CACHE_TIME)
 def route_community_player_post():
 	name = request.form.get('name', '', type=str)
 	player = Player.query.filter(Player.name == name).first()
