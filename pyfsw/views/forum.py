@@ -2,6 +2,7 @@ from flask import render_template, redirect, url_for, flash, request, session, e
 from flask.ext.sqlalchemy import Pagination
 
 from time import time
+from math import ceil
 
 from pyfsw import app, db
 from pyfsw import current_user, login_required, admin_required
@@ -238,6 +239,9 @@ def route_forum_thread_post(id):
 			flash('Your reply must be at least 4 characters long.', 'error')
 			error = True
 
+	# Redirect page
+	page = 1
+
 	if not error:
 		if len(content) > FORUM_CHARACTER_LIMIT:
 			content = content[:FORUM_CHARACTER_LIMIT]
@@ -262,7 +266,13 @@ def route_forum_thread_post(id):
 		db.session().add(post)
 		db.session().commit()
 
-	return redirect(url_for('route_forum_thread', thread=id, page=1))
+		posts = db.session().query(ForumPost.id).filter(ForumPost.thread_id == id).count()
+		page = ceil(posts / POSTS_PER_PAGE)
+
+		print(posts)
+		print(page)
+
+	return redirect(url_for('route_forum_thread', thread=id, page=page))
 
 # Views related to thread/post management
 @app.route('/forum/thread/hard/<int:id>')
