@@ -8,7 +8,7 @@ from pyfsw import current_user, login_required, admin_required
 from pyfsw import Player
 from pyfsw import ForumCategory, ForumBoard, ForumThread, ForumPost
 from pyfsw import POST_COOLDOWN, ADMIN_ACCOUNT_TYPE, FORUM_LEVEL_REQUIREMENT, FORUM_ACCOUNT_AGE_REQUIREMENT
-from pyfsw import THREADS_PER_PAGE, POSTS_PER_PAGE
+from pyfsw import THREADS_PER_PAGE, POSTS_PER_PAGE, FORUM_CHARACTER_LIMIT
 
 @app.route('/forum')
 def route_forum():
@@ -110,8 +110,8 @@ def route_forum_board_post(id):
 		error = True
 
 	if not error:
-		if len(content) > 512:
-			content = content[:512]
+		if len(content) > FORUM_CHARACTER_LIMIT:
+			content = content[:FORUM_CHARACTER_LIMIT]
 
 		content = content.strip()
 		content = '\n'.join(content.split('\n'))
@@ -239,8 +239,8 @@ def route_forum_thread_post(id):
 			error = True
 
 	if not error:
-		if len(content) > 512:
-			content = content[:512]
+		if len(content) > FORUM_CHARACTER_LIMIT:
+			content = content[:FORUM_CHARACTER_LIMIT]
 
 		content = content.strip()
 		content = '\n'.join(content.split('\n'))
