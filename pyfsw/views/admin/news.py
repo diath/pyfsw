@@ -68,6 +68,10 @@ def route_admin_news_compose_post():
 		db.session().add(news)
 		db.session().commit()
 
+		author = Player.query.filter(Player.id == poster_id).first()
+		author.postcount = author.postcount + 1
+		db.session().commit()
+
 		flash('The news has been posted successfully.', 'success')
 
 	return redirect(url_for('route_admin_news_compose'))
