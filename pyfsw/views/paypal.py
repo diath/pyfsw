@@ -29,10 +29,10 @@ def route_paypal_ipn():
 	error = False
 
 	host = socket.getfqdn(request.remote_addr)
-	if host != 'notify.paypal.com':
+	if host not in ['notify.paypal.com', 'localhost', 'localhost.localdomain']:
 		error = True
 
-	test = request.form.get('test_ipn', 1, type=int)
+	test = request.form.get('test_ipn', 0, type=int)
 	if test != 0:
 		error = True
 
