@@ -18,7 +18,7 @@ def route_paypal():
 
 @app.route('/paypal/success')
 def route_paypal_donated():
-	return render_template('paypal/donated.htm')
+	return render_template('paypal/success.htm')
 
 @app.route('/paypal/canceled')
 def route_paypal_canceled():
