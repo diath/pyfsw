@@ -130,7 +130,7 @@ def route_community_staff():
 	staff = db.session().query(
 		Player.name, Player.lastlogin, Player.lastlogout, Player.group_id,
 		Player.looktype, Player.lookhead, Player.lookbody, Player.looklegs, Player.lookfeet, Player.lookaddons
-	).filter(Player.group_id > 1).order_by(Player.group_id.asc()).all()
+	).filter(Player.group_id > 1).order_by(Player.group_id.desc()).all()
 
 	return render_template('community/staff.htm', staff=staff)
 
