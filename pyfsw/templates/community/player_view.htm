@@ -197,14 +197,15 @@
 			<div class="tab-pane" id="Achievements">
 				<table class="table table-striped table-hover">
 				{% for achievement in achievements %}
-				<tr>
 					{% if player.getStorageValue(achievement.key) >= achievement.value %}
-					<td>{{ achievement.name }}</td>
-					<td class="right">
-						{% autoescape off %}
-							{{ '<span class="glyphicon glyphicon-star"></span>' * achievement.tier }}
-						{% endautoescape %}
-					</td>
+					<tr>
+						<td>{{ achievement.name }}</td>
+						<td class="right">
+							{% autoescape off %}
+								{{ '<span class="glyphicon glyphicon-star"></span>' * achievement.tier }}
+							{% endautoescape %}
+						</td>
+					</tr>
 					{% endif %}
 				{% endfor %}
 				</table>
