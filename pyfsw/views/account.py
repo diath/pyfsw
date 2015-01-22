@@ -122,7 +122,12 @@ def route_account_create_post():
 
 	session.pop('captcha')
 
-	return render_template('account/login.htm', created=True)
+	session['account'] = account.id
+	session['access'] = account.type
+	session['web_access'] = account.web_access
+
+	flash('The account has been created. You can create a character now.', 'success')
+	return redirect(url_for('route_account_manage'))
 
 @app.route('/account/manage')
 @login_required
