@@ -41,6 +41,10 @@
 					Resident of {{ thread.player.town_id | town }}
 					<br>
 					Posts: {{ thread.player.postcount }}
+					<br><br>
+					Posted at:
+					<br>
+					{{ thread.timestamp | datetime }}
 				{% else %}
 					Author Deleted
 				{% endif %}
@@ -110,6 +114,10 @@
 					Resident of {{ post.player.town_id | town }}
 					<br>
 					Posts: {{ (post.player.postcount if post.player.postcount > 0 else 0) }}
+					<br><br>
+					Posted at:
+					<br>
+					{{ post.timestamp | datetime }}
 				{% else %}
 					Author Deleted
 				{% endif %}
