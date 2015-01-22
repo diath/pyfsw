@@ -79,7 +79,7 @@ def route_admin_news_compose_post():
 @app.route('/admin/news/manage', methods=['GET'])
 @admin_required(5)
 def route_admin_news_manage():
-	news = News.query.all()
+	news = News.query.order_by(News.id.desc()).all()
 
 	for entry in news:
 		player = db.session().query(Player.name).filter(Player.id == entry.author_id).first()
