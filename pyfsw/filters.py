@@ -1,3 +1,5 @@
+import time
+
 from datetime import datetime
 from math import floor
 
@@ -21,14 +23,7 @@ def filter_worddate(value):
 
 @app.template_filter('timetotal')
 def filter_timetotal(value):
-	value = int(value)
-
-	hour = value / 3600
-	rem = value % 3600
-	minute = rem / 60
-	second = rem % 60
-
-	return '{:02d} hours, {:02d} minutes and {:02d} seconds'.format(int(hour), int(minute), int(second))
+	return time.strftime('%H hours, %M minutes and %S seconds', time.gmtime(int(value)))
 
 @app.template_filter('gender')
 def filter_gender(value):

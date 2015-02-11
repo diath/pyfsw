@@ -19,7 +19,7 @@
 					<tr>
 						<td>Character</td>
 						<td class="right">
-							<select name="character">
+							<select class="form-control" name="character">
 							{% for character in characters %}
 								<option value="{{ character.id }}">{{ character.name }}</option>
 							{% endfor %}

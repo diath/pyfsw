@@ -69,7 +69,7 @@ def route_shop_order_post(id):
 		db.session().add(order)
 		db.session().commit()
 
-		flash('The item has been ordered and should be delivered soon to your character.', 'success')
+		flash('The item has been ordered and should be soon delivered to your character.', 'success')
 
 	return redirect(url_for('route_shop'))
 
