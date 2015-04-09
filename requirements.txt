@@ -1,0 +1,10 @@
+Flask
+Flask-Cache
+Flask-SQLAlchemy
+Flask-DebugToolbar
+Flask-Pagination
+SQLAlchemy
+PyMySQL
+Pillow
+requests
+beautifulsoup4
