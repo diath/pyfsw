@@ -56,6 +56,12 @@ CACHE_TIME
 
 Some pages are cached to improve the performance. This option determines how long should a page get cached for. The value is represented in seconds. Set it to 0 to disable the caching mechanism.
 
+CAPTCHA_SITE_KEY
+CAPTCHA_SECRET_KEY
+------------------
+
+Captcha site and secret keys used to display Google's NoCaptcha Recaptcha. Please see [their website](https://www.google.com/recaptcha/intro/index.html) for more details.
+
 UPLOAD_PATH
 -----------
 

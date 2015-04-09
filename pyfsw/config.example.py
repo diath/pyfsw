@@ -26,11 +26,12 @@ DATE_FORMAT = '%m/%d/%y %I:%M %p'
 # Cache Time (Seconds)
 CACHE_TIME = 0
 
+# Captcha Settings (https://www.google.com/recaptcha/intro/index.html)
+CAPTCHA_SITE_KEY = ''
+CAPTCHA_SECRET_KEY = ''
+
 # Guild Logo Upload Path
 UPLOAD_PATH = ''
-
-# Captcha Font Path (Optional)
-FONT_PATH = ''
 
 # Server Name
 SERVER_NAME = ''

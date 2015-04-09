@@ -5,8 +5,8 @@ import random, string, re
 
 from pyfsw import app, db
 from pyfsw import Account, Player, LoginHistory
-from pyfsw import login_required, current_user
-from pyfsw import NEW_CHARACTER, DELETION_DELAY
+from pyfsw import login_required, current_user, check_captcha
+from pyfsw import CAPTCHA_SITE_KEY, NEW_CHARACTER, DELETION_DELAY
 
 CHAR_NAME_EXPR = re.compile('^([a-zA-Z ]+)$')
 
@@ -67,7 +67,10 @@ def route_account_logout():
 
 @app.route('/account/create', methods=['GET'])
 def route_account_create():
-	return render_template('account/create.htm', name=request.args.get('name', ''), mail=request.args.get('mail', ''))
+	return render_template(
+		'account/create.htm', name=request.args.get('name', ''),
+		mail=request.args.get('mail', ''), site_key=CAPTCHA_SITE_KEY
+	)
 
 @app.route('/account/create', methods=['POST'])
 def route_account_create_post():
@@ -75,7 +78,7 @@ def route_account_create_post():
 	pswd = request.form.get('pswd', '', type=str)
 	mail = request.form.get('mail', '', type=str)
 	pswdRepeat = request.form.get('pswdRepeat', '', type=str)
-	captcha = request.form.get('captcha', '', type=str)
+	captcha = request.form.get('g-recaptcha-response')
 	error = False
 
 	if len(name) < 4 or len(name) > 32:
@@ -99,8 +102,8 @@ def route_account_create_post():
 		flash('The account name is already in use.', 'error')
 		error = True
 
-	if captcha.lower() != session.get('captcha', '').lower():
-		flash('The captcha code does not match.', 'error')
+	if check_captcha(captcha) is False:
+		flash('You have failed the human verification', 'error')
 		error = True
 
 	if error:
@@ -119,8 +122,6 @@ def route_account_create_post():
 
 	db.session().add(account)
 	db.session().commit()
-
-	session.pop('captcha')
 
 	session['account'] = account.id
 	session['access'] = account.type

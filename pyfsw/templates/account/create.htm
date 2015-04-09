@@ -2,6 +2,8 @@
 {% block title %} Create Account {% endblock %}
 {% block body %}
 
+<script type="text/javascript" src="https://www.google.com/recaptcha/api.js"></script>
+
 <div class="panel panel-default">
 	<div class="panel-heading">
 		Create Account
@@ -31,11 +33,8 @@
 				<input type="mail" class="form-control" id="inputMail" name="mail" placeholder="E-mail Address" value="{{ mail }}" required>
 			</div>
 			<div class="form-group">
-				<label for="inputCaptcha">Captcha Code</label>
-				<input type="text" class="form-control" id="inputCaptcha" name="captcha" placeholder="Captcha Code">
-				<br>
-				<img src="/captcha">
-				<small>(The image contains only letters, no spaces nor numbers. The captcha is NOT case-sensitive)</small>
+				<label for="inputCaptcha">Human Verification</label>
+				<div id="inputCaptcha" class="g-recaptcha" data-sitekey="{{site_key}}"></div>
 			</div>
 			<div class="form-group">
 				<p>By clicking the "Create" button you are agreeing to the <a href="/library/rules">server rules</a>.</p>
@@ -69,8 +68,6 @@
 			bar.addClass('progress-bar-warning');
 		else if(percent > 70)
 			bar.addClass('progress-bar-success');
-
-		// I hate myself so much for making the AAC rely on JS ( ._.)
 	});
 </script>
 

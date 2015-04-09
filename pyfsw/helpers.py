@@ -1,10 +1,12 @@
 from flask import redirect, url_for, session, request
 from functools import wraps
+from json import loads
+import requests
 
 from pyfsw import app, db
 from pyfsw import Account, Library, Guild, GuildMembership, GuildRank
 from pyfsw import PlayerItem
-from pyfsw import ADMIN_ACCOUNT_TYPE
+from pyfsw import CAPTCHA_SECRET_KEY, ADMIN_ACCOUNT_TYPE
 
 def login_required(f):
 	@wraps(f)
@@ -112,6 +114,24 @@ def is_number(value):
 		float(value)
 		return True
 	except ValueError:
+		return False
+
+def check_captcha(response):
+	print(response)
+	try:
+		request = requests.get('https://www.google.com/recaptcha/api/siteverify?secret={}&response={}'.format(
+			CAPTCHA_SECRET_KEY, response
+		))
+
+		if request.status_code != 200:
+			return False
+
+		data = loads(request.text)
+		if not data['success']:
+			return False
+
+		return True
+	except Exception:
 		return False
 
 app.jinja_env.globals.update(get_library=get_library)
