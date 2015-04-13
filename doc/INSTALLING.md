@@ -23,7 +23,7 @@ To run the website in development mode, please use the following command:
 
 ``$ python3 run.py``
 
-This will run the website on the configured host and port using the Flask's built-in server. To run the website in production mode please refer to the [deploying document](doc/DEPLOYING.md).
+This will run the website on the configured host and port using the Flask's built-in server. To run the website in production mode please refer to the [deploying document](DEPLOYING.md).
 
 Note
 ====

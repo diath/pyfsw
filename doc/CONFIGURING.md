@@ -7,6 +7,7 @@ DB_URI
 ------
 
 This option tells the website how to connect to the database server. In most cases the following example should get you going:
+
 ``mysql+pymysql://user:password@host/Database?unix_socket=/socket/path``
 
 For a more detailed description and more options please see the [SQLAlchemy documentation](http://docs.sqlalchemy.org/en/latest/dialects/mysql.html#module-sqlalchemy.dialects.mysql.pymysql).
@@ -15,10 +16,13 @@ SECRET_KEY
 ----------
 
 This options is used to sign the cookies cryptographically. You should set it to a random string of at least a moderate length. You can use the following command to generate one:
+
 ``$ < /dev/urandom tr -dc 'a-zA-Z0-9-_!@#$%^&*()_+{}|:<>?=' | head -c${1:-32}; echo;``
 
 You can also invoke a Python shell and use the following code:
+
 ``import os``
+
 ``os.urandom(32)``
 
 NET_HOST
