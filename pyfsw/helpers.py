@@ -117,7 +117,6 @@ def is_number(value):
 		return False
 
 def check_captcha(response):
-	print(response)
 	try:
 		request = requests.get('https://www.google.com/recaptcha/api/siteverify?secret={}&response={}'.format(
 			CAPTCHA_SECRET_KEY, response
