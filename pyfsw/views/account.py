@@ -161,6 +161,10 @@ def route_account_password_post():
 		flash('The new password must be at least 5 characters long.', 'error')
 		error = True
 
+	if pswdNew == user.password:
+		flash('The new password must be different than the current one.', 'error')
+		error = True
+
 	if pswdNew != pswdRepeat:
 		flash('The new passwords do not match.', 'error')
 		error = True
